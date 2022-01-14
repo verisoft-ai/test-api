@@ -1,5 +1,6 @@
 package co.verisoft.fw.xray;
 
+import lombok.Synchronized;
 import org.assertj.core.api.SoftAssertions;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,11 +10,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-public class XrayInfoObjectTest {
+public class XrayJsonInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldBuildAllFieldsCorrectly(JsonInfoObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonInfoObject info){
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getProject()).isEqualTo("project");
@@ -31,9 +32,9 @@ public class XrayInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldAllowToChangeValue(JsonInfoObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonInfoObject infoBase){
 
-        JsonInfoObject info = new JsonInfoObject.XrayInfoObjectBuilder(infoBase)
+        XrayJsonInfoObject info = new XrayJsonInfoObject.XrayInfoObjectBuilder(infoBase)
                 .project("project2")
                 .build();
 
@@ -53,7 +54,7 @@ public class XrayInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldCreateAJsonObject(JsonInfoObject info){
+    public void shouldCreateAJsonObject(XrayJsonInfoObject info){
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -74,7 +75,7 @@ public class XrayInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldCreateAStringObject(JsonInfoObject info) throws ParseException {
+    public void shouldCreateAStringObject(XrayJsonInfoObject info) throws ParseException {
         String objString = info.asString();
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(objString);
@@ -96,8 +97,9 @@ public class XrayInfoObjectTest {
     }
 
 
-    private static Stream<JsonInfoObject> getXrayInfoObject(){
-        JsonInfoObject infoBase = new JsonInfoObject.XrayInfoObjectBuilder()
+    @Synchronized
+    private static Stream<XrayJsonInfoObject> getXrayInfoObject(){
+        XrayJsonInfoObject infoBase = new XrayJsonInfoObject.XrayInfoObjectBuilder()
                 .project("project")
                 .summary("summary")
                 .description("description")

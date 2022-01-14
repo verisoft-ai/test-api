@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
  * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-JSONformat">
  *     Using Xray JSON format to import execution results</a>
  */
-public class JsonInfoObject implements JsonObject {
+public class XrayJsonInfoObject implements JsonObject {
 
     private final String project;         // The project key where the test execution will be created
     private final String summary;         // The summary for the test execution issue
@@ -31,7 +31,7 @@ public class JsonInfoObject implements JsonObject {
     private final String testEnvironments; // The test environments for the test execution issue
 
 
-    private JsonInfoObject(XrayInfoObjectBuilder builder){
+    private XrayJsonInfoObject(XrayInfoObjectBuilder builder){
         this.project = builder.project;
         this.summary = builder.summary;
         this.description = builder.description;
@@ -127,7 +127,7 @@ public class JsonInfoObject implements JsonObject {
 
 
 
-        public XrayInfoObjectBuilder(JsonInfoObject obj){
+        public XrayInfoObjectBuilder(XrayJsonInfoObject obj){
             this.project = obj.project;
             this.summary = obj.summary;
             this.description = obj.description;
@@ -194,13 +194,13 @@ public class JsonInfoObject implements JsonObject {
             return this;
         }
 
-        public JsonInfoObject build(){
-            JsonInfoObject info = new JsonInfoObject(this);
+        public XrayJsonInfoObject build(){
+            XrayJsonInfoObject info = new XrayJsonInfoObject(this);
             validateXrayInfoObject(info);
             return info;
         }
 
-        private void validateXrayInfoObject(JsonInfoObject obj) {
+        private void validateXrayInfoObject(XrayJsonInfoObject obj) {
             // TOOD: some validation code here
         }
     }

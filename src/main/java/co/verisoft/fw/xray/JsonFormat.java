@@ -18,13 +18,14 @@ import org.slf4j.Logger;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  * @since 0.0.2 (Jan 2022)
  */
+@Deprecated
 public class JsonFormat implements JsonObject {
     private static final Logger logger = new ExtendedLog(JsonFormat.class);
 
     private static JsonFormat reporter;
 
     private String testExecutionKey;
-    private JsonInfoObject info;
+    private XrayJsonInfoObject info;
     private JSONArray tests;
 
 

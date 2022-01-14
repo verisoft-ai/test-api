@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
  * @since 0.0.2 (Jan 2022)
  */
 @AllArgsConstructor
+@Deprecated
 public class JsonTestObject implements JsonObject {
     private String testKey;
     private String start;
@@ -105,10 +106,10 @@ public class JsonTestObject implements JsonObject {
      */
     public static class XrayTestObjectBuilder implements Builder<JsonTestObject> {
         private final String testKey;
-        private String start;
-        private String finish;
-        private String comment;
-        private String status;
+        private  String start;
+        private  String finish;
+        private  String comment;
+        private  String status;
 
         public XrayTestObjectBuilder(String testKey){
             this.testKey = testKey;
