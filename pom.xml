@@ -214,10 +214,6 @@
 
                     <!--suppress UnresolvedMavenProperty, MavenModelInspection -->
                     <skipTests>${skip.surefire.tests}</skipTests>
-                    <systemPropertyVariables>
-                        <webdriver.chrome.logfile>./target/SeleniumLogs/seleniumServerLog.log</webdriver.chrome.logfile>
-                        <webdriver.chrome.verboseLogging>true</webdriver.chrome.verboseLogging>
-                    </systemPropertyVariables>
                 </configuration>
 
             </plugin>
