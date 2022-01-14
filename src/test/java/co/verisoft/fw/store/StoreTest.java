@@ -1,8 +1,31 @@
 package co.verisoft.fw.store;
 
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for co.verisoft.fw.store
+ *
+ * @author Nir Gallner
+ * @since 0.0.2
+ */
 public class StoreTest {
 
     @Test
@@ -77,5 +100,28 @@ public class StoreTest {
         StoreManager.getStore(StoreType.GLOBAL).putValueInStore(key1, name);
         String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore(key2);
         Assertions.assertNull(receivedName, "Should have retrieved from store");
+    }
+
+    @Test
+    public void shouldRemoveStore() {
+        String key = "key";
+        String val = "val";
+
+        StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore(key, val);
+        StoreManager.removeStore(StoreType.LOCAL_THREAD);
+
+        // Value expected not to be present after removing the store.
+        String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore(key);
+        Assertions.assertNull(receivedName, "Store should have been empty");
+    }
+
+    @Test
+    public void shouldReplaceValueInStore() {
+
+        StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("key", "val1");
+        StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("key", "val2");
+
+        String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("key");
+        Assertions.assertEquals(receivedName,"val2", "Store should replace the original value");
     }
 }

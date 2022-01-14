@@ -21,13 +21,17 @@ import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import co.verisoft.selenium.framework.inf.ExtendedLog;
 
 /**
  * Generic store implementation
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since Jan 2022
+ * @see Store
+ * @see StoreManager
+ * @see StoreType
+ * @since 0.0.2 (Jan 2022)
  */
 public class StoreImp implements Store {
     private static final Logger logger = new ExtendedLog(StoreImp.class);
@@ -37,22 +41,22 @@ public class StoreImp implements Store {
         store = new HashMap<>();
     }
 
+
+    @Override
     public <T> T getValueFromStore(Object key) {
         return (T) store.get(key);
     }
 
-    /**
-     * Puts a value in the store. If the key was already there, it will replace the old value with the new one
-     *
-     * @param key   key of the objce
-     * @param value object to be stored
-     */
+
+    @Override
     public void putValueInStore(Object key, Object value) {
         if (store.get(key) != null)
             store.remove(key);
         store.put(key, value);
     }
 
+
+    @Override
     public void removeValueFromStore(Object key) {
         store.remove(key);
     }

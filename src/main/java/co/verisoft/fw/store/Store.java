@@ -17,20 +17,45 @@ package co.verisoft.fw.store;
 
 
 /**
+ * Store object. <br>
+ * A store object is a space where objects, values can be stored and located.
+ * It follows the key value pattern. <br>
+ * A store can be either Global per all threads, or local per the current thread. Hence it provides a sort of
+ * global thread safe memory area. Users can either put,get or remove values from the store. Currently only one
+ * implementation exists for the store, which is StoreImp
+ *
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
+ *
+ * @see StoreImp
+ * @see StoreManager
+ * @see StoreType
  *
  */
 public interface Store {
 
     /**
-     * Gets a value from a store. The method assumes
+     * Retrieves a value from a store. Key is given, can be any type of object. <br>
+     * Recommended use for key - String value
      *
-     * @param key
-     * @param <T>
-     * @return
+     * @param key any object which will serve as key
+     * @param <T> The type of value expected to be received from the store. A template is used here
+     *           for convinience, however the user is responssible to make sure the type of return value is correct
+     * @return value from the store
      */
     public <T> T getValueFromStore(Object key);
 
+
+    /**
+     * Puts a value in the store.
+     * @param key Object of any type, to be served as key.
+     * @param value The object to be stored
+     */
     public void putValueInStore(Object key, Object value);
 
+    /**
+     * Removes a value from the store
+     * @param key Key for the object to be removed.
+     */
     public void removeValueFromStore(Object key);
 }

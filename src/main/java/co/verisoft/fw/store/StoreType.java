@@ -20,8 +20,12 @@ package co.verisoft.fw.store;
 /**
  * Attribute for store type
  *
- * @author Nir Gallner
- * @since Jan 2022
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
+ *
+ * @see Store
+ * @see StoreImp
+ * @see StoreManager
  */
 public enum StoreType {
     LOCAL_THREAD,

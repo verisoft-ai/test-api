@@ -25,10 +25,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Global thread safe storage for objects
+ * Global thread safe storage for objects. It is implemented as a singletone.<br>
+ * <b>Example:</b><br>
+ * The following example is taken from the Store unit test, and provides a basic use of the store.
+ * This example uses GLOBAL store, however similar code can be applied to LOCAL_THREAD store. <br>
+ * <pre>
+ * {@code
+ *         String name = "Nir";
+ *         StoreManager.getStore(StoreType.GLOBAL).putValueInStore("NIR", name);
+ *         String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("NIR");
+ *         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
+ *  }
+ * </pre>
  *
- * @author Nir Gallner
- * @since Jan 2022
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
+ *
+ * @see Store
+ * @see StoreImp
+ * @see StoreType
  */
 public class StoreManager {
 
@@ -69,7 +84,7 @@ public class StoreManager {
     public static void removeStore(StoreType storeType) {
         Long threadId = (storeType == StoreType.LOCAL_THREAD) ?
                 Thread.currentThread().getId() : 0;
-        logger.debug("Get store of thread (0 means global) " + threadId);
+        logger.debug("Remove store of thread (0 means global) " + threadId);
         storeMap.remove(threadId);
     }
 }
