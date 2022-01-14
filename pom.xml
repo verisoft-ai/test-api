@@ -55,8 +55,9 @@
         <maven.gpg.plugin.version>3.0.1</maven.gpg.plugin.version>
 
         <!-- Test dependencies -->
-        <junit.platform.version>1.8.1</junit.platform.version>
+        <junit.platform.version>1.8.2</junit.platform.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
+        <assertJ.version>3.22.0</assertJ.version>
 
         <!-- Java -->
         <java.version>1.8</java.version>
@@ -163,6 +164,13 @@
             <version>${xmlBeans.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertJ.version}</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
     <distributionManagement>
@@ -217,7 +225,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.version}</version>
+<!--                <version>${maven.compiler.version}</version>-->
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

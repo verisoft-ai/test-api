@@ -1,5 +1,6 @@
 package co.verisoft.fw.xray;
 
+import co.verisoft.fw.utils.JsonObject;
 import co.verisoft.selenium.framework.inf.ExtendedLog;
 import org.apache.xmlbeans.SystemProperties;
 import org.json.simple.JSONArray;
@@ -12,24 +13,30 @@ import org.slf4j.Logger;
  * During the test executions, test objects are added to the reporter, and at the end of the test execution (of all
  * test classes, in all threads) it generates a json object, compatible with x-ray report.
  * https://docs.getxray.app/display/XRAY/Import+Execution+Results+-+REST
- * @author Nir Gallner
- * @since Jan 2022
+ * https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-JSONformat
+ *
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
  */
-public class XrayReporter {
-    private static final Logger logger = new ExtendedLog(XrayReporter.class);
+public class JsonFormat implements JsonObject {
+    private static final Logger logger = new ExtendedLog(JsonFormat.class);
 
-    private static XrayReporter reporter;
+    private static JsonFormat reporter;
+
+    private String testExecutionKey;
+    private JsonInfoObject info;
     private JSONArray tests;
 
 
-    private XrayReporter() {
+
+    private JsonFormat() {
         tests = new JSONArray();
     }
 
 
-    public static XrayReporter getInstance() {
+    public static JsonFormat getInstance() {
         if (reporter == null)
-            reporter = new XrayReporter();
+            reporter = new JsonFormat();
 
         return reporter;
     }
@@ -40,6 +47,7 @@ public class XrayReporter {
      *
      * @return The report object
      */
+    @SuppressWarnings("unchecked")
     public JSONObject generateReport() {
         JSONObject finalReport = new JSONObject();
         finalReport.put("testExecutionKey", SystemProperties.getProperty("xray.execution.key"));
@@ -63,7 +71,17 @@ public class XrayReporter {
      *
      * @param test a test object, to extract the data as json object and add to the list
      */
-    public void addTest(XrayTestObject test) {
+    public void addTest(JsonTestObject test) {
         this.tests.add(test.asJsonObject());
+    }
+
+    @Override
+    public JSONObject asJsonObject() {
+        return null;
+    }
+
+    @Override
+    public String asString() {
+        return null;
     }
 }

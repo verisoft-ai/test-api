@@ -16,6 +16,8 @@ package co.verisoft.fw.store;
  */
 
 
+import org.apiguardian.api.API;
+
 /**
  * Store object. <br>
  * A store object is a space where objects, values can be stored and located.
@@ -32,6 +34,10 @@ package co.verisoft.fw.store;
  * @see StoreType
  *
  */
+@API(
+        status = API.Status.EXPERIMENTAL,
+        since = "0.0.2"
+)
 public interface Store {
 
     /**
@@ -43,7 +49,7 @@ public interface Store {
      *           for convinience, however the user is responssible to make sure the type of return value is correct
      * @return value from the store
      */
-    public <T> T getValueFromStore(Object key);
+    <T> T getValueFromStore(Object key);
 
 
     /**
@@ -51,11 +57,11 @@ public interface Store {
      * @param key Object of any type, to be served as key.
      * @param value The object to be stored
      */
-    public void putValueInStore(Object key, Object value);
+    void putValueInStore(Object key, Object value);
 
     /**
      * Removes a value from the store
      * @param key Key for the object to be removed.
      */
-    public void removeValueFromStore(Object key);
+    void removeValueFromStore(Object key);
 }

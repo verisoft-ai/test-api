@@ -1,16 +1,18 @@
 package co.verisoft.fw.xray;
 
+import co.verisoft.fw.utils.Builder;
+import co.verisoft.fw.utils.JsonObject;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
 
 /**
  * A representation of a xray test object, with the relevant fields neede for the x-ray report
  *
- * @author Nir Gallner
- * @since Jan 2022
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
  */
 @AllArgsConstructor
-public class XrayTestObject {
+public class JsonTestObject implements JsonObject {
     private String testKey;
     private String start;
     private String finish;
@@ -20,9 +22,9 @@ public class XrayTestObject {
 
     /**
      * Private c-tor from builder static class
-     * @param builder
+     * @param builder a builder object for JsonTestObject
      */
-    private XrayTestObject(XrayTestObjectBuilder builder){
+    private JsonTestObject(XrayTestObjectBuilder builder){
         this.start = builder.start;
         this.finish = builder.finish;
         this.testKey = builder.testKey;
@@ -76,6 +78,7 @@ public class XrayTestObject {
      * https://docs.getxray.app/display/XRAY/Import+Execution+Results+-+REST
      * @return json object - xray test format
      */
+    @SuppressWarnings("unchecked")
     public JSONObject asJsonObject(){
         JSONObject obj = new JSONObject();
         obj.put("testKey", this.testKey);
@@ -100,8 +103,8 @@ public class XrayTestObject {
     /**
      * Builder static class
      */
-    public static class XrayTestObjectBuilder {
-        private String testKey;
+    public static class XrayTestObjectBuilder implements Builder<JsonTestObject> {
+        private final String testKey;
         private String start;
         private String finish;
         private String comment;
@@ -132,8 +135,8 @@ public class XrayTestObject {
             return this;
         }
 
-        public XrayTestObject build() {
-            XrayTestObject test = new XrayTestObject(this);
+        public JsonTestObject build() {
+            JsonTestObject test = new JsonTestObject(this);
             validateXrayTestObject(test);
             return test;
         }
@@ -145,7 +148,7 @@ public class XrayTestObject {
          *
          * @param obj object to be validated
          */
-        private void validateXrayTestObject(XrayTestObject obj) {
+        private void validateXrayTestObject(JsonTestObject obj) {
             // TOOD: some validation code here
         }
     }
