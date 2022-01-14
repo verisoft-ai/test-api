@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+@Deprecated
 public abstract class XrayJsonObject <T> implements JsonObject {
 
     private Map<Object,Object> dataSet;
