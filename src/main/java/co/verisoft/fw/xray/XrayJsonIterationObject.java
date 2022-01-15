@@ -2,31 +2,43 @@ package co.verisoft.fw.xray;
 
 import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 /**
+ * Representation of Xray object - <b>Iteration</b>. This class follows the builder design pattern<br>
  *
+ * <br><b>From Xray documentation:</b><br>
+ * "iteration" object - Data-driven test results <br>
+ * If you need to import data-driven test results you need to use the iteration object.
+ * Xray will store all iterations within the same Test Run object.
+ * It is also possible to import iteration results with parameters.
+ * <b>Currently, this is only supported for manual tests.</b>
+ * In this case, Xray will create a dataset automatically within the Test Run object.
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-%22iteration%22object-Data-driventestresults">
+ * Using Xray JSON format to import execution results - Iteration</a>
  * @since 0.0.2 (Jan 2022)
- *
- * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-stepdef">
- *     "step def" object - step definition</a>
  */
 public class XrayJsonIterationObject implements JsonObject {
 
-    private final String name;          // The iteration name
-    private final String parameters;    // An array of parameters along with their values
-    private final String log;           // The log for the iteration
-    private final String duration;      // A duration for the iteration
-    private final String status;        // The status for the iteration (PASSED, FAILED, EXECUTING, TODO, custom statuses ...)
-    private final String steps;         // An array of step results (for Manual tests)
+    private final String name;                              // The iteration name
+    private final List<XrayJsonParameterObject> parameters; // An array of parameters along with their values
+    private final String log;                               // The log for the iteration
+    private final String duration;                          // A duration for the iteration
+    private final Status status;                            // The status for the iteration (PASSED, FAILED, EXECUTING, custom statuses ...)
+    private final List<XrayJsonStepResultObject> steps;     // An array of step results (for Manual tests)
 
     public String getName() {
         return name;
     }
 
-    public String getParameters() {
+    public List<XrayJsonParameterObject> getParameters() {
         return parameters;
     }
 
@@ -38,15 +50,18 @@ public class XrayJsonIterationObject implements JsonObject {
         return duration;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public String getSteps() {
-        return steps;
+    public String getStatusAsString() {
+        return status.toString();
     }
 
 
+    public List<XrayJsonStepResultObject> getSteps() {
+        return steps;
+    }
 
 
     private XrayJsonIterationObject(XrayJsonIterationObjectBuilder builder) {
@@ -64,12 +79,27 @@ public class XrayJsonIterationObject implements JsonObject {
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
         obj.put("name", this.name);
-        obj.put("parameters", this.parameters);
         obj.put("log", this.log);
         obj.put("duration", this.duration);
-        obj.put("status", this.status);
-        obj.put("steps", this.steps);
+        obj.put("status", this.status.toString());
 
+        // Parameters
+        JSONArray arr = new JSONArray();
+        for (XrayJsonParameterObject parameter : parameters)
+            arr.add(parameter.asJsonObject());
+
+        if (!arr.isEmpty()) {
+            obj.put("parameters", arr);
+        }
+
+        // Step results
+        arr = new JSONArray(); // arr.clear reveales Json simple BUG!
+        for (XrayJsonStepResultObject result : steps)
+            arr.add(result.asJsonObject());
+
+        if (!arr.isEmpty()) {
+            obj.put("steps", arr);
+        }
         return obj;
     }
 
@@ -86,12 +116,12 @@ public class XrayJsonIterationObject implements JsonObject {
      */
     public static class XrayJsonIterationObjectBuilder implements Builder {
 
-        private String name;          // The iteration name
-        private String parameters;    // An array of parameters along with their values
-        private String log;           // The log for the iteration
-        private String duration;      // A duration for the iteration
-        private String status;        // The status for the iteration (PASSED, FAILED, EXECUTING, TODO, custom statuses ...)
-        private String steps;         // An array of step results (for Manual tests)
+        private String name;
+        private List<XrayJsonParameterObject> parameters;
+        private String log;
+        private String duration;
+        private Status status;
+        private List<XrayJsonStepResultObject> steps;
 
 
         public XrayJsonIterationObjectBuilder(XrayJsonIterationObject obj) {
@@ -104,7 +134,8 @@ public class XrayJsonIterationObject implements JsonObject {
         }
 
         public XrayJsonIterationObjectBuilder() {
-            // No op
+            parameters = new ArrayList<>();
+            steps = new ArrayList<>();
         }
 
         public XrayJsonIterationObjectBuilder name(String name) {
@@ -112,8 +143,13 @@ public class XrayJsonIterationObject implements JsonObject {
             return this;
         }
 
-        public XrayJsonIterationObjectBuilder parameters(String parameters) {
+        public XrayJsonIterationObjectBuilder parameters(List<XrayJsonParameterObject> parameters) {
             this.parameters = parameters;
+            return this;
+        }
+
+        public XrayJsonIterationObjectBuilder parameter(XrayJsonParameterObject parameter) {
+            this.parameters.add(parameter);
             return this;
         }
 
@@ -127,13 +163,23 @@ public class XrayJsonIterationObject implements JsonObject {
             return this;
         }
 
-        public XrayJsonIterationObjectBuilder status(String status) {
+        public XrayJsonIterationObjectBuilder status(Status status) {
             this.status = status;
             return this;
         }
 
-        public XrayJsonIterationObjectBuilder steps(String steps) {
+        public XrayJsonIterationObjectBuilder status(String status) {
+            this.status = Status.toStatus(status);
+            return this;
+        }
+
+        public XrayJsonIterationObjectBuilder steps(List<XrayJsonStepResultObject> steps) {
             this.steps = steps;
+            return this;
+        }
+
+        public XrayJsonIterationObjectBuilder step(XrayJsonStepResultObject step) {
+            this.steps.add(step);
             return this;
         }
 

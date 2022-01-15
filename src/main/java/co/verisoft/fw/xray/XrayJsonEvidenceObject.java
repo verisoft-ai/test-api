@@ -4,18 +4,24 @@ import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
 import org.json.simple.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 /**
+ * Representation of Xray object - <b>Evidence</b>. This class follows the builder design pattern<br>
  *
+ * <br><b>From Xray documentation:</b><br>
+ * "evidence" object - embedded attachments <br>
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  * @since 0.0.2 (Jan 2022)
  *
- * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-stepdef">
- *     "step def" object - step definition</a>
+ * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-%22evidence%22object-embeddedattachments">
+ *     Using Xray JSON format to import execution results - Evidence</a>
  */
 public class XrayJsonEvidenceObject implements JsonObject {
 
-    private final String data;        // The attachment data encoded in base64
+    private final String data;          // The attachment data encoded in base64
     private final String filename;      // The file name for the attachment
 
     // The Content-Type representation header is used to indicate the original media type of the resource
@@ -47,7 +53,7 @@ public class XrayJsonEvidenceObject implements JsonObject {
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("data", this.data);
+        obj.put("data", Base64.getEncoder().encodeToString(this.data.getBytes()));
         obj.put("filename", this.filename);
         obj.put("contentType", this.contentType);
 

@@ -5,13 +5,18 @@ import co.verisoft.fw.utils.JsonObject;
 import org.json.simple.JSONObject;
 
 /**
+ * Representation of Xray object - <b>Custom Field</b>. This class follows the builder design pattern<br>
  *
+ * <br><b>From Xray documentation:</b><br>
+ * "customField" object - store test run custom fields <br>
+ * It is possible to import test run custom field values into the Test Run object. Xray will use the "id" or "name"
+ * to find the existing test run custom field in the project settings.
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  * @since 0.0.2 (Jan 2022)
  *
- * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-stepdef">
- *     "step def" object - step definition</a>
+ * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-customfield">
+ *     Using Xray JSON format to import execution results - Custom Field</a>
  */
 public class XrayJsonCustomFieldObject implements JsonObject {
 

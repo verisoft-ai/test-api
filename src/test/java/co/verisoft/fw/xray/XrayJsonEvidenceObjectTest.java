@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Base64;
 import java.util.stream.Stream;
 
 public class XrayJsonEvidenceObjectTest {
@@ -44,7 +45,7 @@ public class XrayJsonEvidenceObjectTest {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(obj.get("data")).isEqualTo(info.getData());
+        softAssertions.assertThat(obj.get("data")).isEqualTo(Base64.getEncoder().encodeToString(info.getData().getBytes()));
         softAssertions.assertThat(obj.get("filename")).isEqualTo(info.getFileName());
         softAssertions.assertThat(obj.get("contentType")).isEqualTo(info.getContentType());
 
@@ -60,7 +61,7 @@ public class XrayJsonEvidenceObjectTest {
         JSONObject obj = (JSONObject) parser.parse(objString);
 
         SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(obj.get("data")).isEqualTo(info.getData());
+        softAssertions.assertThat(obj.get("data")).isEqualTo(Base64.getEncoder().encodeToString(info.getData().getBytes()));
         softAssertions.assertThat(obj.get("filename")).isEqualTo(info.getFileName());
         softAssertions.assertThat(obj.get("contentType")).isEqualTo(info.getContentType());
 
@@ -72,12 +73,12 @@ public class XrayJsonEvidenceObjectTest {
 
     @Synchronized
     private static Stream<XrayJsonEvidenceObject> getXrayEvidenceObject(){
-        XrayJsonEvidenceObject custField = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
+        XrayJsonEvidenceObject evidence = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
                 .data("data")
                 .filename("fileName")
                 .contentType("contentType")
                 .build();
 
-        return Stream.of(custField);
+        return Stream.of(evidence);
     }
 }

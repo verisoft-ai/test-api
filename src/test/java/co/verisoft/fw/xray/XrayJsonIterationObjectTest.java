@@ -1,7 +1,9 @@
 package co.verisoft.fw.xray;
 
+import co.verisoft.fw.utils.JsonObject;
 import lombok.Synchronized;
 import org.assertj.core.api.SoftAssertions;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,11 +20,11 @@ public class XrayJsonIterationObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getName()).isEqualTo("name");
-        softAssertions.assertThat(info.getParameters()).isEqualTo("parameters");
+        softAssertions.assertThat(info.getParameters().get(0).getName()).isEqualTo("name1");
         softAssertions.assertThat(info.getLog()).isEqualTo("log");
         softAssertions.assertThat(info.getDuration()).isEqualTo("duration");
-        softAssertions.assertThat(info.getStatus()).isEqualTo("status");
-        softAssertions.assertThat(info.getSteps()).isEqualTo("steps");
+        softAssertions.assertThat(info.getStatusAsString()).isEqualTo("PASSED");
+        softAssertions.assertThat(info.getSteps().get(0).getActualResult()).isEqualTo("result1");
         softAssertions.assertAll();
     }
 
@@ -36,11 +38,11 @@ public class XrayJsonIterationObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getName()).isEqualTo("name2");
-        softAssertions.assertThat(info.getParameters()).isEqualTo("parameters");
+        softAssertions.assertThat(info.getParameters().get(0).getName()).isEqualTo("name1");
         softAssertions.assertThat(info.getLog()).isEqualTo("log");
         softAssertions.assertThat(info.getDuration()).isEqualTo("duration");
-        softAssertions.assertThat(info.getStatus()).isEqualTo("status");
-        softAssertions.assertThat(info.getSteps()).isEqualTo("steps");
+        softAssertions.assertThat(info.getStatusAsString()).isEqualTo("PASSED");
+        softAssertions.assertThat(info.getSteps().get(0).getActualResult()).isEqualTo("result1");
         softAssertions.assertAll();
     }
 
@@ -51,11 +53,11 @@ public class XrayJsonIterationObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(obj.get("name")).isEqualTo(info.getName());
-        softAssertions.assertThat(obj.get("parameters")).isEqualTo(info.getParameters());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("parameters")).get(0)).get("name").toString()).isEqualTo("name1");
         softAssertions.assertThat(obj.get("log")).isEqualTo(info.getLog());
         softAssertions.assertThat(obj.get("duration")).isEqualTo(info.getDuration());
-        softAssertions.assertThat(obj.get("status")).isEqualTo(info.getStatus());
-        softAssertions.assertThat(obj.get("steps")).isEqualTo(info.getSteps());
+        softAssertions.assertThat(obj.get("status")).isEqualTo(info.getStatus().toString());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("steps")).get(0)).get("defects").toString()).isEqualTo("defects1");
 
         softAssertions.assertAll();
 
@@ -70,11 +72,11 @@ public class XrayJsonIterationObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(obj.get("name")).isEqualTo(info.getName());
-        softAssertions.assertThat(obj.get("parameters")).isEqualTo(info.getParameters());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("parameters")).get(0)).get("name").toString()).isEqualTo("name1");
         softAssertions.assertThat(obj.get("log")).isEqualTo(info.getLog());
         softAssertions.assertThat(obj.get("duration")).isEqualTo(info.getDuration());
-        softAssertions.assertThat(obj.get("status")).isEqualTo(info.getStatus());
-        softAssertions.assertThat(obj.get("steps")).isEqualTo(info.getSteps());
+        softAssertions.assertThat(obj.get("status")).isEqualTo(info.getStatus().toString());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("steps")).get(0)).get("defects").toString()).isEqualTo("defects1");
 
         softAssertions.assertAll();
 
@@ -83,15 +85,28 @@ public class XrayJsonIterationObjectTest {
 
     @Synchronized
     private static Stream<XrayJsonIterationObject> getXrayIterationObject(){
-        XrayJsonIterationObject stepDef = new XrayJsonIterationObject.XrayJsonIterationObjectBuilder()
-                .name("name")
-                .parameters("parameters")
-                .log("log")
-                .duration("duration")
-                .status("status")
-                .steps("steps")
+
+        XrayJsonParameterObject param1 = new XrayJsonParameterObject.XrayJsonParameterObjectBuilder()
+                .name("name1")
+                .value("value1")
                 .build();
 
-        return Stream.of(stepDef);
+        XrayJsonStepResultObject result1 = new XrayJsonStepResultObject.XrayJsonStepResultObjectBuilder()
+                .comment("comment1")
+                .status("passed1")
+                .actualResult("result1")
+                .defects("defects1")
+                .build();
+
+        XrayJsonIterationObject iteration = new XrayJsonIterationObject.XrayJsonIterationObjectBuilder()
+                .name("name")
+                .parameter(param1)
+                .log("log")
+                .duration("duration")
+                .status("passed")
+                .step(result1)
+                .build();
+
+        return Stream.of(iteration);
     }
 }

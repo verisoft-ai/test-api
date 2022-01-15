@@ -5,13 +5,16 @@ import co.verisoft.fw.utils.JsonObject;
 import org.json.simple.JSONObject;
 
 /**
+ * Representation of Xray object - <b>Parameter</b>. This class follows the builder design pattern<br>
  *
+ * <br><b>From Xray documentation:</b><br>
+ * "parameter" object - parameters within iteration results <br>
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  * @since 0.0.2 (Jan 2022)
  *
- * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-stepdef">
- *     "step def" object - step definition</a>
+ * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-%22parameter%22object-parameterswithiniterationresults">
+ *     Using Xray JSON format to import execution results - Parameter</a>
  */
 public class XrayJsonParameterObject implements JsonObject {
 
