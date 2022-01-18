@@ -2,6 +2,7 @@ package co.verisoft.fw.xray;
 
 import lombok.Synchronized;
 import org.assertj.core.api.SoftAssertions;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,9 +18,9 @@ public class XrayJsonFormatObjectTest {
     public void shouldBuildAllFieldsCorrectly(XrayJsonFormatObject info){
 
         SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(info.getTestExecutionKey()).isEqualTo("testExecutionKey");
-        softAssertions.assertThat(info.getInfo()).isEqualTo("info");
-        softAssertions.assertThat(info.getTests()).isEqualTo("tests");
+        softAssertions.assertThat(info.getTestExecutionKey()).isEqualTo("key");
+        softAssertions.assertThat(info.getInfo().getDescription()).isEqualTo("description1");
+        softAssertions.assertThat(info.getTests().get(0).getStatus().toString()).isEqualTo("PASSED");
         softAssertions.assertAll();
     }
 
@@ -33,8 +34,8 @@ public class XrayJsonFormatObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getTestExecutionKey()).isEqualTo("testExecutionKey2");
-        softAssertions.assertThat(info.getInfo()).isEqualTo("info");
-        softAssertions.assertThat(info.getTests()).isEqualTo("tests");
+        softAssertions.assertThat(info.getInfo().getDescription()).isEqualTo("description1");
+        softAssertions.assertThat(info.getTests().get(0).getStatus().toString()).isEqualTo("PASSED");
         softAssertions.assertAll();
     }
 
@@ -45,9 +46,9 @@ public class XrayJsonFormatObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(obj.get("testExecutionKey")).isEqualTo(info.getTestExecutionKey());
-        softAssertions.assertThat(obj.get("info")).isEqualTo(info.getInfo());
-        softAssertions.assertThat(obj.get("tests")).isEqualTo(info.getTests());
-
+        softAssertions.assertThat(((JSONObject) obj.get("info")).get("summary")).isEqualTo(info.getInfo().getSummary());
+        softAssertions.assertThat(((JSONObject) ((JSONObject) ((JSONArray) obj.get("tests")).get(0)).get("testInfo")).get("summary"))
+                .isEqualTo(info.getTests().get(0).getTestInfo().getSummary());
         softAssertions.assertAll();
 
     }
@@ -61,9 +62,9 @@ public class XrayJsonFormatObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(obj.get("testExecutionKey")).isEqualTo(info.getTestExecutionKey());
-        softAssertions.assertThat(obj.get("info")).isEqualTo(info.getInfo());
-        softAssertions.assertThat(obj.get("tests")).isEqualTo(info.getTests());
-
+        softAssertions.assertThat(((JSONObject) obj.get("info")).get("summary")).isEqualTo(info.getInfo().getSummary());
+        softAssertions.assertThat(((JSONObject) ((JSONObject) ((JSONArray) obj.get("tests")).get(0)).get("testInfo")).get("summary"))
+                .isEqualTo(info.getTests().get(0).getTestInfo().getSummary());
         softAssertions.assertAll();
 
     }
@@ -72,12 +73,130 @@ public class XrayJsonFormatObjectTest {
 
     @Synchronized
     private static Stream<XrayJsonFormatObject> getXrayFormatObject(){
-        XrayJsonFormatObject custField = new XrayJsonFormatObject.XrayJsonFormatObjectBuilder()
-                .testExecutionKey("testExecutionKey")
-                .info("info")
-                .tests("tests")
+
+        // Create JsonInfo
+        XrayJsonInfoObject info = new XrayJsonInfoObject.XrayInfoObjectBuilder()
+                .testEnvironments("env1")
+                .testPlanKey("planKey1")
+                .project("project1")
+                .description("description1")
+                .summary("summary1")
+                .startDate("start")
+                .finishDate("finish")
+                .user("user1")
+                .version("version")
+                .revision("revision1")
                 .build();
 
-        return Stream.of(custField);
+        // Create Test info
+        XrayJsonCustomFieldObject cust1 = new XrayJsonCustomFieldObject.XrayJsonCustomFieldObjectBuilder()
+                .id("custId1")
+                .name("custName1")
+                .value("custValue1")
+                .build();
+
+        XrayJsonStepDefObject step1 = new XrayJsonStepDefObject.XrayJsonStepDefObjectBuilder()
+                .action("action1")
+                .result("result1")
+                .customField(cust1)
+                .data("data1")
+                .build();
+
+        XrayJsonTestInfoObject testInfo = new XrayJsonTestInfoObject.XrayJsonTestInfoObjectBuilder()
+                .projectKey("projectKey1")
+                .summary("summary1")
+                .type("generic")
+                .requirementKey("key1")
+                .labels("label1")
+                .step(step1)
+                .scenario("scenario1")
+                .definition("def1")
+                .build();
+
+
+        // Create step result
+        XrayJsonEvidenceObject evidenc1 = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
+                .data("data1")
+                .contentType("contentType1")
+                .filename("fileName1")
+                .build();
+
+        XrayJsonEvidenceObject evidenc2 = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
+                .data("data2")
+                .contentType("contentType2")
+                .filename("fileName2")
+                .build();
+
+        XrayJsonStepResultObject stepResult = new XrayJsonStepResultObject.XrayJsonStepResultObjectBuilder()
+                .status("passed")
+                .comment("comment")
+                .actualResult("actualResult")
+                .evidence(evidenc1)
+                .evidence(evidenc2)
+                .defects("defects")
+                .build();
+
+
+        // Create iteration
+        XrayJsonParameterObject param1 = new XrayJsonParameterObject.XrayJsonParameterObjectBuilder()
+                .name("name1")
+                .value("value1")
+                .build();
+
+        XrayJsonStepResultObject result1 = new XrayJsonStepResultObject.XrayJsonStepResultObjectBuilder()
+                .comment("comment1")
+                .status("passed1")
+                .actualResult("result1")
+                .defects("defects1")
+                .build();
+
+        XrayJsonIterationObject iteration = new XrayJsonIterationObject.XrayJsonIterationObjectBuilder()
+                .name("name")
+                .parameter(param1)
+                .log("log")
+                .duration("duration")
+                .status("passed")
+                .step(result1)
+                .build();
+
+        // Create Evidence
+        XrayJsonEvidenceObject evidence = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
+                .data("data")
+                .filename("fileName")
+                .contentType("contentType")
+                .build();
+
+        // Create custom field
+        XrayJsonCustomFieldObject custField = new XrayJsonCustomFieldObject.XrayJsonCustomFieldObjectBuilder()
+                .id("id")
+                .name("name")
+                .value("value")
+                .build();
+
+        XrayJsonTestObject infoBase = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
+                .testKey("testKey")
+                .testInfo(testInfo)
+                .start("start")
+                .finish("finish")
+                .comment("comment")
+                .executedBy("executedBy")
+                .assignee("assignee")
+                .status("passed")
+                .step(stepResult)
+                .examples("examples")
+                .iteration(iteration)
+                .defect("defect1")
+                .evidence(evidence)
+                .customField(custField)
+                .build();
+
+        XrayJsonFormatObject obj = new XrayJsonFormatObject.XrayJsonFormatObjectBuilder()
+                .test(infoBase)
+                .info(info)
+                .testExecutionKey("key")
+                .build();
+
+        System.out.println(obj.asJsonObject());
+        return Stream.of(obj);
     }
 }

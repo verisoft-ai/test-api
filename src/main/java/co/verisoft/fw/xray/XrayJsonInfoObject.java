@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
  * @since 0.0.2 (Jan 2022)
  *
  * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-JSONformat">
- *     Using Xray JSON format to import execution results</a>
+ *     Using Xray JSON format to import execution results - info</a>
  */
 public class XrayJsonInfoObject implements JsonObject {
 
