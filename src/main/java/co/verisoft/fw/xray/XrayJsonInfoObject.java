@@ -1,7 +1,27 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import co.verisoft.fw.utils.JsonObject;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
+
+import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Representation of Xray info object - Test execution issue. This class follows the builder design pattern<br>
@@ -12,76 +32,56 @@ import org.json.simple.JSONObject;
  * specify the issue fields within the <b>info</b> object.
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-JSONformat">
- *     Using Xray JSON format to import execution results - info</a>
+ * Using Xray JSON format to import execution results - info</a>
+ * @since 0.0.2 (Jan 2022)
  */
-public class XrayJsonInfoObject implements JsonObject {
+public class XrayJsonInfoObject extends XrayJsonFormat implements JsonObject {
 
-    private final String project;         // The project key where the test execution will be created
-    private final String summary;         // The summary for the test execution issue
-    private final String description;     // The description for the test execution issue
-    private final String version;         // The version name for the Fix Version field of the test execution issue
-    private final String revision;        // A revision for the revision custom field
-    private final String user;            // The userid for the Jira user who executed the tests
-    private final String startDate;       // The start date for the test execution issue
-    private final String finishDate;      // The finish date for the test execution issue
-    private final String testPlanKey;      // The test plan key for associating the test execution issue
-    private final String testEnvironments; // The test environments for the test execution issue
+    private final Map<String, String> fields;
 
-
-    private XrayJsonInfoObject(XrayInfoObjectBuilder builder){
-        this.project = builder.project;
-        this.summary = builder.summary;
-        this.description = builder.description;
-        this.version = builder.version;
-        this.revision = builder.revision;
-        this.user = builder.user;
-        this.startDate = builder.startDate;
-        this.finishDate = builder.finishDate;
-        this.testPlanKey = builder.testPlanKey;
-        this.testEnvironments = builder.testEnvironments;
+    private XrayJsonInfoObject(XrayInfoObjectBuilder builder) {
+        this.fields = builder.fields;
     }
 
-    public String getProject() {
-        return project;
+    public @Nullable String getProject() {
+        return fields.get("project");
     }
 
-    public String getSummary() {
-        return summary;
+    public @Nullable String getSummary() {
+        return fields.get("summary");
     }
 
-    public String getDescription() {
-        return description;
+    public @Nullable String getDescription() {
+        return fields.get("description");
     }
 
-    public String getVersion() {
-        return version;
+    public @Nullable String getVersion() {
+        return fields.get("version");
     }
 
-    public String getRevision() {
-        return revision;
+    public @Nullable String getRevision() {
+        return fields.get("revision");
     }
 
-    public String getUser() {
-        return user;
+    public @Nullable String getUser() {
+        return fields.get("user");
     }
 
-    public String getStartDate() {
-        return startDate;
+    public @Nullable String getStartDate() {
+        return fields.get("startDate");
     }
 
-    public String getFinishDate() {
-        return finishDate;
+    public @Nullable String getFinishDate() {
+        return fields.get("finishDate");
     }
 
-    public String getTestPlanKey() {
-        return testPlanKey;
+    public @Nullable String getTestPlanKey() {
+        return fields.get("testPlanKey");
     }
 
-    public String getTestEnvironments() {
-        return testEnvironments;
+    public @Nullable String getTestEnvironments() {
+        return fields.get("testEnvironments");
     }
 
 
@@ -89,16 +89,11 @@ public class XrayJsonInfoObject implements JsonObject {
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("project", this.project);
-        obj.put("summary", this.summary);
-        obj.put("description", this.description);
-        obj.put("version", this.version);
-        obj.put("revision", this.revision);
-        obj.put("user", this.user);
-        obj.put("startDate", this.startDate);
-        obj.put("finishDate", this.finishDate);
-        obj.put("testPlanKey", this.testPlanKey);
-        obj.put("testEnvironments", this.testEnvironments);
+        for (Map.Entry<String, String> entry : fields.entrySet()) {
+            if (entry.getValue() != null)
+                obj.put(entry.getKey(), entry.getValue());
+        }
+
         return obj;
     }
 
@@ -113,88 +108,69 @@ public class XrayJsonInfoObject implements JsonObject {
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
-    public static class XrayInfoObjectBuilder{
-        private String project;         // The project key where the test execution will be created
-        private String summary;         // The summary for the test execution issue
-        private String description;     // The description for the test execution issue
-        private String version;         // The version name for the Fix Version field of the test execution issue
-        private String revision;        // A revision for the revision custom field
-        private String user;            // The userid for the Jira user who executed the tests
-        private String startDate;       // The start date for the test execution issue
-        private String finishDate;      // The finish date for the test execution issue
-        public String testPlanKey;      // The test plan key for associating the test execution issue
-        public String testEnvironments; // The test environments for the test execution issue
+    public static class XrayInfoObjectBuilder {
+        private final Map<String, String> fields;
 
 
-
-        public XrayInfoObjectBuilder(XrayJsonInfoObject obj){
-            this.project = obj.project;
-            this.summary = obj.summary;
-            this.description = obj.description;
-            this.version = obj.version;
-            this.revision = obj.revision;
-            this.user = obj.user;
-            this.startDate = obj.startDate;
-            this.finishDate = obj.finishDate;
-            this.testPlanKey = obj.testPlanKey;
-            this.testEnvironments = obj.testEnvironments;
+        public XrayInfoObjectBuilder(XrayJsonInfoObject obj) {
+            this.fields = obj.fields;
         }
 
-        public XrayInfoObjectBuilder(){
-            // No-Op. Basic builder option
+        public XrayInfoObjectBuilder() {
+            this.fields = new HashMap<>();
         }
 
         public XrayInfoObjectBuilder project(String project) {
-            this.project = project;
+            this.fields.put("project", project);
             return this;
         }
 
         public XrayInfoObjectBuilder summary(String summary) {
-            this.summary = summary;
+            this.fields.put("summary", summary);
             return this;
         }
 
         public XrayInfoObjectBuilder description(String description) {
-            this.description = description;
+            this.fields.put("description", description);
             return this;
         }
 
         public XrayInfoObjectBuilder version(String version) {
-            this.version = version;
+            this.fields.put("version", version);
             return this;
         }
 
         public XrayInfoObjectBuilder revision(String revision) {
-            this.revision = revision;
+            this.fields.put("revision", revision);
             return this;
         }
 
         public XrayInfoObjectBuilder user(String user) {
-            this.user = user;
+            this.fields.put("user", user);
             return this;
         }
 
-        public XrayInfoObjectBuilder startDate(String startDate) {
-            this.startDate = startDate;
+        public XrayInfoObjectBuilder startDate(ZonedDateTime startDate) {
+            this.fields.put("startDate", asXrayDateTime(startDate));
             return this;
         }
 
-        public XrayInfoObjectBuilder finishDate(String finishDate) {
-            this.finishDate = finishDate;
+        public XrayInfoObjectBuilder finishDate(ZonedDateTime finishDate) {
+            this.fields.put("finishDate", asXrayDateTime(finishDate));
             return this;
         }
 
         public XrayInfoObjectBuilder testPlanKey(String testPlanKey) {
-            this.testPlanKey = testPlanKey;
+            this.fields.put("testPlanKey", testPlanKey);
             return this;
         }
 
         public XrayInfoObjectBuilder testEnvironments(String testEnvironments) {
-            this.testEnvironments = testEnvironments;
+            this.fields.put("testEnvironments", testEnvironments);
             return this;
         }
 
-        public XrayJsonInfoObject build(){
+        public XrayJsonInfoObject build() {
             XrayJsonInfoObject info = new XrayJsonInfoObject(this);
             validateXrayInfoObject(info);
             return info;

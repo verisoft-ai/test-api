@@ -1,14 +1,27 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Representation of Xray object - <b>Step Result</b>. This class follows the builder design pattern<br>
@@ -17,48 +30,42 @@ import java.util.Locale;
  * "step result" object - step results <br>
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-%22stepresult%22object-stepresults">
- *     Using Xray JSON format to import execution results - Step Result</a>
+ * Using Xray JSON format to import execution results - Step Result</a>
+ * @since 0.0.2 (Jan 2022)
  */
-public class XrayJsonStepResultObject implements JsonObject {
+public class XrayJsonStepResultObject extends XrayJsonFormat implements JsonObject {
 
-    private final Status status;                                // The status for the test step (PASSED, FAILED, EXECUTING, custom statuses ...)
-    private final String comment;                               // The comment for the step result
-    private final String actualResult;                          // The actual result field for the step result
-    private final List<XrayJsonEvidenceObject> evidences;      // An array of evidence items of the test run
-    private final String defects;                              // An array of defect issue keys to associate with the test run
+    private final Map<String, Object> fields;
 
-    public Status getStatus() {
-        return status;
+    public @Nullable Status getStatus() {
+        return (Status) fields.get("status");
     }
 
-    public String getStatusAsString() { return status.toString();}
-
-    public String getComment() {
-        return comment;
+    public @Nullable String getStatusAsString() {
+        return getStatus() != null ? this.getStatus().toString() : null;
     }
 
-    public String getActualResult() {
-        return actualResult;
+    public @Nullable String getComment() {
+        return (String) fields.get("comment");
     }
 
-    public List getEvidences() {
-        return evidences;
+    public @Nullable String getActualResult() {
+        return (String) fields.get("actualResult");
     }
 
-    public String getDefects() {
-        return defects;
+    @SuppressWarnings("unchecked")
+    public @Nullable List<XrayJsonEvidenceObject> getEvidences() {
+        return (List<XrayJsonEvidenceObject>) fields.get("evidences");
+    }
+
+    public @Nullable String getDefects() {
+        return (String) fields.get("defects");
     }
 
 
     private XrayJsonStepResultObject(XrayJsonStepResultObjectBuilder builder) {
-        this.status = builder.status;
-        this.comment = builder.comment;
-        this.actualResult = builder.actualResult;
-        this.evidences = builder.evidences;
-        this.defects = builder.defects;
+        this.fields = builder.fields;
     }
 
 
@@ -66,18 +73,27 @@ public class XrayJsonStepResultObject implements JsonObject {
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("status", this.status.toString());
-        obj.put("comment", this.comment);
-        obj.put("actualResult", this.actualResult);
-        obj.put("defects", this.defects);
 
-        // Write down the evidences
-        JSONArray arr = new JSONArray();
-        for (XrayJsonEvidenceObject evidence:evidences)
-            arr.add(evidence.asJsonObject());
+        if (this.getStatus() != null)
+            obj.put("status", this.getStatusAsString());
 
-        if (!arr.isEmpty()){
-            obj.put("evidences", arr);
+        if (this.getComment() != null)
+            obj.put("comment", this.getComment());
+
+        if (this.getActualResult() != null)
+            obj.put("actualResult", this.getActualResult());
+
+        if (this.getDefects() != null)
+            obj.put("defects", this.getDefects());
+
+        if (this.getEvidences() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonEvidenceObject evidence : getEvidences())
+                arr.add(evidence.asJsonObject());
+
+            if (!arr.isEmpty()) {
+                obj.put("evidences", arr);
+            }
         }
 
         return obj;
@@ -94,58 +110,59 @@ public class XrayJsonStepResultObject implements JsonObject {
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
+    @SuppressWarnings("rawtypes")
     public static class XrayJsonStepResultObjectBuilder implements Builder {
 
-        private Status status;
-        private String comment;
-        private String actualResult;
-        private List<XrayJsonEvidenceObject> evidences;
-        private String defects;
+        private final Map<String, Object> fields;
 
         public XrayJsonStepResultObjectBuilder(XrayJsonStepResultObject obj) {
-            this.status = obj.status;
-            this.comment = obj.comment;
-            this.actualResult = obj.actualResult;
-            this.evidences = obj.evidences;
-            this.defects = obj.defects;
+            this.fields = obj.fields;
         }
 
         public XrayJsonStepResultObjectBuilder() {
-            this.evidences = new ArrayList<>();
+            this.fields = new HashMap<>();
         }
 
         public XrayJsonStepResultObjectBuilder status(String status) {
-            this.status = Status.toStatus(status);
+            fields.put("status", Status.toStatus(status));
             return this;
         }
 
         public XrayJsonStepResultObjectBuilder status(Status status) {
-            this.status = status;
+            fields.put("status", status);
             return this;
         }
 
         public XrayJsonStepResultObjectBuilder comment(String comment) {
-            this.comment = comment;
+            fields.put("comment", comment);
             return this;
         }
 
         public XrayJsonStepResultObjectBuilder actualResult(String actualResult) {
-            this.actualResult = actualResult;
+            fields.put("actualResult", actualResult);
             return this;
         }
 
         public XrayJsonStepResultObjectBuilder evidence(List<XrayJsonEvidenceObject> evidences) {
-            this.evidences = evidences;
+            fields.put("evidences", evidences);
             return this;
         }
 
         public XrayJsonStepResultObjectBuilder evidence(XrayJsonEvidenceObject evidence) {
-            this.evidences.add(evidence);
+            if (fields.get("evidences") != null) {
+                List<XrayJsonEvidenceObject> p = ((List<XrayJsonEvidenceObject>) fields.get("evidences"));
+                p.add(evidence);
+                fields.put("evidences", p);
+            } else {
+                List<XrayJsonEvidenceObject> p = new ArrayList<>();
+                p.add(evidence);
+                this.evidence(p);
+            }
             return this;
         }
 
         public XrayJsonStepResultObjectBuilder defects(String defects) {
-            this.defects = defects;
+            fields.put("defects", defects);
             return this;
         }
 

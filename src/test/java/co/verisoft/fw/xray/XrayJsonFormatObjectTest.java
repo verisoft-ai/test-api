@@ -1,4 +1,19 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import lombok.Synchronized;
 import org.assertj.core.api.SoftAssertions;
@@ -6,11 +21,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
+@SuppressWarnings("ALL")
+@Execution(ExecutionMode.CONCURRENT)
 public class XrayJsonFormatObjectTest {
 
     @ParameterizedTest
@@ -20,7 +40,7 @@ public class XrayJsonFormatObjectTest {
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getTestExecutionKey()).isEqualTo("key");
         softAssertions.assertThat(info.getInfo().getDescription()).isEqualTo("description1");
-        softAssertions.assertThat(info.getTests().get(0).getStatus().toString()).isEqualTo("PASSED");
+        softAssertions.assertThat(info.getTests().get(0).getStatus()).isEqualTo(Status.PASSED);
         softAssertions.assertAll();
     }
 
@@ -81,8 +101,8 @@ public class XrayJsonFormatObjectTest {
                 .project("project1")
                 .description("description1")
                 .summary("summary1")
-                .startDate("start")
-                .finishDate("finish")
+                .startDate(ZonedDateTime.parse("2022-01-06T11:44:11+02"))
+                .finishDate(ZonedDateTime.parse("2022-01-06T11:44:11+02"))
                 .user("user1")
                 .version("version")
                 .revision("revision1")
@@ -145,7 +165,7 @@ public class XrayJsonFormatObjectTest {
 
         XrayJsonStepResultObject result1 = new XrayJsonStepResultObject.XrayJsonStepResultObjectBuilder()
                 .comment("comment1")
-                .status("passed1")
+                .status("passed")
                 .actualResult("result1")
                 .defects("defects1")
                 .build();
@@ -176,8 +196,8 @@ public class XrayJsonFormatObjectTest {
         XrayJsonTestObject infoBase = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
                 .testKey("testKey")
                 .testInfo(testInfo)
-                .start("start")
-                .finish("finish")
+                .start(ZonedDateTime.parse("2022-01-06T11:21:11+02"))
+                .finish(ZonedDateTime.parse("2022-01-06T11:44:11+02"))
                 .comment("comment")
                 .executedBy("executedBy")
                 .assignee("assignee")
@@ -196,7 +216,6 @@ public class XrayJsonFormatObjectTest {
                 .testExecutionKey("key")
                 .build();
 
-        System.out.println(obj.asJsonObject());
         return Stream.of(obj);
     }
 }

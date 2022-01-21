@@ -1,18 +1,36 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import lombok.Synchronized;
 import org.assertj.core.api.SoftAssertions;
-import org.assertj.core.util.Arrays;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
+import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
+@SuppressWarnings("ALL")
+@Execution(ExecutionMode.CONCURRENT)
 public class XrayJsonTestObjectTest {
 
     @ParameterizedTest
@@ -22,8 +40,8 @@ public class XrayJsonTestObjectTest {
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getTestKey()).isEqualTo("testKey");
         softAssertions.assertThat(info.getTestInfo().getDefinition()).isEqualTo("def1");
-        softAssertions.assertThat(info.getStart()).isEqualTo("start");
-        softAssertions.assertThat(info.getFinish()).isEqualTo("finish");
+        softAssertions.assertThat(info.getStart()).isEqualTo("2022-01-06T11:21:11+02");
+        softAssertions.assertThat(info.getFinish()).isEqualTo("2022-01-06T11:44:11+02");
         softAssertions.assertThat(info.getComment()).isEqualTo("comment");
         softAssertions.assertThat(info.getExecutedBy()).isEqualTo("executedBy");
         softAssertions.assertThat(info.getAssignee()).isEqualTo("assignee");
@@ -48,8 +66,8 @@ public class XrayJsonTestObjectTest {
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getTestKey()).isEqualTo("testKey2");
         softAssertions.assertThat(info.getTestInfo().getDefinition()).isEqualTo("def1");
-        softAssertions.assertThat(info.getStart()).isEqualTo("start");
-        softAssertions.assertThat(info.getFinish()).isEqualTo("finish");
+        softAssertions.assertThat(info.getStart()).isEqualTo("2022-01-06T11:21:11+02");
+        softAssertions.assertThat(info.getFinish()).isEqualTo("2022-01-06T11:44:11+02");
         softAssertions.assertThat(info.getComment()).isEqualTo("comment");
         softAssertions.assertThat(info.getExecutedBy()).isEqualTo("executedBy");
         softAssertions.assertThat(info.getAssignee()).isEqualTo("assignee");
@@ -70,19 +88,23 @@ public class XrayJsonTestObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(obj.get("testKey")).isEqualTo(info.getTestKey());
-        softAssertions.assertThat(((XrayJsonTestInfoObject) obj.get("testInfo")).getProjectKey()).isEqualTo(info.getTestInfo().getProjectKey());
+        softAssertions.assertThat(((JSONObject) obj.get("testInfo")).get("projectKey")).isEqualTo(info.getTestInfo().getProjectKey());
         softAssertions.assertThat(obj.get("start")).isEqualTo(info.getStart());
         softAssertions.assertThat(obj.get("finish")).isEqualTo(info.getFinish());
         softAssertions.assertThat(obj.get("comment")).isEqualTo(info.getComment());
         softAssertions.assertThat(obj.get("executedBy")).isEqualTo(info.getExecutedBy());
         softAssertions.assertThat(obj.get("assignee")).isEqualTo(info.getAssignee());
         softAssertions.assertThat(obj.get("status").toString()).isEqualTo(info.getStatus().toString());
-        softAssertions.assertThat(((XrayJsonStepResultObject) ((List) obj.get("steps")).get(0)).getActualResult()).isEqualTo(info.getSteps().get(0).getActualResult());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("steps")).get(0))).isEqualTo(info.getSteps().get(0).asJsonObject());
         softAssertions.assertThat(obj.get("examples")).isEqualTo(info.getExamples());
-        softAssertions.assertThat(((XrayJsonIterationObject) ((List) obj.get("iterations")).get(0)).getName()).isEqualTo(info.getIterations().get(0).getName());
-        softAssertions.assertThat(((List) obj.get("defects")).get(0)).isEqualTo(info.getDefects().get(0));
-        // softAssertions.assertThat(obj.get("evidences")).isEqualTo(info.getEvidence());
-        //softAssertions.assertThat(obj.get("customFields")).isEqualTo(info.getCustomFields());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("iterations")).get(0)))
+                .isEqualTo(info.getIterations().get(0).asJsonObject());
+        softAssertions.assertThat(((String) ((JSONArray) obj.get("defects")).get(0)))
+                .isEqualTo(info.getDefects().get(0));
+         softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("evidences")).get(0)))
+                 .isEqualTo(info.getEvidence().get(0).asJsonObject());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("customFields")).get(0)))
+                .isEqualTo(info.getCustomFields().get(0).asJsonObject());
 
         softAssertions.assertAll();
 
@@ -97,19 +119,23 @@ public class XrayJsonTestObjectTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(obj.get("testKey")).isEqualTo(info.getTestKey());
-        softAssertions.assertThat(obj.get("testInfo")).isEqualTo(info.getTestInfo());
+        softAssertions.assertThat(obj.get("testInfo")).isEqualTo(info.getTestInfo().asJsonObject());
         softAssertions.assertThat(obj.get("start")).isEqualTo(info.getStart());
         softAssertions.assertThat(obj.get("finish")).isEqualTo(info.getFinish());
         softAssertions.assertThat(obj.get("comment")).isEqualTo(info.getComment());
         softAssertions.assertThat(obj.get("executedBy")).isEqualTo(info.getExecutedBy());
         softAssertions.assertThat(obj.get("assignee")).isEqualTo(info.getAssignee());
-        softAssertions.assertThat(obj.get("status")).isEqualTo(info.getStatus());
-        softAssertions.assertThat(obj.get("steps")).isEqualTo(info.getSteps());
+        softAssertions.assertThat(obj.get("status")).isEqualTo(info.getStatus().toString());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("steps")).get(0)))
+                .isEqualTo(info.getSteps().get(0).asJsonObject());
         softAssertions.assertThat(obj.get("examples")).isEqualTo(info.getExamples());
-        softAssertions.assertThat(obj.get("iterations")).isEqualTo(info.getIterations());
-        softAssertions.assertThat(obj.get("defects")).isEqualTo(info.getDefects());
-        softAssertions.assertThat(obj.get("evidence")).isEqualTo(info.getEvidence());
-        softAssertions.assertThat(obj.get("customFields")).isEqualTo(info.getCustomFields());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("iterations")).get(0)))
+                .isEqualTo(info.getIterations().get(0).asJsonObject());
+        softAssertions.assertThat(((String) ((JSONArray) obj.get("defects")).get(0)))
+                .isEqualTo(info.getDefects().get(0));
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("evidences")).get(0)))
+                .isEqualTo(info.getEvidence().get(0).asJsonObject());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("customFields")).get(0))).isEqualTo(info.getCustomFields().get(0).asJsonObject());
 
         softAssertions.assertAll();
 
@@ -176,7 +202,7 @@ public class XrayJsonTestObjectTest {
 
         XrayJsonStepResultObject result1 = new XrayJsonStepResultObject.XrayJsonStepResultObjectBuilder()
                 .comment("comment1")
-                .status("passed1")
+                .status("passed")
                 .actualResult("result1")
                 .defects("defects1")
                 .build();
@@ -207,8 +233,8 @@ public class XrayJsonTestObjectTest {
         XrayJsonTestObject infoBase = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
                 .testKey("testKey")
                 .testInfo(testInfo)
-                .start("start")
-                .finish("finish")
+                .start(ZonedDateTime.parse("2022-01-06T11:21:11+02"))
+                .finish(ZonedDateTime.parse("2022-01-06T11:44:11+02"))
                 .comment("comment")
                 .executedBy("executedBy")
                 .assignee("assignee")
@@ -220,7 +246,6 @@ public class XrayJsonTestObjectTest {
                 .evidence(evidence)
                 .customField(custField)
                 .build();
-        System.out.println(infoBase.asJsonObject());
         return Stream.of(infoBase);
     }
 }

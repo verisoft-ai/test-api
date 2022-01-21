@@ -1,13 +1,27 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Representation of Xray object - <b>Iteration</b>. This class follows the builder design pattern<br>
@@ -25,52 +39,45 @@ import java.util.Locale;
  * Using Xray JSON format to import execution results - Iteration</a>
  * @since 0.0.2 (Jan 2022)
  */
-public class XrayJsonIterationObject implements JsonObject {
+public class XrayJsonIterationObject extends XrayJsonFormat implements JsonObject {
 
-    private final String name;                              // The iteration name
-    private final List<XrayJsonParameterObject> parameters; // An array of parameters along with their values
-    private final String log;                               // The log for the iteration
-    private final String duration;                          // A duration for the iteration
-    private final Status status;                            // The status for the iteration (PASSED, FAILED, EXECUTING, custom statuses ...)
-    private final List<XrayJsonStepResultObject> steps;     // An array of step results (for Manual tests)
+    private final Map<String, Object> fields;
 
-    public String getName() {
-        return name;
+    public @Nullable String getName() {
+        return (String) fields.get("name");
     }
 
-    public List<XrayJsonParameterObject> getParameters() {
-        return parameters;
+    public @Nullable List<XrayJsonParameterObject> getParameters() {
+
+        return ((List<XrayJsonParameterObject>) fields.get("parameters"));
     }
 
-    public String getLog() {
-        return log;
+    public @Nullable String getLog() {
+        return ((String) fields.get("log"));
     }
 
-    public String getDuration() {
-        return duration;
+    public @Nullable String getDuration() {
+
+        return ((String) fields.get("duration"));
     }
 
-    public Status getStatus() {
-        return status;
+    public @Nullable Status getStatus() {
+        return ((Status) fields.get("status"));
     }
 
-    public String getStatusAsString() {
-        return status.toString();
+    public @Nullable String getStatusAsString() {
+        return getStatus().toString();
     }
 
 
-    public List<XrayJsonStepResultObject> getSteps() {
-        return steps;
+    public @Nullable List<XrayJsonStepResultObject> getSteps() {
+
+        return ((List<XrayJsonStepResultObject>) fields.get("steps"));
     }
 
 
     private XrayJsonIterationObject(XrayJsonIterationObjectBuilder builder) {
-        this.name = builder.name;
-        this.parameters = builder.parameters;
-        this.log = builder.log;
-        this.duration = builder.duration;
-        this.status = builder.status;
-        this.steps = builder.steps;
+        this.fields = builder.fields;
     }
 
 
@@ -78,27 +85,38 @@ public class XrayJsonIterationObject implements JsonObject {
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("name", this.name);
-        obj.put("log", this.log);
-        obj.put("duration", this.duration);
-        obj.put("status", this.status.toString());
 
-        // Parameters
-        JSONArray arr = new JSONArray();
-        for (XrayJsonParameterObject parameter : parameters)
-            arr.add(parameter.asJsonObject());
+        if (this.getName() != null)
+            obj.put("name", this.getName());
 
-        if (!arr.isEmpty()) {
-            obj.put("parameters", arr);
+        if (this.getLog() != null)
+            obj.put("log", this.getLog());
+
+        if (this.getDuration() != null)
+            obj.put("duration", this.getDuration());
+
+        if (this.getStatus() != null)
+            obj.put("status", this.getStatusAsString());
+
+        if (this.getParameters() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonParameterObject parameter : this.getParameters())
+                arr.add(parameter.asJsonObject());
+
+            if (!arr.isEmpty()) {
+                obj.put("parameters", arr);
+            }
         }
 
-        // Step results
-        arr = new JSONArray(); // arr.clear reveales Json simple BUG!
-        for (XrayJsonStepResultObject result : steps)
-            arr.add(result.asJsonObject());
+        if (this.getSteps() != null) {
+            JSONArray arr = new JSONArray(); // arr.clear reveales Json simple BUG!
+            for (XrayJsonStepResultObject result : this.getSteps())
+                arr.add(result.asJsonObject());
 
-        if (!arr.isEmpty()) {
-            obj.put("steps", arr);
+            if (!arr.isEmpty()) {
+                obj.put("steps", arr);
+            }
+            return obj;
         }
         return obj;
     }
@@ -116,70 +134,77 @@ public class XrayJsonIterationObject implements JsonObject {
      */
     public static class XrayJsonIterationObjectBuilder implements Builder {
 
-        private String name;
-        private List<XrayJsonParameterObject> parameters;
-        private String log;
-        private String duration;
-        private Status status;
-        private List<XrayJsonStepResultObject> steps;
+        private final Map<String, Object> fields;
 
 
         public XrayJsonIterationObjectBuilder(XrayJsonIterationObject obj) {
-            this.name = obj.name;
-            this.parameters = obj.parameters;
-            this.log = obj.log;
-            this.duration = obj.duration;
-            this.status = obj.status;
-            this.steps = obj.steps;
+            this.fields = obj.fields;
         }
 
         public XrayJsonIterationObjectBuilder() {
-            parameters = new ArrayList<>();
-            steps = new ArrayList<>();
+            fields = new HashMap<>();
         }
 
         public XrayJsonIterationObjectBuilder name(String name) {
-            this.name = name;
+            fields.put("name", name);
             return this;
         }
 
         public XrayJsonIterationObjectBuilder parameters(List<XrayJsonParameterObject> parameters) {
-            this.parameters = parameters;
+            fields.put("parameters", parameters);
             return this;
         }
 
         public XrayJsonIterationObjectBuilder parameter(XrayJsonParameterObject parameter) {
-            this.parameters.add(parameter);
+            if (fields.get("parameters") !=null){
+                List<XrayJsonParameterObject> p = ((List<XrayJsonParameterObject>) fields.get("parameters"));
+                p.add(parameter);
+                fields.put("parameters", p);
+            }
+            else{
+                List<XrayJsonParameterObject> p = new ArrayList<>();
+                p.add(parameter);
+                this.parameters(p);
+            }
             return this;
         }
 
         public XrayJsonIterationObjectBuilder log(String log) {
-            this.log = log;
+            fields.put("log", log);
             return this;
         }
 
         public XrayJsonIterationObjectBuilder duration(String duration) {
-            this.duration = duration;
+            fields.put("duration", duration);
             return this;
         }
 
         public XrayJsonIterationObjectBuilder status(Status status) {
-            this.status = status;
+            fields.put("status", status.toString());
             return this;
         }
 
         public XrayJsonIterationObjectBuilder status(String status) {
-            this.status = Status.toStatus(status);
+            fields.put("status", Status.toStatus(status));
             return this;
         }
 
         public XrayJsonIterationObjectBuilder steps(List<XrayJsonStepResultObject> steps) {
-            this.steps = steps;
+            fields.put("steps", steps);
             return this;
         }
 
         public XrayJsonIterationObjectBuilder step(XrayJsonStepResultObject step) {
-            this.steps.add(step);
+            if (fields.get("steps") !=null){
+                List<XrayJsonStepResultObject> p = ((List<XrayJsonStepResultObject>) fields.get("steps"));
+                p.add(step);
+                fields.put("steps", p);
+            }
+            else{
+                List<XrayJsonStepResultObject> p = new ArrayList<>();
+                p.add(step);
+                this.steps(p);
+            }
             return this;
         }
 

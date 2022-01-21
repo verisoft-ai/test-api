@@ -1,12 +1,27 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Representation of Xray object - <b>Test Info</b>. This class follows the builder design pattern<br>
@@ -23,62 +38,48 @@ import java.util.List;
  * Using Xray JSON format to import execution results - Tets Info</a>
  * @since 0.0.2 (Jan 2022)
  */
-public class XrayJsonTestInfoObject implements JsonObject {
+public class XrayJsonTestInfoObject extends XrayJsonFormat implements JsonObject {
 
-    private final String projectKey;                    // The project key where the test issue will be created
-    private final String summary;                       // The summary for the test issue
-    private final TestType type;                        // The test type (e.g. Manual, Cucumber, Generic)
-    private final List<String> requirementKeys;         // An array of requirement issue keys to associate with the test
-    private final String labels;                        // The test issue labels
-    private final List<XrayJsonStepDefObject> steps;    // An array of test steps (for Manual tests)
-    private final String scenario;                      // The BDD scenario
-    private final String definition;                    // The generic test definition
+    private final Map<String, Object> fields;
 
-    public String getProjectKey() {
-        return projectKey;
+    public @Nullable String getProjectKey() {
+        return (String) fields.get("projectKey");
     }
 
-    public String getSummary() {
-        return summary;
+    public @Nullable String getSummary() {
+        return (String) fields.get("summary");
     }
 
-    public TestType getType() {
-        return type;
+    public @Nullable TestType getType() {
+        return (TestType) fields.get("type");
     }
 
-    public String getTypeAsString() {
-        return type.toString();
+    public @Nullable String getTypeAsString() {
+        return getType().toString();
     }
 
-    public List<String> getRequirementKeys() {
-        return requirementKeys;
+    public @Nullable List<String> getRequirementKeys() {
+        return ((List<String>) fields.get("requirementKeys"));
     }
 
-    public String getLabels() {
-        return labels;
+    public @Nullable String getLabels() {
+        return (String) fields.get("labels");
     }
 
-    public List<XrayJsonStepDefObject> getSteps() {
-        return steps;
+    public @Nullable List<XrayJsonStepDefObject> getSteps() {
+        return ((List<XrayJsonStepDefObject>) fields.get("steps"));
     }
 
-    public String getScenario() {
-        return scenario;
+    public @Nullable String getScenario() {
+        return (String) fields.get("scenario");
     }
 
-    public String getDefinition() {
-        return definition;
+    public @Nullable String getDefinition() {
+        return ((String) fields.get("definition"));
     }
 
     private XrayJsonTestInfoObject(XrayJsonTestInfoObjectBuilder builder) {
-        this.projectKey = builder.projectKey;
-        this.summary = builder.summary;
-        this.type = builder.type;
-        this.requirementKeys = builder.requirementKeys;
-        this.labels = builder.labels;
-        this.steps = builder.steps;
-        this.scenario = builder.scenario;
-        this.definition = builder.definition;
+        this.fields = builder.fields;
     }
 
 
@@ -86,32 +87,44 @@ public class XrayJsonTestInfoObject implements JsonObject {
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("projectKey", this.projectKey);
-        obj.put("summary", this.summary);
-        obj.put("type", this.type.toString());
 
-        // requirementKeys
-        JSONArray arr = new JSONArray();
-        for (String requirementKey : requirementKeys)
-            arr.add(requirementKey);
+        if (this.getProjectKey() != null)
+            obj.put("projectKey", getProjectKey());
 
-        if (!arr.isEmpty()) {
-            obj.put("requirementKeys", arr);
+        if (this.getSummary() != null)
+            obj.put("summary", this.getSummary());
+
+        if (this.getType() != null)
+            obj.put("type", this.getType().toString());
+
+        if (this.getRequirementKeys() != null) {
+            JSONArray arr = new JSONArray();
+            arr.addAll(getRequirementKeys());
+
+            if (!arr.isEmpty()) {
+                obj.put("requirementKeys", arr);
+            }
         }
 
-        obj.put("labels", this.labels);
+        if (this.getLabels() != null)
+            obj.put("labels", this.getLabels());
 
-        // Steps
-        arr = new JSONArray(); // arr.clear reveales Json simple BUG!
-        for (XrayJsonStepDefObject result : steps)
-            arr.add(result.asJsonObject());
 
-        if (!arr.isEmpty()) {
-            obj.put("steps", arr);
+        if (this.getSteps() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonStepDefObject requirementKey : this.getSteps())
+                arr.add(requirementKey.asJsonObject());
+
+            if (!arr.isEmpty()) {
+                obj.put("steps", arr);
+            }
         }
 
-        obj.put("scenario", this.scenario);
-        obj.put("definition", this.definition);
+        if (this.getScenario() != null)
+            obj.put("scenario", this.getScenario());
+
+        if (this.getDefinition() != null)
+            obj.put("definition", this.getDefinition());
 
         return obj;
     }
@@ -127,89 +140,90 @@ public class XrayJsonTestInfoObject implements JsonObject {
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
+    @SuppressWarnings("rawtypes")
     public static class XrayJsonTestInfoObjectBuilder implements Builder {
 
-        private String projectKey;
-        private String summary;
-        private TestType type;
-        private List<String> requirementKeys;
-        private String labels;
-        private List<XrayJsonStepDefObject> steps;
-        private String scenario;
-        private String definition;
+        private final Map<String, Object> fields;
 
 
         public XrayJsonTestInfoObjectBuilder(XrayJsonTestInfoObject obj) {
-            this.projectKey = obj.projectKey;
-            this.summary = obj.summary;
-            this.type = obj.type;
-            this.requirementKeys = obj.requirementKeys;
-            this.labels = obj.labels;
-            this.steps = obj.steps;
-            this.scenario = obj.scenario;
-            this.definition = obj.definition;
+            this.fields = obj.fields;
         }
 
         public XrayJsonTestInfoObjectBuilder() {
-            requirementKeys = new ArrayList<>();
-            steps = new ArrayList<>();
+            this.fields = new HashMap<>();
         }
 
         public XrayJsonTestInfoObjectBuilder projectKey(String projectKey) {
-            this.projectKey = projectKey;
+            fields.put("projectKey", projectKey);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder summary(String summary) {
-            this.summary = summary;
+            fields.put("summary", summary);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder type(TestType type) {
-            this.type = type;
+            fields.put("type", type);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder type(String type) {
-            this.type = TestType.toType(type);
+            fields.put("type", TestType.toType(type));
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder requirementKeys(List<String> requirementKeys) {
-            this.requirementKeys = requirementKeys;
+            fields.put("requirementKeys", requirementKeys);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder requirementKey(String requirementKey) {
-            this.requirementKeys.add(requirementKey);
+            if (fields.get("requirementKeys") != null) {
+                List<String> p = ((List<String>) fields.get("requirementKey"));
+                p.add(requirementKey);
+                fields.put("requirementKeys", p);
+            } else {
+                List<String> p = new ArrayList<>();
+                p.add(requirementKey);
+                this.requirementKeys(p);
+            }
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder labels(String labels) {
-            this.labels = labels;
+            fields.put("labels", labels);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder steps(List<XrayJsonStepDefObject> steps) {
-            this.steps = steps;
+            fields.put("steps", steps);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder step(XrayJsonStepDefObject step) {
-            this.steps.add(step);
+            if (fields.get("steps") != null) {
+                List<XrayJsonStepDefObject> p = ((List<XrayJsonStepDefObject>) fields.get("steps"));
+                p.add(step);
+                fields.put("steps", p);
+            } else {
+                List<XrayJsonStepDefObject> p = new ArrayList<>();
+                p.add(step);
+                this.steps(p);
+            }
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder scenario(String scenario) {
-            this.scenario = scenario;
+            fields.put("scenario", scenario);
             return this;
         }
 
         public XrayJsonTestInfoObjectBuilder definition(String definition) {
-            this.definition = definition;
+            fields.put("definition", definition);
             return this;
         }
-
 
 
         public XrayJsonTestInfoObject build() {

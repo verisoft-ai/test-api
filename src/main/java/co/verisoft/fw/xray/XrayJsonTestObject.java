@@ -1,11 +1,30 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import co.verisoft.fw.utils.JsonObject;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Representation of Xray info object - Test object. This class follows the builder design pattern<br>
@@ -18,160 +37,157 @@ import java.util.List;
  * Test Run (data-driven testing) using the <b>"iterations"</b> array.
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-%22test%22object-TestRundetails">
- *     Using Xray JSON format to import execution results - Test</a>
+ * Using Xray JSON format to import execution results - Test</a>
+ * @since 0.0.2 (Jan 2022)
  */
-public class XrayJsonTestObject implements JsonObject {
+public class XrayJsonTestObject extends XrayJsonFormat implements JsonObject {
 
-    private final String testKey;                               // The test issue key
-    private final XrayJsonTestInfoObject testInfo;              // The testInfo element
-    private final String start;                                 // The start date for the test run
-    private final String finish;                                // The finish date for the test run
-    private final String comment;                               // The comment for the test run
-    private final String executedBy;                            // The user id who executed the test run
-    private final String assignee;                              // The user id for the assignee of the test run
-    private final Status status;            // The test run status (PASSED, FAILED, EXECUTING, custom statuses ...)
-    private final List<XrayJsonStepResultObject> steps;         // The step results
-    private final String examples;                              // The example results for BDD tests (link)
-    private final List<XrayJsonIterationObject> iterations;     // The iteration containing data-driven test results
-    private final List<String> defects;                         // An array of defect issue keys to associate with the test run
-    private final List<XrayJsonEvidenceObject> evidence;        // An array of evidence items of the test run
-    private final List<XrayJsonCustomFieldObject> customFields; // An array of custom fields for the test run
+    private final Map<String, Object> fields;
 
-
-    private XrayJsonTestObject(XrayJsonTestObjectBuilder builder){
-        this.testKey = builder.testKey;
-        this.testInfo = builder.testInfo;
-        this.start = builder.start;
-        this.finish = builder.finish;
-        this.comment = builder.comment;
-        this.executedBy = builder.executedBy;
-        this.assignee = builder.assignee;
-        this.status = builder.status;
-        this.steps = builder.steps;
-        this.examples = builder.examples;
-        this.iterations = builder.iterations;
-        this.defects = builder.defects;
-        this.evidence = builder.evidence;
-        this.customFields = builder.customFields;
+    private XrayJsonTestObject(XrayJsonTestObjectBuilder builder) {
+        this.fields = builder.fields;
     }
 
-    public String getTestKey() {
-        return testKey;
+    public @Nullable String getTestKey() {
+        return (String) fields.get("testKey");
     }
 
-    public XrayJsonTestInfoObject getTestInfo() {
-        return testInfo;
+    public @Nullable XrayJsonTestInfoObject getTestInfo() {
+        return (XrayJsonTestInfoObject) fields.get("testInfo");
     }
 
-    public String getStart() {
-        return start;
+    public @Nullable String getStart() {
+        return (String) fields.get("start");
     }
 
-    public String getFinish() {
-        return finish;
+    public @Nullable String getFinish() {
+        return (String) fields.get("finish");
     }
 
-    public String getComment() {
-        return comment;
+    public @Nullable String getComment() {
+        return (String) fields.get("comment");
     }
 
-    public String getExecutedBy() {
-        return executedBy;
+    public @Nullable String getExecutedBy() {
+        return (String) fields.get("executedBy");
     }
 
-    public String getAssignee() {
-        return assignee;
+    public @Nullable String getAssignee() {
+        return (String) fields.get("assignee");
     }
 
-    public Status getStatus() {
-        return status;
+    public @Nullable Status getStatus() {
+        return (Status) fields.get("status");
     }
 
-    public String getStatusAsString() {
-        return status.toString();
+    public @Nullable String getStatusAsString() {
+        return fields.get("status").toString();
     }
 
-    public List<XrayJsonStepResultObject> getSteps() {
-        return steps;
+    public @Nullable List<XrayJsonStepResultObject> getSteps() {
+        return (List<XrayJsonStepResultObject>) fields.get("steps");
     }
 
-    public String getExamples() {
-        return examples;
+    public @Nullable String getExamples() {
+        return (String) fields.get("examples");
     }
 
-    public List<XrayJsonIterationObject> getIterations() {
-        return iterations;
+    public @Nullable List<XrayJsonIterationObject> getIterations() {
+
+        return (List<XrayJsonIterationObject>) fields.get("iterations");
     }
 
-    public List<String> getDefects() {
-        return defects;
+    public @Nullable List<String> getDefects() {
+        return (List<String>) fields.get("defects");
     }
 
-    public List<XrayJsonEvidenceObject> getEvidence() {
-        return evidence;
+    public @Nullable List<XrayJsonEvidenceObject> getEvidence() {
+
+        return (List<XrayJsonEvidenceObject>) fields.get("evidences");
     }
 
-    public List<XrayJsonCustomFieldObject> getCustomFields() {
-        return customFields;
+    public @Nullable List<XrayJsonCustomFieldObject> getCustomFields() {
+
+        return (List<XrayJsonCustomFieldObject>) fields.get("customFields");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("testKey", this.testKey);
-        obj.put("testInfo", this.testInfo.asJsonObject());
-        obj.put("start", this.start);
-        obj.put("finish", this.finish);
-        obj.put("comment", this.comment);
-        obj.put("executedBy", this.executedBy);
-        obj.put("assignee", this.assignee);
-        obj.put("status", this.status.toString());
 
-        // Steps
-        JSONArray arr = new JSONArray();
-        for (XrayJsonStepResultObject step: steps) {
-            arr.add(step.asJsonObject());
+        if (getTestKey() != null)
+            obj.put("testKey", this.getTestKey());
+
+        if (getTestInfo() != null)
+            obj.put("testInfo", this.getTestInfo().asJsonObject());
+
+        if (getStart() != null)
+            obj.put("start", this.getStart());
+
+        if (this.getFinish() != null)
+            obj.put("finish", this.getFinish());
+
+        if (this.getComment() != null)
+            obj.put("comment", this.getComment());
+
+        if (this.getExecutedBy() != null)
+            obj.put("executedBy", this.getExecutedBy());
+
+        if (this.getAssignee() != null)
+            obj.put("assignee", this.getAssignee());
+
+        if (this.getStatus() != null)
+            obj.put("status", this.getStatus().toString());
+
+        if (this.getSteps() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonStepResultObject step : getSteps()) {
+                arr.add(step.asJsonObject());
+            }
+            if (!arr.isEmpty())
+                obj.put("steps", arr);
         }
-        if (!arr.isEmpty())
-            obj.put("steps", arr);
 
-        obj.put("examples", this.examples);
+        if (this.getExamples() != null)
+            obj.put("examples", this.getExamples());
 
-        // Iterations
-        arr = new JSONArray();
-        for (XrayJsonIterationObject iteration: iterations) {
-            arr.add(iteration.asJsonObject());
+        if (this.getIterations() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonIterationObject iteration : getIterations()) {
+                arr.add(iteration.asJsonObject());
+            }
+            if (!arr.isEmpty())
+                obj.put("iterations", arr);
         }
-        if (!arr.isEmpty())
-            obj.put("iterations", arr);
 
-        // Defects
-        arr = new JSONArray();
-        for (String defect: defects) {
-            arr.add(defect);
+        if (getDefects() != null) {
+            JSONArray arr = new JSONArray();
+            for (String defect : getDefects()) {
+                arr.add(defect);
+            }
+            if (!arr.isEmpty())
+                obj.put("defects", arr);
         }
-        if (!arr.isEmpty())
-            obj.put("defects", arr);
 
-        // Evidences
-        arr = new JSONArray();
-        for (XrayJsonEvidenceObject evidence: evidence) {
-            arr.add(evidence.asJsonObject());
+        if (getEvidence() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonEvidenceObject evidence : getEvidence()) {
+                arr.add(evidence.asJsonObject());
+            }
+            if (!arr.isEmpty())
+                obj.put("evidences", arr);
         }
-        if (!arr.isEmpty())
-            obj.put("evidences", arr);
 
-        // Custom Fields
-        arr = new JSONArray();
-        for (XrayJsonCustomFieldObject cusField: customFields) {
-            arr.add(cusField.asJsonObject());
+        if (this.getCustomFields() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonCustomFieldObject cusField : getCustomFields()) {
+                arr.add(cusField.asJsonObject());
+            }
+            if (!arr.isEmpty())
+                obj.put("customFields", arr);
         }
-        if (!arr.isEmpty())
-            obj.put("customFields", arr);
 
         return obj;
     }
@@ -187,150 +203,159 @@ public class XrayJsonTestObject implements JsonObject {
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
-    public static class XrayJsonTestObjectBuilder{
-        private String testKey;
-        private XrayJsonTestInfoObject testInfo;
-        private String start;
-        private String finish;
-        private String comment;
-        private String executedBy;
-        private String assignee;
-        private Status status;
-        private List<XrayJsonStepResultObject> steps;
-        private String examples;
-        private List<XrayJsonIterationObject> iterations;
-        private List<String> defects;
-        private List<XrayJsonEvidenceObject> evidence;
-        private List<XrayJsonCustomFieldObject> customFields;
+    public static class XrayJsonTestObjectBuilder {
+        private final Map<String, Object> fields;
 
 
-
-        public XrayJsonTestObjectBuilder(XrayJsonTestObject obj){
-            this.testKey = obj.testKey;
-            this.testInfo = obj.testInfo;
-            this.start = obj.start;
-            this.finish = obj.finish;
-            this.comment = obj.comment;
-            this.executedBy = obj.executedBy;
-            this.assignee = obj.assignee;
-            this.status = obj.status;
-            this.steps = obj.steps;
-            this.examples = obj.examples;
-            this.iterations = obj.iterations;
-            this.defects = obj.defects;
-            this.evidence = obj.evidence;
-            this.customFields = obj.customFields;
+        public XrayJsonTestObjectBuilder(XrayJsonTestObject obj) {
+            this.fields = obj.fields;
         }
 
-        public XrayJsonTestObjectBuilder(){
-            steps = new ArrayList<>();
-            iterations = new ArrayList<>();
-            defects = new ArrayList<>();
-            evidence = new ArrayList<>();
-            customFields = new ArrayList<>();
+        public XrayJsonTestObjectBuilder() {
+            fields = new HashMap<>();
         }
 
         public XrayJsonTestObjectBuilder testKey(String testKey) {
-            this.testKey = testKey;
+            fields.put("testKey", testKey);
             return this;
         }
 
         public XrayJsonTestObjectBuilder testInfo(XrayJsonTestInfoObject testInfo) {
-            this.testInfo = testInfo;
+            fields.put("testInfo", testInfo);
             return this;
         }
 
-        public XrayJsonTestObjectBuilder start(String start) {
-            this.start = start;
+        public XrayJsonTestObjectBuilder start(ZonedDateTime start) {
+            fields.put("start", asXrayDateTime(start));
             return this;
         }
 
-        public XrayJsonTestObjectBuilder finish(String finish) {
-            this.finish = finish;
+        public XrayJsonTestObjectBuilder finish(ZonedDateTime finish) {
+            fields.put("finish", asXrayDateTime(finish));
             return this;
         }
 
         public XrayJsonTestObjectBuilder comment(String comment) {
-            this.comment = comment;
+            fields.put("comment", comment);
             return this;
         }
 
         public XrayJsonTestObjectBuilder executedBy(String executedBy) {
-            this.executedBy = executedBy;
+            fields.put("executedBy", executedBy);
             return this;
         }
 
         public XrayJsonTestObjectBuilder assignee(String assignee) {
-            this.assignee = assignee;
+            fields.put("assignee", assignee);
             return this;
         }
 
         public XrayJsonTestObjectBuilder status(Status status) {
-            this.status = status;
+            fields.put("status", status);
             return this;
         }
 
         public XrayJsonTestObjectBuilder status(String status) {
-            this.status = Status.toStatus(status);
+            fields.put("status", Status.toStatus(status));
             return this;
         }
 
         public XrayJsonTestObjectBuilder steps(List<XrayJsonStepResultObject> steps) {
-            this.steps = steps;
+            fields.put("steps", steps);
             return this;
         }
 
         public XrayJsonTestObjectBuilder step(XrayJsonStepResultObject step) {
-            this.steps.add(step);
+            if (fields.get("steps") != null) {
+                List<XrayJsonStepResultObject> p = ((List<XrayJsonStepResultObject>) fields.get("steps"));
+                p.add(step);
+                fields.put("steps", p);
+            } else {
+                List<XrayJsonStepResultObject> p = new ArrayList<>();
+                p.add(step);
+                this.steps(p);
+            }
             return this;
         }
 
         public XrayJsonTestObjectBuilder examples(String examples) {
-            this.examples = examples;
+            fields.put("examples", examples);
             return this;
         }
 
         public XrayJsonTestObjectBuilder iterations(List<XrayJsonIterationObject> iterations) {
-            this.iterations = iterations;
+            fields.put("iterations", iterations);
             return this;
         }
 
         public XrayJsonTestObjectBuilder iteration(XrayJsonIterationObject iteration) {
-            this.iterations.add(iteration);
+            if (fields.get("iterations") != null) {
+                List<XrayJsonIterationObject> p = ((List<XrayJsonIterationObject>) fields.get("iterations"));
+                p.add(iteration);
+                fields.put("steps", p);
+            } else {
+                List<XrayJsonIterationObject> p = new ArrayList<>();
+                p.add(iteration);
+                this.iterations(p);
+            }
             return this;
         }
 
         public XrayJsonTestObjectBuilder defects(List<String> defects) {
-            this.defects = defects;
+            fields.put("defects", defects);
             return this;
         }
 
         public XrayJsonTestObjectBuilder defect(String defect) {
-            this.defects.add(defect);
+            if (fields.get("defects") != null) {
+                List<String> p = ((List<String>) fields.get("defects"));
+                p.add(defect);
+                fields.put("defects", p);
+            } else {
+                List<String> p = new ArrayList<>();
+                p.add(defect);
+                this.defects(p);
+            }
             return this;
         }
 
         public XrayJsonTestObjectBuilder evidences(List<XrayJsonEvidenceObject> evidences) {
-            this.evidence = evidences;
+            fields.put("evidences", evidences);
             return this;
         }
 
         public XrayJsonTestObjectBuilder evidence(XrayJsonEvidenceObject evidence) {
-            this.evidence.add(evidence);
+            if (fields.get("evidences") != null) {
+                List<XrayJsonEvidenceObject> p = ((List<XrayJsonEvidenceObject>) fields.get("evidences"));
+                p.add(evidence);
+                fields.put("evidences", p);
+            } else {
+                List<XrayJsonEvidenceObject> p = new ArrayList<>();
+                p.add(evidence);
+                this.evidences(p);
+            }
             return this;
         }
 
         public XrayJsonTestObjectBuilder customFields(List<XrayJsonCustomFieldObject> customFields) {
-            this.customFields = customFields;
+            fields.put("customFields", customFields);
             return this;
         }
 
         public XrayJsonTestObjectBuilder customField(XrayJsonCustomFieldObject customField) {
-            this.customFields.add(customField);
+            if (fields.get("customFields") != null) {
+                List<XrayJsonCustomFieldObject> p = ((List<XrayJsonCustomFieldObject>) fields.get("customFields"));
+                p.add(customField);
+                fields.put("customFields", p);
+            } else {
+                List<XrayJsonCustomFieldObject> p = new ArrayList<>();
+                p.add(customField);
+                this.customFields(p);
+            }
             return this;
         }
 
-        public XrayJsonTestObject build(){
+        public XrayJsonTestObject build() {
             XrayJsonTestObject info = new XrayJsonTestObject(this);
             validateXrayTestObject(info);
             return info;

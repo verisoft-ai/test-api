@@ -19,6 +19,8 @@ package co.verisoft.fw.store;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 /**
  * Unit tests for co.verisoft.fw.store
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.Test;
  * @author Nir Gallner
  * @since 0.0.2
  */
+@Execution(ExecutionMode.CONCURRENT)
 public class StoreTest {
 
     @Test

@@ -43,6 +43,7 @@
         <lombok.version>1.18.22</lombok.version>
         <json.simple.version>1.1.1</json.simple.version>
         <xmlBeans.version>5.0.3</xmlBeans.version>
+        <jetbrains.annotations.version>22.0.0</jetbrains.annotations.version>
 
 
         <!-- Maven plugins versions-->
@@ -171,7 +172,12 @@
             <version>${assertJ.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.annotations.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>

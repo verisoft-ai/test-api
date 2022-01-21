@@ -1,12 +1,30 @@
 package co.verisoft.fw.xray;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Representation of Xray Json format. This class follows the builder design pattern<br>
@@ -20,33 +38,28 @@ import java.util.List;
  * Limited support of existing formats to import detailed execution results back into Jira<br>
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see <a href="https://docs.getxray.app/display/XRAYCLOUD/Using+Xray+JSON+format+to+import+execution+results#UsingXrayJSONformattoimportexecutionresults-Overview">
- *     Using Xray JSON format to import execution results - info</a>
+ * Using Xray JSON format to import execution results - info</a>
+ * @since 0.0.2 (Jan 2022)
  */
-public class XrayJsonFormatObject implements JsonObject {
+public class XrayJsonFormatObject extends XrayJsonFormat implements JsonObject {
 
-    private final String testExecutionKey;          // The test execution key where to import the execution results
-    private final XrayJsonInfoObject info;          // The info object for creating new Test Execution issues
-    private final List<XrayJsonTestObject> tests;   // The Test Run result details
+    private final Map<String, Object> fields;
 
-    public String getTestExecutionKey() {
-        return testExecutionKey;
+    public @Nullable String getTestExecutionKey() {
+        return (String) fields.get("testExecutionKey");
     }
 
-    public XrayJsonInfoObject getInfo() {
-        return info;
+    public @Nullable XrayJsonInfoObject getInfo() {
+        return (XrayJsonInfoObject) fields.get("info");
     }
 
-    public List<XrayJsonTestObject> getTests() {
-        return tests;
+    public @Nullable List<XrayJsonTestObject> getTests() {
+        return (List<XrayJsonTestObject>) fields.get("tests");
     }
 
     private XrayJsonFormatObject(XrayJsonFormatObjectBuilder builder) {
-        this.testExecutionKey = builder.testExecutionKey;
-        this.info = builder.info;
-        this.tests = builder.tests;
+        this.fields = builder.fields;
     }
 
 
@@ -54,16 +67,21 @@ public class XrayJsonFormatObject implements JsonObject {
     @Override
     public JSONObject asJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("testExecutionKey", this.testExecutionKey);
-        obj.put("info", this.info.asJsonObject());
 
-        // Tests
-        JSONArray arr = new JSONArray();
-        for (XrayJsonTestObject test: tests) {
-            arr.add(test.asJsonObject());
+        if (this.getTestExecutionKey() != null)
+            obj.put("testExecutionKey", this.getTestExecutionKey());
+
+        if (this.getInfo() != null)
+            obj.put("info", this.getInfo().asJsonObject());
+
+        if (this.getTests() != null) {
+            JSONArray arr = new JSONArray();
+            for (XrayJsonTestObject test : this.getTests()) {
+                arr.add(test.asJsonObject());
+            }
+            if (!arr.isEmpty())
+                obj.put("tests", arr);
         }
-        if (!arr.isEmpty())
-            obj.put("tests", arr);
 
         return obj;
     }
@@ -81,37 +99,42 @@ public class XrayJsonFormatObject implements JsonObject {
      */
     public static class XrayJsonFormatObjectBuilder implements Builder {
 
-        private String testExecutionKey;        // The test execution key where to import the execution results
-        private XrayJsonInfoObject info;        // The info object for creating new Test Execution issues
-        private List<XrayJsonTestObject> tests; // The Test Run result details
+        private final Map<String, Object> fields;
 
         public XrayJsonFormatObjectBuilder(XrayJsonFormatObject obj) {
-            this.testExecutionKey = obj.testExecutionKey;
-            this.info = obj.info;
-            this.tests = obj.tests;
+            this.fields = obj.fields;
         }
 
         public XrayJsonFormatObjectBuilder() {
-            tests = new ArrayList<>();
+            fields = new HashMap<>();
         }
 
         public XrayJsonFormatObjectBuilder testExecutionKey(String testExecutionKey) {
-            this.testExecutionKey = testExecutionKey;
+            fields.put("testExecutionKey", testExecutionKey);
             return this;
         }
 
         public XrayJsonFormatObjectBuilder info(XrayJsonInfoObject info) {
-            this.info = info;
+            fields.put("info", info);
             return this;
         }
 
         public XrayJsonFormatObjectBuilder tests(List<XrayJsonTestObject> tests) {
-            this.tests = tests;
+            fields.put("tests", tests);
             return this;
         }
 
         public XrayJsonFormatObjectBuilder test(XrayJsonTestObject test) {
-            this.tests.add(test);
+            if (fields.get("tests") !=null){
+                List<XrayJsonTestObject> testList = ((List<XrayJsonTestObject>) fields.get("tests"));
+                testList.add(test);
+                fields.put("tests", testList);
+            }
+            else{
+                List<XrayJsonTestObject> testList = new ArrayList<>();
+                testList.add(test);
+                fields.put("tests", testList);
+            }
             return this;
         }
 
