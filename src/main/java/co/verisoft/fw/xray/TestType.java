@@ -29,6 +29,11 @@ public enum TestType {
     MANUAL,
     GENERIC;
 
+    /**
+     * Converts a string to TestType enum. If string is not recognized, default is TestType.GENERIC
+     * @param type string based TestType report
+     * @return a TestType object, after parsed
+     */
     @Synchronized
     public static TestType toType(String type) {
         TestType result;

@@ -17,11 +17,21 @@ package co.verisoft.fw.utils;
 
 import org.apiguardian.api.API;
 
+/**
+ * Builder interface method - build the class
+ *
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
+ */
 @API(
         status = API.Status.EXPERIMENTAL,
         since = "0.0.2"
 )
 public interface Builder<T> {
 
+    /**
+     * Builds the object
+     * @return a generic type, according to implementing class
+     */
     T build();
 }

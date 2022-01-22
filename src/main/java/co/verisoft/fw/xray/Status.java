@@ -21,6 +21,9 @@ import org.apiguardian.api.API;
 
 import java.util.Locale;
 
+/**
+ * Jira Xray statuses
+ */
 @API(
         status = API.Status.EXPERIMENTAL,
         since = "0.0.2"
@@ -31,6 +34,12 @@ public enum Status {
     PASSED,
     EXECUTING;
 
+
+    /**
+     * Converts a string to status enum. If string is not recognized, default is Status.TODO
+     * @param status string based status report
+     * @return a status object, after parsed
+     */
     @Synchronized
     public static Status toStatus(String status) {
         Status result;
