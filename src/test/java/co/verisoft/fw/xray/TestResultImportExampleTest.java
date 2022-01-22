@@ -27,8 +27,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.FileWriter;
 import java.time.ZonedDateTime;
 
-@SuppressWarnings("ALL")
-@ExtendWith({XrayPluginExtension.class, PropertyLoaderExtension.class, GenericExampleExtension.class})
+/**
+ * Example class for creating a result json object fo xray tests
+ *
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
+ */
+@SuppressWarnings("unchecked")
+@ExtendWith({XrayPluginExtension.class, PropertyLoaderExtension.class})
 public class TestResultImportExampleTest {
 
     @Test
@@ -41,20 +47,12 @@ public class TestResultImportExampleTest {
                 .testKey("VER-3")
                 .status(Status.PASSED)
                 .build();
+        //noinspection MismatchedQueryAndUpdateOfCollection
         JSONObject obj = new JSONObject();
         obj.put("testExecutionKey", "VER-5");
         JSONArray arr = new JSONArray();
         arr.add(tests.asJsonObject());
         obj.put("tests", arr);
-
-        try {
-            FileWriter file = new FileWriter(SystemProperties.getProperty("user.dir") + "/target/result.json");
-            file.write(obj.toJSONString());
-            file.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Test

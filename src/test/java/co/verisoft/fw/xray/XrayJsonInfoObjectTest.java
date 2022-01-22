@@ -28,6 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
+@SuppressWarnings("ALL")
 @Execution(ExecutionMode.CONCURRENT)
 public class XrayJsonInfoObjectTest {
 

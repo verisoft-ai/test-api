@@ -16,7 +16,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.ExtendedLog;
+import co.verisoft.fw.utils.ExtendedLog;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;
 
@@ -73,7 +73,7 @@ public class GenericExampleExtension implements
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
+    public void afterAll(ExtensionContext context) {
 
         logger.info("GeneralExampleExtension- In afterAll");
 
@@ -87,7 +87,7 @@ public class GenericExampleExtension implements
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void afterEach(ExtensionContext context) throws Exception {
+    public void afterEach(ExtensionContext context) {
         logger.info("GeneralExampleExtension- In afterEach");
     }
 
@@ -100,7 +100,7 @@ public class GenericExampleExtension implements
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void afterTestExecution(ExtensionContext context) throws Exception {
+    public void afterTestExecution(ExtensionContext context) {
         logger.info("GeneralExampleExtension- In afterTestExecution");
     }
 
@@ -112,7 +112,7 @@ public class GenericExampleExtension implements
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
+    public void beforeAll(ExtensionContext context) {
 
         // This part will run ONLY ONCE per execution, no matter how many classes register the extension
         if (!didRun) {
@@ -134,7 +134,7 @@ public class GenericExampleExtension implements
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         logger.info("GeneralExampleExtension- In beforeEach");
     }
 
@@ -147,7 +147,7 @@ public class GenericExampleExtension implements
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void beforeTestExecution(ExtensionContext context) throws Exception {
+    public void beforeTestExecution(ExtensionContext context) {
         logger.info("GeneralExampleExtension- In beforeTestExecution");
     }
 
@@ -166,7 +166,7 @@ public class GenericExampleExtension implements
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         String s = "GeneralExampleExtension- Test " + context.getDisplayName() + " was disabled";
         if (reason.isPresent())
-            s += ", reason: " + reason.toString();
+            s += ", reason: " + reason;
 
         logger.info(s);
     }

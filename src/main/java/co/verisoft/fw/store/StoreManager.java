@@ -17,7 +17,7 @@ package co.verisoft.fw.store;
  */
 
 
-import co.verisoft.fw.ExtendedLog;
+import co.verisoft.fw.utils.ExtendedLog;
 import lombok.Synchronized;
 import lombok.ToString;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ import java.util.Map;
 public class StoreManager {
 
     private static final Logger logger = new ExtendedLog(StoreManager.class);
-    private static Map<Long, Store> storeMap = new HashMap<>();
+    private static final Map<Long, Store> storeMap = new HashMap<>();
 
     private StoreManager() {
     }

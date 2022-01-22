@@ -79,6 +79,7 @@ public class XrayJsonParameterObject extends XrayJsonFormat implements JsonObjec
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
+    @SuppressWarnings("rawtypes")
     @ToString
     public static class XrayJsonParameterObjectBuilder implements Builder {
 
@@ -102,7 +103,6 @@ public class XrayJsonParameterObject extends XrayJsonFormat implements JsonObjec
 
             return this;
         }
-
 
         public XrayJsonParameterObject build() {
             XrayJsonParameterObject info = new XrayJsonParameterObject(this);

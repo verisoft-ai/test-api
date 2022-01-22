@@ -17,7 +17,7 @@ package co.verisoft.fw.store;
  */
 
 
-import co.verisoft.fw.ExtendedLog;
+import co.verisoft.fw.utils.ExtendedLog;
 import lombok.ToString;
 import org.slf4j.Logger;
 
@@ -37,7 +37,7 @@ import java.util.Map;
 @ToString
 public class StoreImp implements Store {
     private static final Logger logger = new ExtendedLog(StoreImp.class);
-    private Map<Object, Object> store;
+    private final Map<Object, Object> store;
 
     public StoreImp() {
         store = new HashMap<>();
@@ -46,6 +46,7 @@ public class StoreImp implements Store {
 
     @Override
     public <T> T getValueFromStore(Object key) {
+        //noinspection unchecked
         return (T) store.get(key);
     }
 

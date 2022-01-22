@@ -25,8 +25,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 /**
  * Unit tests for co.verisoft.fw.store
  *
- * @author Nir Gallner
- * @since 0.0.2
+ * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
+ * @since 0.0.2 (Jan 2022)
  */
 @Execution(ExecutionMode.CONCURRENT)
 public class StoreTest {

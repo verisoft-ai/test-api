@@ -16,7 +16,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.ExtendedLog;
+import co.verisoft.fw.utils.ExtendedLog;
 import co.verisoft.fw.utils.Utils;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;

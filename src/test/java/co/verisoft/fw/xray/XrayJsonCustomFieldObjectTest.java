@@ -28,6 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 @Execution(ExecutionMode.CONCURRENT)
+@SuppressWarnings("ALL")
 public class XrayJsonCustomFieldObjectTest {
 
     @ParameterizedTest

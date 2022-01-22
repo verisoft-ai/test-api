@@ -16,7 +16,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.ExtendedLog;
+import co.verisoft.fw.utils.ExtendedLog;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import co.verisoft.fw.xray.Status;
@@ -30,7 +30,6 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -49,6 +48,7 @@ import java.util.Map;
  * @author Nir Gallner
  * @since 0.0.2 (Jan 2022)
  */
+@SuppressWarnings("unchecked")
 public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallback,
         BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 
@@ -189,6 +189,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
         File destDir = new File(localPath);
         if (!destDir.exists())
+            //noinspection ResultOfMethodCallIgnored
             destDir.mkdir();
 
         if (!destDir.exists()) {

@@ -1,4 +1,4 @@
-package co.verisoft.fw;
+package co.verisoft.fw.utils;
 
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import org.slf4j.Marker;
 @ToString
 public class ExtendedLog implements Logger {
 
-    private Logger logger;
+    private final Logger logger;
 
     /**
      * Creates a new Logger instance with a designated configuration name
@@ -47,7 +47,7 @@ public class ExtendedLog implements Logger {
     /**
      * create logger with class name
      *
-     * @param clazz
+     * @param clazz origin caller class
      */
     public ExtendedLog(final Class<?> clazz) {
         logger = LoggerFactory.getLogger(clazz);
@@ -424,7 +424,7 @@ public class ExtendedLog implements Logger {
      */
     private String getCallerTrace() {
 
-        String callTrace = "Caller Trace: ";
+        StringBuilder callTrace = new StringBuilder("Caller Trace: ");
 
         for (int i = 3; i < Thread.currentThread().getStackTrace().length; i++) {
             String s = Thread.currentThread().getStackTrace()[i].getClassName();
@@ -432,10 +432,10 @@ public class ExtendedLog implements Logger {
                 s = s.substring(s.lastIndexOf('.') + 1);
                 String m = Thread.currentThread().getStackTrace()[i].getMethodName() + " line: "
                         + Thread.currentThread().getStackTrace()[i].getLineNumber();
-                callTrace += "CLASS: " + s + " METHOD: " + m + " ";
+                callTrace.append("CLASS: ").append(s).append(" METHOD: ").append(m).append(" ");
             }
         }
 
-        return callTrace;
+        return callTrace.toString();
     }
 }
