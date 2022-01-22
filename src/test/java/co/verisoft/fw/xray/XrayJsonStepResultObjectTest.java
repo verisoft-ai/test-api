@@ -34,7 +34,7 @@ public class XrayJsonStepResultObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayStepResultObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonStepResultObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonStepResultObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getStatusAsString()).isEqualTo("PASSED");
@@ -49,7 +49,7 @@ public class XrayJsonStepResultObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayStepResultObject")
-    public void shouldAllowToChangeValue(XrayJsonStepResultObject stepResult){
+    public void shouldAllowToChangeValue(XrayJsonStepResultObject stepResult) {
 
         XrayJsonStepResultObject info = new XrayJsonStepResultObject.XrayJsonStepResultObjectBuilder(stepResult)
                 .status("failed")
@@ -68,7 +68,7 @@ public class XrayJsonStepResultObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayStepResultObject")
-    public void shouldCreateAJsonObject(XrayJsonStepResultObject info){
+    public void shouldCreateAJsonObject(XrayJsonStepResultObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -104,7 +104,7 @@ public class XrayJsonStepResultObjectTest {
 
 
     @Synchronized
-    private static Stream<XrayJsonStepResultObject> getXrayStepResultObject(){
+    private static Stream<XrayJsonStepResultObject> getXrayStepResultObject() {
         XrayJsonEvidenceObject evidenc1 = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
                 .data("data1")
                 .contentType("contentType1")

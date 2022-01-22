@@ -39,6 +39,7 @@ public class StoreTest {
         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
     }
 
+
     @Test
     public void shouldSaveAndRetrieveValueFromLocalStore() {
         String name = "Irit";
@@ -46,6 +47,7 @@ public class StoreTest {
         String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("IRIT");
         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
     }
+
 
     @Test
     public void valueFromLocalNotFoundInGlobal() {
@@ -55,6 +57,7 @@ public class StoreTest {
         Assertions.assertNull(receivedName, "Should not contain any value");
     }
 
+
     @Test
     public void valueFromGlobalNotFoundInLocal() {
         String name = "Lior";
@@ -62,6 +65,7 @@ public class StoreTest {
         String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("LIOR");
         Assertions.assertNull(receivedName, "Should not contain any value");
     }
+
 
     @Test
     public void valueDoesNotAppearAfterRemove() {
@@ -78,6 +82,7 @@ public class StoreTest {
         Assertions.assertNull(receivedName, "Should not contain any value");
     }
 
+
     @Test
     public void shouldUseOtherValueThanString() {
         String name = "Nir";
@@ -85,6 +90,7 @@ public class StoreTest {
         String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore(12);
         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
     }
+
 
     @Test
     public void shouldUseOBject() {
@@ -95,6 +101,7 @@ public class StoreTest {
         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
     }
 
+
     @Test
     public void shouldNotUse2OBject() {
         Object key1 = new Object();
@@ -104,6 +111,7 @@ public class StoreTest {
         String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore(key2);
         Assertions.assertNull(receivedName, "Should have retrieved from store");
     }
+
 
     @Test
     public void shouldRemoveStore() {
@@ -118,6 +126,7 @@ public class StoreTest {
         Assertions.assertNull(receivedName, "Store should have been empty");
     }
 
+
     @Test
     public void shouldReplaceValueInStore() {
 
@@ -125,6 +134,6 @@ public class StoreTest {
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("key", "val2");
 
         String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("key");
-        Assertions.assertEquals(receivedName,"val2", "Store should replace the original value");
+        Assertions.assertEquals(receivedName, "val2", "Store should replace the original value");
     }
 }

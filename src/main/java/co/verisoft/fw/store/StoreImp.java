@@ -17,12 +17,13 @@ package co.verisoft.fw.store;
  */
 
 
+import co.verisoft.fw.ExtendedLog;
+import lombok.ToString;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import co.verisoft.selenium.framework.inf.ExtendedLog;
 
 /**
  * Generic store implementation
@@ -33,6 +34,7 @@ import co.verisoft.selenium.framework.inf.ExtendedLog;
  * @see StoreType
  * @since 0.0.2 (Jan 2022)
  */
+@ToString
 public class StoreImp implements Store {
     private static final Logger logger = new ExtendedLog(StoreImp.class);
     private Map<Object, Object> store;

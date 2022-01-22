@@ -33,7 +33,7 @@ public class XrayJsonInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonInfoObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonInfoObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getProject()).isEqualTo("project");
@@ -51,7 +51,7 @@ public class XrayJsonInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldAllowToChangeValue(XrayJsonInfoObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonInfoObject infoBase) {
 
         XrayJsonInfoObject info = new XrayJsonInfoObject.XrayInfoObjectBuilder(infoBase)
                 .project("project2")
@@ -73,7 +73,7 @@ public class XrayJsonInfoObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayInfoObject")
-    public void shouldCreateAJsonObject(XrayJsonInfoObject info){
+    public void shouldCreateAJsonObject(XrayJsonInfoObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -117,7 +117,7 @@ public class XrayJsonInfoObjectTest {
 
 
     @Synchronized
-    private static Stream<XrayJsonInfoObject> getXrayInfoObject(){
+    private static Stream<XrayJsonInfoObject> getXrayInfoObject() {
         XrayJsonInfoObject infoBase = new XrayJsonInfoObject.XrayInfoObjectBuilder()
                 .project("project")
                 .summary("summary")

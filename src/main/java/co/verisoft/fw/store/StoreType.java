@@ -17,16 +17,18 @@ package co.verisoft.fw.store;
  */
 
 
+import lombok.ToString;
+
 /**
  * Attribute for store type
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see Store
  * @see StoreImp
  * @see StoreManager
+ * @since 0.0.2 (Jan 2022)
  */
+@ToString
 public enum StoreType {
     LOCAL_THREAD,
     GLOBAL

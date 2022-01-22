@@ -32,7 +32,7 @@ public class XrayJsonParameterObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayParameterObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonParameterObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonParameterObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getName()).isEqualTo("name");
@@ -42,7 +42,7 @@ public class XrayJsonParameterObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayParameterObject")
-    public void shouldAllowToChangeValue(XrayJsonParameterObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonParameterObject infoBase) {
 
         XrayJsonParameterObject info = new XrayJsonParameterObject.XrayJsonParameterObjectBuilder(infoBase)
                 .name("name2")
@@ -56,7 +56,7 @@ public class XrayJsonParameterObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayParameterObject")
-    public void shouldCreateAJsonObject(XrayJsonParameterObject info){
+    public void shouldCreateAJsonObject(XrayJsonParameterObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -84,7 +84,7 @@ public class XrayJsonParameterObjectTest {
 
 
     @Synchronized
-    private static Stream<XrayJsonParameterObject> getXrayParameterObject(){
+    private static Stream<XrayJsonParameterObject> getXrayParameterObject() {
         XrayJsonParameterObject custField = new XrayJsonParameterObject.XrayJsonParameterObjectBuilder()
                 .name("name")
                 .value("value")

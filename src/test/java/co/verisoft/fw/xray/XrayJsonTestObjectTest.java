@@ -101,8 +101,8 @@ public class XrayJsonTestObjectTest {
                 .isEqualTo(info.getIterations().get(0).asJsonObject());
         softAssertions.assertThat(((String) ((JSONArray) obj.get("defects")).get(0)))
                 .isEqualTo(info.getDefects().get(0));
-         softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("evidences")).get(0)))
-                 .isEqualTo(info.getEvidence().get(0).asJsonObject());
+        softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("evidences")).get(0)))
+                .isEqualTo(info.getEvidence().get(0).asJsonObject());
         softAssertions.assertThat(((JSONObject) ((JSONArray) obj.get("customFields")).get(0)))
                 .isEqualTo(info.getCustomFields().get(0).asJsonObject());
 

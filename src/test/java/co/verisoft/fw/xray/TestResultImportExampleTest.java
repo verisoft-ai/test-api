@@ -15,18 +15,24 @@ package co.verisoft.fw.xray;
  * limitations under the License.
  */
 
+import co.verisoft.fw.extensions.jupiter.GenericExampleExtension;
+import co.verisoft.fw.extensions.jupiter.PropertyLoaderExtension;
+import co.verisoft.fw.extensions.jupiter.XrayPluginExtension;
 import org.apache.xmlbeans.SystemProperties;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.FileWriter;
 import java.time.ZonedDateTime;
 
 @SuppressWarnings("ALL")
+@ExtendWith({XrayPluginExtension.class, PropertyLoaderExtension.class, GenericExampleExtension.class})
 public class TestResultImportExampleTest {
 
     @Test
+    @XrayIdentifier("NIR-1")
     public void resultWithTestExecutionKey() {
 
         XrayJsonTestObject tests = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
@@ -41,17 +47,18 @@ public class TestResultImportExampleTest {
         arr.add(tests.asJsonObject());
         obj.put("tests", arr);
 
-        try{
-            FileWriter file = new FileWriter(SystemProperties.getProperty("user.dir")+"/target/result.json");
+        try {
+            FileWriter file = new FileWriter(SystemProperties.getProperty("user.dir") + "/target/result.json");
             file.write(obj.toJSONString());
             file.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @Test
+    @XrayIdentifier("NIR-2")
     public void resultWithTestPlanKey() {
 
         XrayJsonTestObject tests = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
@@ -76,11 +83,11 @@ public class TestResultImportExampleTest {
                 .test(tests)
                 .build();
 
-        try{
-            FileWriter file = new FileWriter(SystemProperties.getProperty("user.dir")+"/target/result.json");
+        try {
+            FileWriter file = new FileWriter(SystemProperties.getProperty("user.dir") + "/target/result.json");
             file.write(f.asString());
             file.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -1,4 +1,4 @@
-package co.verisoft.selenium.framework.inf;
+package co.verisoft.fw;
 
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@ package co.verisoft.selenium.framework.inf;
  * limitations under the License.
  */
 
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -26,8 +27,9 @@ import org.slf4j.Marker;
  * etc.
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- *
+ * @since 1.9.6
  */
+@ToString
 public class ExtendedLog implements Logger {
 
     private Logger logger;

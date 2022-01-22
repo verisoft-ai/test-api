@@ -30,8 +30,7 @@ public enum TestType {
     GENERIC;
 
     @Synchronized
-    public static TestType toType(String type)
-    {
+    public static TestType toType(String type) {
         TestType result;
         switch (type.toUpperCase(Locale.ROOT)) {
             case "CUCUMBER":
@@ -39,9 +38,6 @@ public enum TestType {
                 break;
             case "MANUAL":
                 result = TestType.MANUAL;
-                break;
-            case "GENERIC":
-                result = TestType.GENERIC;
                 break;
             default:
                 result = TestType.GENERIC;

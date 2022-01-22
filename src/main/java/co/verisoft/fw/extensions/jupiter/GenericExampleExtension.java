@@ -16,7 +16,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.selenium.framework.inf.ExtendedLog;
+import co.verisoft.fw.ExtendedLog;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;
 
@@ -47,7 +47,6 @@ import java.util.Optional;
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a> @ <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 2.0.3.9
- *
  */
 public class GenericExampleExtension implements
         AfterTestExecutionCallback,
@@ -56,10 +55,16 @@ public class GenericExampleExtension implements
         BeforeAllCallback,
         BeforeEachCallback,
         BeforeTestExecutionCallback,
+        ExtensionContext.Store.CloseableResource,
         TestWatcher {
 
 
+    // Since the beforeAll method will be invoked for each class registered with this extension, and there are pieces
+    // of code we wish to run ONLY ONCE per execution, we mark this flag and use it in the beforeAll method
+    private static boolean didRun = false;
+
     private static final Logger logger = new ExtendedLog(GenericExampleExtension.class);
+
 
     /**
      * Callback that is invoked once <em>after</em> all tests in the current
@@ -74,6 +79,7 @@ public class GenericExampleExtension implements
 
     }
 
+
     /**
      * Callback that is invoked <em>after</em> an individual test and any
      * user-defined teardown methods for that test have been executed.
@@ -84,6 +90,7 @@ public class GenericExampleExtension implements
     public void afterEach(ExtensionContext context) throws Exception {
         logger.info("GeneralExampleExtension- In afterEach");
     }
+
 
     /**
      * Callback that is invoked <em>immediately after</em> an individual test has
@@ -97,6 +104,7 @@ public class GenericExampleExtension implements
         logger.info("GeneralExampleExtension- In afterTestExecution");
     }
 
+
     /**
      * Callback that is invoked once <em>before</em> all tests in the current
      * container.
@@ -105,8 +113,19 @@ public class GenericExampleExtension implements
      */
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
+
+        // This part will run ONLY ONCE per execution, no matter how many classes register the extension
+        if (!didRun) {
+            // Set the callback for close method at the end of the session
+            context.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("ExtensionCallback", this);
+
+            didRun = true;
+        }
+
+        logger.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
         logger.info("GeneralExampleExtension- In beforeAll");
     }
+
 
     /**
      * Callback that is invoked <em>before</em> an individual test and any
@@ -118,6 +137,7 @@ public class GenericExampleExtension implements
     public void beforeEach(ExtensionContext context) throws Exception {
         logger.info("GeneralExampleExtension- In beforeEach");
     }
+
 
     /**
      * Callback that is invoked <em>immediately before</em> an individual test is
@@ -139,8 +159,8 @@ public class GenericExampleExtension implements
      * override this method as appropriate.
      *
      * @param context the current extension context; never {@code null}
-     * @param reason the reason the test is disabled; never {@code null} but
-     * potentially <em>empty</em>
+     * @param reason  the reason the test is disabled; never {@code null} but
+     *                potentially <em>empty</em>
      */
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
@@ -150,6 +170,7 @@ public class GenericExampleExtension implements
 
         logger.info(s);
     }
+
 
     /**
      * Invoked after a test has completed successfully.
@@ -165,6 +186,7 @@ public class GenericExampleExtension implements
         logger.info(s);
     }
 
+
     /**
      * Invoked after a test has been aborted.
      *
@@ -172,7 +194,7 @@ public class GenericExampleExtension implements
      * override this method as appropriate.
      *
      * @param context the current extension context; never {@code null}
-     * @param cause the throwable responsible for the test being aborted; may be {@code null}
+     * @param cause   the throwable responsible for the test being aborted; may be {@code null}
      */
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
@@ -182,6 +204,7 @@ public class GenericExampleExtension implements
         logger.info(s);
     }
 
+
     /**
      * Invoked after a test has failed.
      *
@@ -189,7 +212,7 @@ public class GenericExampleExtension implements
      * override this method as appropriate.
      *
      * @param context the current extension context; never {@code null}
-     * @param cause the throwable that caused test failure; may be {@code null}
+     * @param cause   the throwable that caused test failure; may be {@code null}
      */
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
@@ -197,5 +220,15 @@ public class GenericExampleExtension implements
         s += ", cause: " + cause.getMessage();
 
         logger.info(s);
+    }
+
+
+    /**
+     * Invoked after all tests have been executed, from all classes. This method will run while junit engine is
+     * shutting donwn.
+     */
+    @Override
+    public void close() {
+        logger.info("This is the last method, after all other methods and extension methods are performed");
     }
 }

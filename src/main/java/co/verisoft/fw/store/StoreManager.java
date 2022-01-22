@@ -17,8 +17,9 @@ package co.verisoft.fw.store;
  */
 
 
-import co.verisoft.selenium.framework.inf.ExtendedLog;
+import co.verisoft.fw.ExtendedLog;
 import lombok.Synchronized;
+import lombok.ToString;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -39,12 +40,12 @@ import java.util.Map;
  * </pre>
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see Store
  * @see StoreImp
  * @see StoreType
+ * @since 0.0.2 (Jan 2022)
  */
+@ToString
 public class StoreManager {
 
     private static final Logger logger = new ExtendedLog(StoreManager.class);
@@ -65,7 +66,7 @@ public class StoreManager {
     public static Store getStore(StoreType storeType) {
         Long threadId = (storeType == StoreType.LOCAL_THREAD) ?
                 Thread.currentThread().getId() : 0;
-        logger.debug("Get store of thread (0 means global) " + threadId);
+        logger.debug("Get store of thread " + threadId + " (0 means global)");
 
         // If store not exist, create a store
         if (storeMap.get(threadId) == null)

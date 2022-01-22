@@ -17,6 +17,7 @@ package co.verisoft.fw.xray;
 
 import co.verisoft.fw.utils.Builder;
 import co.verisoft.fw.utils.JsonObject;
+import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,6 +40,7 @@ import java.util.*;
  * Using Xray JSON format to import execution results - Iteration</a>
  * @since 0.0.2 (Jan 2022)
  */
+@ToString
 public class XrayJsonIterationObject extends XrayJsonFormat implements JsonObject {
 
     private final Map<String, Object> fields;
@@ -132,6 +134,7 @@ public class XrayJsonIterationObject extends XrayJsonFormat implements JsonObjec
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
+    @ToString
     public static class XrayJsonIterationObjectBuilder implements Builder {
 
         private final Map<String, Object> fields;
@@ -156,12 +159,11 @@ public class XrayJsonIterationObject extends XrayJsonFormat implements JsonObjec
         }
 
         public XrayJsonIterationObjectBuilder parameter(XrayJsonParameterObject parameter) {
-            if (fields.get("parameters") !=null){
+            if (fields.get("parameters") != null) {
                 List<XrayJsonParameterObject> p = ((List<XrayJsonParameterObject>) fields.get("parameters"));
                 p.add(parameter);
                 fields.put("parameters", p);
-            }
-            else{
+            } else {
                 List<XrayJsonParameterObject> p = new ArrayList<>();
                 p.add(parameter);
                 this.parameters(p);
@@ -195,12 +197,11 @@ public class XrayJsonIterationObject extends XrayJsonFormat implements JsonObjec
         }
 
         public XrayJsonIterationObjectBuilder step(XrayJsonStepResultObject step) {
-            if (fields.get("steps") !=null){
+            if (fields.get("steps") != null) {
                 List<XrayJsonStepResultObject> p = ((List<XrayJsonStepResultObject>) fields.get("steps"));
                 p.add(step);
                 fields.put("steps", p);
-            }
-            else{
+            } else {
                 List<XrayJsonStepResultObject> p = new ArrayList<>();
                 p.add(step);
                 this.steps(p);

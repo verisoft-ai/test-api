@@ -34,7 +34,7 @@ public class XrayJsonIterationObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayIterationObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonIterationObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonIterationObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getName()).isEqualTo("name");
@@ -48,7 +48,7 @@ public class XrayJsonIterationObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayIterationObject")
-    public void shouldAllowToChangeValue(XrayJsonIterationObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonIterationObject infoBase) {
 
         XrayJsonIterationObject info = new XrayJsonIterationObject.XrayJsonIterationObjectBuilder(infoBase)
                 .name("name2")
@@ -66,7 +66,7 @@ public class XrayJsonIterationObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayIterationObject")
-    public void shouldCreateAJsonObject(XrayJsonIterationObject info){
+    public void shouldCreateAJsonObject(XrayJsonIterationObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -102,7 +102,7 @@ public class XrayJsonIterationObjectTest {
 
 
     @Synchronized
-    private static Stream<XrayJsonIterationObject> getXrayIterationObject(){
+    private static Stream<XrayJsonIterationObject> getXrayIterationObject() {
 
         XrayJsonParameterObject param1 = new XrayJsonParameterObject.XrayJsonParameterObjectBuilder()
                 .name("name1")

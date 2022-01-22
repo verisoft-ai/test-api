@@ -16,8 +16,8 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.Utils;
-import co.verisoft.selenium.framework.inf.ExtendedLog;
+import co.verisoft.fw.ExtendedLog;
+import co.verisoft.fw.utils.Utils;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;
 
@@ -32,6 +32,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
     private static final Logger logger = new ExtendedLog(JunitLogExtension.class);
 
+
     @Override
     public void afterAll(ExtensionContext context) {
         if (!context.getTestClass().isPresent())
@@ -39,6 +40,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
         logger.info("After All : " + context.getTestClass().get().getName());
     }
+
 
     @Override
     public void afterEach(ExtensionContext context) {
@@ -48,6 +50,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
         //noinspection OptionalGetWithoutIsPresent
         logger.info(String.format("After Each : %s", context.getTestMethod().get().getName()));
     }
+
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
@@ -63,6 +66,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
             logger.info("After Test Execution -Test result : PASS. Test name: " + context.getTestMethod().get().getName());
     }
 
+
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public void beforeTestExecution(ExtensionContext context) {
@@ -71,6 +75,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
         logger.info("Before Test Execution : " + context.getTestMethod().get().getName());
     }
+
 
     @Override
     public void beforeEach(ExtensionContext context) {
@@ -81,11 +86,13 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
         logger.info("Before Each : " + context.getTestMethod().get().getName());
     }
 
+
     @Override
     public void beforeAll(ExtensionContext context) {
         if (!context.getTestClass().isPresent())
             return;
 
+        logger.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
         logger.info("Before All : " + context.getTestClass().get().getName());
     }
 }

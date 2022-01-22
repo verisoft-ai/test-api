@@ -27,12 +27,10 @@ import org.apiguardian.api.API;
  * implementation exists for the store, which is StoreImp
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.2 (Jan 2022)
- *
  * @see StoreImp
  * @see StoreManager
  * @see StoreType
- *
+ * @since 0.0.2 (Jan 2022)
  */
 @API(
         status = API.Status.EXPERIMENTAL,
@@ -46,7 +44,7 @@ public interface Store {
      *
      * @param key any object which will serve as key
      * @param <T> The type of value expected to be received from the store. A template is used here
-     *           for convinience, however the user is responssible to make sure the type of return value is correct
+     *            for convinience, however the user is responssible to make sure the type of return value is correct
      * @return value from the store
      */
     <T> T getValueFromStore(Object key);
@@ -54,13 +52,15 @@ public interface Store {
 
     /**
      * Puts a value in the store.
-     * @param key Object of any type, to be served as key.
+     *
+     * @param key   Object of any type, to be served as key.
      * @param value The object to be stored
      */
     void putValueInStore(Object key, Object value);
 
     /**
      * Removes a value from the store
+     *
      * @param key Key for the object to be removed.
      */
     void removeValueFromStore(Object key);

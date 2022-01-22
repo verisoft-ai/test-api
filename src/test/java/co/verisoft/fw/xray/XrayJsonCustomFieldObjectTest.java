@@ -32,7 +32,7 @@ public class XrayJsonCustomFieldObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayCustomFieldObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonCustomFieldObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonCustomFieldObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getId()).isEqualTo("id");
@@ -43,7 +43,7 @@ public class XrayJsonCustomFieldObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayCustomFieldObject")
-    public void shouldAllowToChangeValue(XrayJsonCustomFieldObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonCustomFieldObject infoBase) {
 
         XrayJsonCustomFieldObject info = new XrayJsonCustomFieldObject.XrayJsonCustomFieldObjectBuilder(infoBase)
                 .id("id2")
@@ -58,7 +58,7 @@ public class XrayJsonCustomFieldObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayCustomFieldObject")
-    public void shouldCreateAJsonObject(XrayJsonCustomFieldObject info){
+    public void shouldCreateAJsonObject(XrayJsonCustomFieldObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -87,9 +87,8 @@ public class XrayJsonCustomFieldObjectTest {
     }
 
 
-
     @Synchronized
-    private static Stream<XrayJsonCustomFieldObject> getXrayCustomFieldObject(){
+    private static Stream<XrayJsonCustomFieldObject> getXrayCustomFieldObject() {
         XrayJsonCustomFieldObject custField = new XrayJsonCustomFieldObject.XrayJsonCustomFieldObjectBuilder()
                 .id("id")
                 .name("name")

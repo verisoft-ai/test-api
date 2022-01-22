@@ -35,7 +35,7 @@ public class XrayJsonFormatObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayFormatObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonFormatObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonFormatObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getTestExecutionKey()).isEqualTo("key");
@@ -46,7 +46,7 @@ public class XrayJsonFormatObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayFormatObject")
-    public void shouldAllowToChangeValue(XrayJsonFormatObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonFormatObject infoBase) {
 
         XrayJsonFormatObject info = new XrayJsonFormatObject.XrayJsonFormatObjectBuilder(infoBase)
                 .testExecutionKey("testExecutionKey2")
@@ -61,7 +61,7 @@ public class XrayJsonFormatObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayFormatObject")
-    public void shouldCreateAJsonObject(XrayJsonFormatObject info){
+    public void shouldCreateAJsonObject(XrayJsonFormatObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -90,9 +90,8 @@ public class XrayJsonFormatObjectTest {
     }
 
 
-
     @Synchronized
-    private static Stream<XrayJsonFormatObject> getXrayFormatObject(){
+    private static Stream<XrayJsonFormatObject> getXrayFormatObject() {
 
         // Create JsonInfo
         XrayJsonInfoObject info = new XrayJsonInfoObject.XrayInfoObjectBuilder()

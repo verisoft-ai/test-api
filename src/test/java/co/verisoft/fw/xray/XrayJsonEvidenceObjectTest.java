@@ -34,7 +34,7 @@ public class XrayJsonEvidenceObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayEvidenceObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonEvidenceObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonEvidenceObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getData()).isEqualTo("data");
@@ -45,7 +45,7 @@ public class XrayJsonEvidenceObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayEvidenceObject")
-    public void shouldAllowToChangeValue(XrayJsonEvidenceObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonEvidenceObject infoBase) {
 
         XrayJsonEvidenceObject info = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder(infoBase)
                 .data("data2")
@@ -60,7 +60,7 @@ public class XrayJsonEvidenceObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayEvidenceObject")
-    public void shouldCreateAJsonObject(XrayJsonEvidenceObject info){
+    public void shouldCreateAJsonObject(XrayJsonEvidenceObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -91,9 +91,8 @@ public class XrayJsonEvidenceObjectTest {
     }
 
 
-
     @Synchronized
-    private static Stream<XrayJsonEvidenceObject> getXrayEvidenceObject(){
+    private static Stream<XrayJsonEvidenceObject> getXrayEvidenceObject() {
         XrayJsonEvidenceObject evidence = new XrayJsonEvidenceObject.XrayJsonEvidenceObjectBuilder()
                 .data("data")
                 .filename("fileName")

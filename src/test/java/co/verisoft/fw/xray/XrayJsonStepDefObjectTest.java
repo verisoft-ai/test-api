@@ -36,7 +36,7 @@ public class XrayJsonStepDefObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayStepDefObject")
-    public void shouldBuildAllFieldsCorrectly(XrayJsonStepDefObject info){
+    public void shouldBuildAllFieldsCorrectly(XrayJsonStepDefObject info) {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(info.getAction()).isEqualTo("action");
@@ -49,14 +49,14 @@ public class XrayJsonStepDefObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayStepDefObject")
-    public void shouldReturnNullIfNoCustoField(XrayJsonStepDefObject info){
+    public void shouldReturnNullIfNoCustoField(XrayJsonStepDefObject info) {
 
         assertThat(info.getCustomField("custId3")).isNull();
     }
 
     @ParameterizedTest
     @MethodSource("getXrayStepDefObject")
-    public void shouldAllowToChangeValue(XrayJsonStepDefObject infoBase){
+    public void shouldAllowToChangeValue(XrayJsonStepDefObject infoBase) {
 
         XrayJsonStepDefObject info = new XrayJsonStepDefObject.XrayJsonStepDefObjectBuilder(infoBase)
                 .action("action2")
@@ -73,7 +73,7 @@ public class XrayJsonStepDefObjectTest {
 
     @ParameterizedTest
     @MethodSource("getXrayStepDefObject")
-    public void shouldCreateAJsonObject(XrayJsonStepDefObject info){
+    public void shouldCreateAJsonObject(XrayJsonStepDefObject info) {
         JSONObject obj = info.asJsonObject();
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -110,7 +110,7 @@ public class XrayJsonStepDefObjectTest {
 
 
     @Synchronized
-    private static Stream<XrayJsonStepDefObject> getXrayStepDefObject(){
+    private static Stream<XrayJsonStepDefObject> getXrayStepDefObject() {
         XrayJsonCustomFieldObject custObj1 = new XrayJsonCustomFieldObject.XrayJsonCustomFieldObjectBuilder()
                 .id("custId1")
                 .name("custName1")

@@ -16,6 +16,7 @@ package co.verisoft.fw.xray;
  */
 
 import co.verisoft.fw.utils.JsonObject;
+import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 
@@ -36,6 +37,7 @@ import java.util.Map;
  * Using Xray JSON format to import execution results - info</a>
  * @since 0.0.2 (Jan 2022)
  */
+@ToString
 public class XrayJsonInfoObject extends XrayJsonFormat implements JsonObject {
 
     private final Map<String, String> fields;
@@ -108,6 +110,7 @@ public class XrayJsonInfoObject extends XrayJsonFormat implements JsonObject {
      * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
      * @since 0.0.2 (Jan 2022)
      */
+    @ToString
     public static class XrayInfoObjectBuilder {
         private final Map<String, String> fields;
 
