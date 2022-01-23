@@ -47,9 +47,9 @@ public class StoreImp implements Store {
     @Override
     public <T> T getValueFromStore(Object key) {
         //noinspection unchecked
-        T obj = (T) store.get(key);
-        logger.debug("Retrieved " + obj.toString() + " from store using key " + key);
-        return obj;
+        Object obj = store.get(key);
+        logger.debug("Retrieved " + obj + " from store using key " + key);
+        return (T)obj;
     }
 
 
@@ -59,7 +59,6 @@ public class StoreImp implements Store {
             store.remove(key);
         store.put(key, value);
         logger.debug("Insert into store KEY: " + key.toString() + "\tVALUE: " + value.toString());
-
     }
 
 

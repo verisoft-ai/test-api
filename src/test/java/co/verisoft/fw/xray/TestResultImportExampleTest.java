@@ -15,7 +15,6 @@ package co.verisoft.fw.xray;
  * limitations under the License.
  */
 
-import co.verisoft.fw.extensions.jupiter.GenericExampleExtension;
 import co.verisoft.fw.extensions.jupiter.PropertyLoaderExtension;
 import co.verisoft.fw.extensions.jupiter.XrayPluginExtension;
 import org.apache.xmlbeans.SystemProperties;
