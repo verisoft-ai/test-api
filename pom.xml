@@ -44,6 +44,8 @@
         <json.simple.version>1.1.1</json.simple.version>
         <xmlBeans.version>5.0.3</xmlBeans.version>
         <jetbrains.annotations.version>22.0.0</jetbrains.annotations.version>
+        <com.aventstack.extentReport.version>5.0.9</com.aventstack.extentReport.version>
+
 
 
         <!-- Maven plugins versions-->
@@ -179,6 +181,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${com.aventstack.extentReport.version}</version>
+        </dependency>
 
     </dependencies>
     <distributionManagement>
