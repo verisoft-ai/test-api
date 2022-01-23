@@ -24,24 +24,23 @@ import com.aventstack.extentreports.Status;
 import org.junit.jupiter.api.extension.*;
 import org.slf4j.Logger;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 
 /**
- * VeriSoft extent report handling extension. It replaces TestSuiteExtension.class
- * It initializes the report at the beginning of all tests and once at the end of all tests. <br>
- * Before each test it creates a new test instance in the report<br>
+ * VeriSoft extent report handling extension. It replaces It initializes the report at the beginning of all tests
+ * and creates the HTML final report once at the end of all tests. <br>
+ * Before each test it creates a new test instance in the report, and adds a UUID to the report and store<br>
  * Unlike Junit 5 beforeAll and afterAll, This extension will be invoked <b>exactly</b> once, even if there are
  * several test containers (in different classes).<br>
  * <b>Note!</b> <br>
  * 1. In order for the extension to work you need to register it at the class level. <br>
- * use <br> <pre> {@code @ExtendWith({TestSuiteExtension.class})} </pre>. <br>
- * 2.You may write several extension in th same line:<br> <pre> {@code @ExtendWith({TestSuiteExtension.class,
+ * use <br> <pre> {@code @ExtendWith({ExtentReportExtension.class})} </pre>. <br>
+ * 2.You may write several extension in th same line:<br> <pre> {@code @ExtendWith({ExtentReportExtension.class,
  * Extension2.class, Extension3.class})} </pre><br>
  * 3. Since Junit 5 does not guarantee which class will be invoked first, register this extension in all test methods,
- * or create a class which register the extension and other classes to derive from it.
+ * or create a class which register the extension and other classes to derive from it.<br>
  * <p>
  * TODO: Figure out how to attach screenshots
  *
@@ -63,22 +62,15 @@ public class ExtentReportExtension implements BeforeAllCallback,
      * This method will be invoked <b>only once before all test executions</b>.
      * It does the following tasks:<br>
      * 1. Register a callback to be called once <b>all</b> tests are completed<br>
-     * 2. Sets a system level property of the current start time of the run. This parameter will be used later on
-     * for example to write in the report, or abort tool long or hang test execution<br>
-     * 3. Registers property variables to the system property - path to test results
+     * 2. Registers property variables to the system property - path to test results
      * (from property file into system property), additional test information if supplied etc..
      */
     @Override
     public synchronized void beforeAll(ExtensionContext context) throws Exception {
 
         if (!didRun) {
-            didRun = true;
-
             // The following line registers a callback hook when the root test context is shut down
             context.getRoot().getStore(GLOBAL).put("Extent Report Callback", this);
-
-            //Set the start time of running as a global property
-            System.setProperty("startTime", LocalDateTime.now().toString());
 
             // Sets additional data if available
             if (System.getProperty("tester.name") != null)
@@ -90,19 +82,12 @@ public class ExtentReportExtension implements BeforeAllCallback,
             if (System.getProperty("test.included.groups") != null)
                 ReportManager.getInstance().getReport().setSystemInfo("Test Group Executed: ",
                         System.getProperty("test.included.groups"));
+
+            didRun = true;
         }
     }
 
 
-    /**
-     * Callback that is invoked <em>before</em> an individual test and any
-     * user-defined setup methods for that test have been executed.<br>
-     * At the VeriSoft framework level, <b>it does nothing</b>. <br>
-     * However, projects may inherit from this class and process their own additions
-     * so the infrastructure supplies them with the option to derive these methods as well
-     *
-     * @param context the current extension context; never {@code null}
-     */
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
         /** no-op. Satisfy the interface**/
@@ -113,7 +98,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
      * Callback that is invoked <em>before</em> an individual test.
      * Creates a new test instance using the method name
      *
-     * @param context the current extension context; never {@code null}
+     * @param context Junit 5 context object
      */
     @Override
     public void beforeTestExecution(ExtensionContext context) throws Exception {
@@ -125,7 +110,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Create a new test
         ReportManager.getInstance().newTest(context.getTestMethod().get().getName());
 
-        ReportManager.getInstance().getCurrentTest().info("Test ID: " + uuid);
+        ReportManager.getInstance().getCurrentTest().info("KEY: testId VALUE: " + uuid);
     }
 
 
@@ -139,12 +124,10 @@ public class ExtentReportExtension implements BeforeAllCallback,
      */
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-
         if (context.getExecutionException().isPresent()) {
             ReportManager.getInstance().getCurrentTest().fail("An Error occured. Reason: " +
                     context.getExecutionException().toString() + "  See logs for further details");
-        }
-        else if (ReportManager.getInstance().getCurrentTest().getStatus() == Status.FAIL) {
+        } else if (ReportManager.getInstance().getCurrentTest().getStatus() == Status.FAIL) {
             throw new AssertionError("Report fail caused test to fail");
         }
 
@@ -153,41 +136,24 @@ public class ExtentReportExtension implements BeforeAllCallback,
     }
 
 
-    /**
-     * Callback that is invoked <em>after</em> an individual test and any
-     * user-defined teardown methods for that test have been executed.
-     * At the VeriSoft framework level, <b>it does nothing</b>. <br>
-     * However, projects may inherit from this class and process their own additions
-     * so the infrastructure supplies them with the option to derive these methods as well
-     *
-     * @param context the current extension context; never {@code null}
-     */
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
         /** no-op. Satisfy the interface **/
     }
 
-    /**
-     * Callback that is invoked once <em>after</em> all tests in the current
-     * container.
-     * At the VeriSoft framework level, <b>it does nothing</b>. <br>
-     * However, projects may inherit from this class and process their own additions
-     * so the infrastructure supplies them with the option to derive these methods as well
-     *
-     * @param context the current extension context; never {@code null}
-     */
+
     @Override
     public void afterAll(ExtensionContext context) throws Exception {
         /** no-op. Satisfy the interface **/
     }
 
+
     /**
      * This method will be invoked <b>only once after all test executions</b>.
-     * It creates the HTML report, put all the screenshots and the report in the path defined in the property file
+     * It creates the HTML report.
      */
     @Override
     public void close() {
-
         ReportManager.getInstance().flush();
     }
 }
