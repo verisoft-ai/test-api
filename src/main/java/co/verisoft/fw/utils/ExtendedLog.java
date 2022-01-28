@@ -66,8 +66,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void trace(String msg) {
-        logger.trace(msg);
-        logger.trace(getCallerTrace());
+        logger.trace(msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -90,8 +89,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void trace(String msg, Throwable t) {
-        logger.trace(msg, t);
-        logger.trace(getCallerTrace());
+        logger.trace(msg + "   " + getCallerTrace(), t);
     }
 
     @Override
@@ -101,8 +99,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void trace(Marker marker, String msg) {
-        logger.trace(marker, msg);
-        logger.trace(getCallerTrace());
+        logger.trace(marker, msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -125,8 +122,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void trace(Marker marker, String msg, Throwable t) {
-        logger.trace(marker, msg, t);
-        logger.trace(getCallerTrace());
+        logger.trace(marker, msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -136,8 +132,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void debug(String msg) {
-        logger.debug(msg);
-        logger.trace(getCallerTrace());
+        logger.debug(msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -160,8 +155,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void debug(String msg, Throwable t) {
-        logger.debug(msg, t);
-        logger.trace(getCallerTrace());
+        logger.debug(msg + " " + getCallerTrace(), t);
     }
 
     @Override
@@ -171,9 +165,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void debug(Marker marker, String msg) {
-        logger.debug(marker, msg);
-        logger.trace(getCallerTrace());
-
+        logger.debug(marker, msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -196,8 +188,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void debug(Marker marker, String msg, Throwable t) {
-        logger.debug(marker, msg, t);
-        logger.trace(getCallerTrace());
+        logger.debug(marker, msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -208,8 +199,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void info(String msg) {
-        logger.info(msg);
-        logger.trace(getCallerTrace());
+        logger.info(msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -232,8 +222,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void info(String msg, Throwable t) {
-        logger.info(msg, t);
-        logger.trace(getCallerTrace());
+        logger.info(msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -244,8 +233,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void info(Marker marker, String msg) {
-        logger.info(marker, msg);
-        logger.trace(getCallerTrace());
+        logger.info(marker, msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -268,8 +256,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void info(Marker marker, String msg, Throwable t) {
-        logger.info(marker, msg, t);
-        logger.trace(getCallerTrace());
+        logger.info(marker, msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -279,8 +266,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void warn(String msg) {
-        logger.warn(msg);
-        logger.trace(getCallerTrace());
+        logger.warn(msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -303,8 +289,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void warn(String msg, Throwable t) {
-        logger.warn(msg, t);
-        logger.trace(getCallerTrace());
+        logger.warn(msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -314,8 +299,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void warn(Marker marker, String msg) {
-        logger.warn(marker, msg);
-        logger.trace(getCallerTrace());
+        logger.warn(marker, msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -339,8 +323,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void warn(Marker marker, String msg, Throwable t) {
-        logger.warn(marker, msg, t);
-        logger.trace(getCallerTrace());
+        logger.warn(marker, msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -350,8 +333,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void error(String msg) {
-        logger.error(msg);
-        logger.trace(getCallerTrace());
+        logger.error(msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -374,8 +356,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void error(String msg, Throwable t) {
-        logger.error(msg, t);
-        logger.trace(getCallerTrace());
+        logger.error(msg + "  " + getCallerTrace(), t);
     }
 
     @Override
@@ -385,8 +366,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void error(Marker marker, String msg) {
-        logger.error(marker, msg);
-        logger.trace(getCallerTrace());
+        logger.error(marker, msg + "  " + getCallerTrace());
     }
 
     @Override
@@ -409,8 +389,7 @@ public class ExtendedLog implements Logger {
 
     @Override
     public void error(Marker marker, String msg, Throwable t) {
-        logger.error(marker, msg, t);
-        logger.trace(getCallerTrace());
+        logger.error(marker, msg + "  " + getCallerTrace(), t);
     }
 
     /**

@@ -8,7 +8,7 @@
         </Console>
 
         <RollingFile name="RollingFileAppender" fileName="target/logs/app.log"
-                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="target/logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
                 </Pattern>
@@ -22,7 +22,7 @@
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
         <RollingFile name="RollingFileTraceAppender" fileName="target/logs/app-trace.log"
-                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="target/logs/$${date:yyyy-MM}/app-trace-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
                 </Pattern>
@@ -41,7 +41,7 @@
         <Logger name="org.springframework" level="info">
             <AppenderRef ref="RollingFileTraceAppender"/>
         </Logger>
-        <Root level="trace">
+        <Root level="debug">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="RollingFileAppender"/>
             <AppenderRef ref="RollingFileTraceAppender"/>

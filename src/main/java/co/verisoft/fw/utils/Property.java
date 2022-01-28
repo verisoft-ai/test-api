@@ -16,17 +16,20 @@ package co.verisoft.fw.utils;
  * limitations under the License.
  */
 
+import lombok.Getter;
+import lombok.ToString;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.Properties;
 
 /**
- * decorator for java.util.Properties that handles config.properties file. <br>
+ * Decorator for java.util.Properties that handles config.properties file. <br>
  * Extension functionality load properties file allowing load file by parameter
  * or default.
  * 
@@ -43,14 +46,15 @@ import java.util.Properties;
  * boolean b=new
  * Property("C:/data/config.properties").getBooleanProperty("keyForBoolVal")
  * 
- * @author David Yehezkel
  * @author <a href="mailto:yael.rozenfeld@verisoft.co">Yael Rozenfeld</a> @
  *         <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 2.0.3.9
  */
+@ToString
 public class Property {
 
 	private static final Logger logger = new ExtendedLog(Property.class);
+	@Getter
 	private Properties properties;
 
 	/**
@@ -71,7 +75,15 @@ public class Property {
 	 * c-tor - will load properties from default file
 	 */
 	public Property() {
-		this(Optional.empty());
+		properties = new Properties();
+		try{
+			properties.load(Property.class.getClassLoader().getResourceAsStream("root.config.properties"));
+		}
+		catch(Exception e)
+		{
+			logger.error("Could not initialize root.config.properties file. " + Utils.getStackTrace(e));
+		}
+
 	}
 
 	/**
@@ -102,8 +114,7 @@ public class Property {
 			}
 
 		} catch (Throwable t) {
-			logger.error("Could not initialize property file");
-			logger.debug(Utils.getStackTrace(t));
+			logger.error("Could not initialize property file. " + Utils.getStackTrace(t));
 		}
 		return prop;
 	}
@@ -151,8 +162,7 @@ public class Property {
 		try {
 			return Integer.parseInt(getProperty(key));
 		} catch (NumberFormatException numberFormatExeption) {
-			logger.error("key value of key: " + key + "is: " + getProperty(key) + "can't parse it to int");
-			logger.error(numberFormatExeption.getMessage());
+			logger.error("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to int");
 			return (Integer) null;
 
 		}
@@ -171,8 +181,7 @@ public class Property {
 		try {
 			return Double.parseDouble(getProperty(key));
 		} catch (NumberFormatException numberFormatExeption) {
-			logger.error("key value of key: " + key + "is: " + getProperty(key) + "can't parse it to double");
-			logger.error(numberFormatExeption.getMessage());
+			logger.error("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to double");
 			return (Double) null;
 		}
 	}
