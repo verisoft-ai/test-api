@@ -133,8 +133,8 @@ public class Property {
 	 * set new property by key and value set property in stuck. dons't in the
 	 * config.properties file
 	 * 
-	 * @param key
-	 * @param value
+	 * @param key Key to set
+	 * @param value Value to set
 	 */
 	public void setProperty(String key, String value) {
 		properties.setProperty(key, value);
@@ -143,7 +143,7 @@ public class Property {
 	/**
 	 * remove property from stuck dons't erase from the config.properties file
 	 * 
-	 * @param key
+	 * @param key Key to remove
 	 */
 	public void removeProperty(String key) {
 		properties.remove(key);
@@ -162,7 +162,7 @@ public class Property {
 		try {
 			return Integer.parseInt(getProperty(key));
 		} catch (NumberFormatException numberFormatExeption) {
-			logger.error("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to int");
+			logger.warn("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to int");
 			return (Integer) null;
 
 		}
@@ -181,7 +181,7 @@ public class Property {
 		try {
 			return Double.parseDouble(getProperty(key));
 		} catch (NumberFormatException numberFormatExeption) {
-			logger.error("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to double");
+			logger.warn("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to double");
 			return (Double) null;
 		}
 	}
@@ -190,7 +190,7 @@ public class Property {
 	 * return boolean value if the key (String) is equals to True || true return
 	 * true other wise return false
 	 * 
-	 * @param key
+	 * @param key to retrieve
 	 * @return true if key equals to True || true false other wise
 	 */
 	public boolean getBooleanProperty(String key) {
