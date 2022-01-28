@@ -1,0 +1,5 @@
+Change maven version:
+mvn versions:set -DnewVersion=x.x.x
+
+Publish Release to maven central:
+mvn clean deploy -P release
