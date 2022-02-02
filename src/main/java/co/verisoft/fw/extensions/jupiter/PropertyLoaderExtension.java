@@ -15,10 +15,9 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.utils.ExtendedLog;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.slf4j.Logger;
 
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -35,9 +34,8 @@ import java.util.Properties;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a> @ <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 0.0.2 (Jan 2022)
  */
+@Slf4j
 public class PropertyLoaderExtension implements BeforeAllCallback {
-
-    private static final Logger logger = new ExtendedLog(PropertyLoaderExtension.class);
 
     private static boolean didRun = false;
 
@@ -48,7 +46,7 @@ public class PropertyLoaderExtension implements BeforeAllCallback {
             didRun = true;
         }
 
-        logger.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
+        log.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
     }
 
 
@@ -63,7 +61,7 @@ public class PropertyLoaderExtension implements BeforeAllCallback {
             appProps.load(new FileInputStream(xrayConfigPath));
         } catch (Exception e) {
             // No property file found - rely on -D only
-            logger.warn("No property file were found: " + xrayConfigPath + ", will rely on injection (-D) only");
+            log.warn("No property file were found: " + xrayConfigPath + ", will rely on injection (-D) only");
             return;
         }
 

@@ -16,9 +16,8 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.utils.ExtendedLog;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
-import org.slf4j.Logger;
 
 import java.util.Optional;
 
@@ -48,6 +47,7 @@ import java.util.Optional;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a> @ <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 2.0.3.9
  */
+@Slf4j
 public class GenericExampleExtension implements
         AfterTestExecutionCallback,
         AfterAllCallback,
@@ -63,8 +63,6 @@ public class GenericExampleExtension implements
     // of code we wish to run ONLY ONCE per execution, we mark this flag and use it in the beforeAll method
     private static boolean didRun = false;
 
-    private static final Logger logger = new ExtendedLog(GenericExampleExtension.class);
-
 
     /**
      * Callback that is invoked once <em>after</em> all tests in the current
@@ -75,7 +73,7 @@ public class GenericExampleExtension implements
     @Override
     public void afterAll(ExtensionContext context) {
 
-        logger.info("GeneralExampleExtension- In afterAll");
+        log.info("GeneralExampleExtension- In afterAll");
 
     }
 
@@ -88,7 +86,7 @@ public class GenericExampleExtension implements
      */
     @Override
     public void afterEach(ExtensionContext context) {
-        logger.info("GeneralExampleExtension- In afterEach");
+        log.info("GeneralExampleExtension- In afterEach");
     }
 
 
@@ -101,7 +99,7 @@ public class GenericExampleExtension implements
      */
     @Override
     public void afterTestExecution(ExtensionContext context) {
-        logger.info("GeneralExampleExtension- In afterTestExecution");
+        log.info("GeneralExampleExtension- In afterTestExecution");
     }
 
 
@@ -122,8 +120,8 @@ public class GenericExampleExtension implements
             didRun = true;
         }
 
-        logger.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
-        logger.info("GeneralExampleExtension- In beforeAll");
+        log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
+        log.info("GeneralExampleExtension- In beforeAll");
     }
 
 
@@ -135,7 +133,7 @@ public class GenericExampleExtension implements
      */
     @Override
     public void beforeEach(ExtensionContext context) {
-        logger.info("GeneralExampleExtension- In beforeEach");
+        log.info("GeneralExampleExtension- In beforeEach");
     }
 
 
@@ -148,7 +146,7 @@ public class GenericExampleExtension implements
      */
     @Override
     public void beforeTestExecution(ExtensionContext context) {
-        logger.info("GeneralExampleExtension- In beforeTestExecution");
+        log.info("GeneralExampleExtension- In beforeTestExecution");
     }
 
 
@@ -168,7 +166,7 @@ public class GenericExampleExtension implements
         if (reason.isPresent())
             s += ", reason: " + reason;
 
-        logger.info(s);
+        log.info(s);
     }
 
 
@@ -183,7 +181,7 @@ public class GenericExampleExtension implements
     @Override
     public void testSuccessful(ExtensionContext context) {
         String s = "GeneralExampleExtension- Test " + context.getDisplayName() + " passed";
-        logger.info(s);
+        log.info(s);
     }
 
 
@@ -201,7 +199,7 @@ public class GenericExampleExtension implements
         String s = "GeneralExampleExtension- Test " + context.getDisplayName() + " aborted";
         s += ", cause: " + cause.getMessage();
 
-        logger.info(s);
+        log.info(s);
     }
 
 
@@ -219,7 +217,7 @@ public class GenericExampleExtension implements
         String s = "GeneralExampleExtension- Test " + context.getDisplayName() + " failed";
         s += ", cause: " + cause.getMessage();
 
-        logger.info(s);
+        log.info(s);
     }
 
 
@@ -229,6 +227,6 @@ public class GenericExampleExtension implements
      */
     @Override
     public void close() {
-        logger.info("This is the last method, after all other methods and extension methods are performed");
+        log.info("This is the last method, after all other methods and extension methods are performed");
     }
 }

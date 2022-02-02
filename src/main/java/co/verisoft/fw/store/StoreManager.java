@@ -17,10 +17,9 @@ package co.verisoft.fw.store;
  */
 
 
-import co.verisoft.fw.utils.ExtendedLog;
 import lombok.Synchronized;
 import lombok.ToString;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +45,9 @@ import java.util.Map;
  * @since 0.0.2 (Jan 2022)
  */
 @ToString
+@Slf4j
 public class StoreManager {
 
-    private static final Logger logger = new ExtendedLog(StoreManager.class);
     private static final Map<Long, Store> storeMap = new HashMap<>();
 
     private StoreManager() {
@@ -66,7 +65,7 @@ public class StoreManager {
     public static Store getStore(StoreType storeType) {
         Long threadId = (storeType == StoreType.LOCAL_THREAD) ?
                 Thread.currentThread().getId() : 0;
-        logger.debug("Get store of thread " + threadId + " (0 means global)");
+        log.debug("Get store of thread " + threadId + " (0 means global)");
 
         // If store not exist, create a store
         if (storeMap.get(threadId) == null)
@@ -85,7 +84,7 @@ public class StoreManager {
     public static void removeStore(StoreType storeType) {
         Long threadId = (storeType == StoreType.LOCAL_THREAD) ?
                 Thread.currentThread().getId() : 0;
-        logger.debug("Remove store of thread (0 means global) " + threadId);
+        log.debug("Remove store of thread (0 means global) " + threadId);
         storeMap.remove(threadId);
     }
 }

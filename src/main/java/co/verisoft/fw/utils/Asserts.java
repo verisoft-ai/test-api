@@ -16,13 +16,12 @@ package co.verisoft.fw.utils;
  * limitations under the License.
  */
 
-//import org.apache.commons.text.StringEscapeUtils;
 
 import co.verisoft.fw.extentreport.DelegateExtentTest;
 import co.verisoft.fw.extentreport.ReportManager;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
-import org.slf4j.Logger;
 
 /**
  * Class wraps the whole assert process into one step:
@@ -32,9 +31,9 @@ import org.slf4j.Logger;
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  */
+@Slf4j
 public class Asserts {
 
-    private static final Logger logger = new ExtendedLog(Asserts.class);
 
     /**
      * Protected constructor allowing subclassing but not direct instantiation.
@@ -45,7 +44,7 @@ public class Asserts {
 
     public static <V> V fail(String message) {
 
-        logger.info("Assert - FAIL. " + message);
+        log.info("Assert - FAIL. " + message);
 
         DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
         if (testCase != null)
@@ -67,7 +66,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -85,7 +84,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
 
@@ -104,7 +103,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -122,7 +121,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -140,7 +139,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -158,7 +157,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -176,7 +175,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -194,7 +193,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -212,7 +211,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -230,7 +229,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -248,7 +247,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -266,7 +265,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -284,7 +283,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -302,7 +301,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -320,7 +319,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -337,7 +336,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -355,7 +354,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -373,7 +372,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -391,7 +390,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -409,7 +408,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -427,7 +426,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -445,7 +444,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -463,7 +462,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -481,7 +480,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -499,7 +498,7 @@ public class Asserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            logger.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }

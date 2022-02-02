@@ -16,10 +16,9 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import co.verisoft.fw.utils.ExtendedLog;
 import co.verisoft.fw.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
-import org.slf4j.Logger;
 
 /**
  * Write information to the log, according to the test life cycle (before all, before each, before
@@ -28,9 +27,8 @@ import org.slf4j.Logger;
  * @author David Yehezkel
  * @since 1.9.6
  */
+@Slf4j
 public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback, BeforeTestExecutionCallback, AfterTestExecutionCallback, AfterEachCallback, AfterAllCallback {
-
-    private static final Logger logger = new ExtendedLog(JunitLogExtension.class);
 
 
     @Override
@@ -38,7 +36,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
         if (!context.getTestClass().isPresent())
             return;
 
-        logger.info("After All : " + context.getTestClass().get().getName());
+        log.info("After All : " + context.getTestClass().get().getName());
     }
 
 
@@ -48,7 +46,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
             return;
 
         //noinspection OptionalGetWithoutIsPresent
-        logger.info(String.format("After Each : %s", context.getTestMethod().get().getName()));
+        log.info(String.format("After Each : %s", context.getTestMethod().get().getName()));
     }
 
 
@@ -60,10 +58,10 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
             return;
 
         if (context.getExecutionException().isPresent()) {
-            logger.info("After Test Execution -Test result : FAIL. Test name: " + context.getTestMethod().get().getName());
-            logger.debug("Stack trace is: " + Utils.getStackTrace(context.getExecutionException().get()));
+            log.info("After Test Execution -Test result : FAIL. Test name: " + context.getTestMethod().get().getName());
+            log.debug("Stack trace is: " + Utils.getStackTrace(context.getExecutionException().get()));
         } else
-            logger.info("After Test Execution -Test result : PASS. Test name: " + context.getTestMethod().get().getName());
+            log.info("After Test Execution -Test result : PASS. Test name: " + context.getTestMethod().get().getName());
     }
 
 
@@ -73,7 +71,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
         if (!context.getTestClass().isPresent())
             return;
 
-        logger.info("Before Test Execution : " + context.getTestMethod().get().getName());
+        log.info("Before Test Execution : " + context.getTestMethod().get().getName());
     }
 
 
@@ -83,7 +81,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
             return;
 
         //noinspection OptionalGetWithoutIsPresent
-        logger.info("Before Each : " + context.getTestMethod().get().getName());
+        log.info("Before Each : " + context.getTestMethod().get().getName());
     }
 
 
@@ -92,7 +90,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
         if (!context.getTestClass().isPresent())
             return;
 
-        logger.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
-        logger.info("Before All : " + context.getTestClass().get().getName());
+        log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
+        log.info("Before All : " + context.getTestClass().get().getName());
     }
 }

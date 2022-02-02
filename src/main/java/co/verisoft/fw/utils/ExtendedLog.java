@@ -29,6 +29,7 @@ import org.slf4j.Marker;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  * @since 1.9.6
  */
+@Deprecated
 @ToString
 public class ExtendedLog implements Logger {
 

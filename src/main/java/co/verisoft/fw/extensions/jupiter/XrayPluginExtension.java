@@ -18,10 +18,10 @@ package co.verisoft.fw.extensions.jupiter;
 
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
-import co.verisoft.fw.utils.ExtendedLog;
 import co.verisoft.fw.xray.Status;
 import co.verisoft.fw.xray.XrayIdentifier;
 import co.verisoft.fw.xray.XrayJsonTestObject;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,7 +29,6 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -49,10 +48,9 @@ import java.util.Map;
  * @since 0.0.2 (Jan 2022)
  */
 @SuppressWarnings("unchecked")
+@Slf4j
 public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallback,
         BeforeAllCallback, ExtensionContext.Store.CloseableResource {
-
-    private static final Logger logger = new ExtendedLog(XrayPluginExtension.class);
 
     private static boolean executed = false;
 
@@ -76,7 +74,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             executed = true;
         }
 
-        logger.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
+        log.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
     }
 
 
@@ -193,7 +191,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             destDir.mkdir();
 
         if (!destDir.exists()) {
-            logger.error("Directory " + localPath + " was not created - terminating operation");
+            log.error("Directory " + localPath + " was not created - terminating operation");
             return;
         }
 
@@ -204,7 +202,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             file.flush();
             file.close();
         } catch (Exception e) {
-            logger.error("Could not create xray report. Error is " + e.getMessage());
+            log.error("Could not create xray report. Error is " + e.getMessage());
         }
     }
 }
