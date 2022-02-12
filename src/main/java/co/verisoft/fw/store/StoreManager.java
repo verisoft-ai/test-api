@@ -65,7 +65,14 @@ public class StoreManager {
     public static Store getStore(StoreType storeType) {
         Long threadId = (storeType == StoreType.LOCAL_THREAD) ?
                 Thread.currentThread().getId() : 0;
-        log.debug("Get store of thread " + threadId + " (0 means global)");
+
+        // Show only global access to store
+        if (threadId == 0){
+            log.debug("Get store of thread " + threadId + " (0 means global)");
+        }
+        else
+            log.trace("Get store of thread " + threadId + " (0 means global)");
+
 
         // If store not exist, create a store
         if (storeMap.get(threadId) == null)
