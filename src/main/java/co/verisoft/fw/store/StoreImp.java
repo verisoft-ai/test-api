@@ -17,9 +17,8 @@ package co.verisoft.fw.store;
  */
 
 
-import co.verisoft.fw.utils.ExtendedLog;
 import lombok.ToString;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,8 +34,8 @@ import java.util.Map;
  * @since 0.0.2 (Jan 2022)
  */
 @ToString
+@Slf4j
 public class StoreImp implements Store {
-    private static final Logger logger = new ExtendedLog(StoreImp.class);
     private final Map<Object, Object> store;
 
     public StoreImp() {
@@ -48,8 +47,8 @@ public class StoreImp implements Store {
     public <T> T getValueFromStore(Object key) {
         //noinspection unchecked
         Object obj = store.get(key);
-        logger.debug("Retrieved " + obj + " from store using key " + key);
-        return (T)obj;
+        log.debug("Retrieved " + obj + " from store using key " + key);
+        return (T) obj;
     }
 
 
@@ -58,13 +57,13 @@ public class StoreImp implements Store {
         if (store.get(key) != null)
             store.remove(key);
         store.put(key, value);
-        logger.debug("Insert into store KEY: " + key.toString() + "\tVALUE: " + value.toString());
+        log.debug("Insert into store KEY: " + key.toString() + "\tVALUE: " + value.toString());
     }
 
 
     @Override
     public void removeValueFromStore(Object key) {
-        logger.debug("Removed value from store using key " + key.toString());
+        log.debug("Removed value from store using key " + key.toString());
         store.remove(key);
     }
 }

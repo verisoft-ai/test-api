@@ -19,10 +19,9 @@ package co.verisoft.fw.extensions.jupiter;
 import co.verisoft.fw.extentreport.ReportManager;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
-import co.verisoft.fw.utils.ExtendedLog;
 import com.aventstack.extentreports.Status;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
-import org.slf4j.Logger;
 
 import java.util.UUID;
 
@@ -47,6 +46,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
  * @author David Yehezkel, VeriSoft
  * @since 1.9.6
  */
+@Slf4j
 public class ExtentReportExtension implements BeforeAllCallback,
         BeforeEachCallback,
         BeforeTestExecutionCallback,
@@ -56,7 +56,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
         ExtensionContext.Store.CloseableResource {
 
     private static boolean didRun = false;
-    private static final Logger logger = new ExtendedLog(ExtentReportExtension.class);
 
     /**
      * This method will be invoked <b>only once before all test executions</b>.

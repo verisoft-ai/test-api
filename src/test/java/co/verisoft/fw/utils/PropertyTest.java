@@ -45,7 +45,8 @@ public class PropertyTest {
 
     @Test
     public void getIntPropertyValueIsString() {
-        logger.info("This test will invoke a warning log messge 'specific_file cannot parse it to int' . IT IS A NORMAL BEHAVIOR");
+        logger.info("This test will invoke a warning log messge 'specific_file cannot parse it to int' . " +
+                "IT IS A NORMAL BEHAVIOR");
         Property property = new Property(
                 System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
         assertNull(property.getIntProperty("str"));
@@ -76,7 +77,8 @@ public class PropertyTest {
 
     @Test
     public void getDoublePropertyValueIsString() {
-        logger.info("This test will invoke a warning log messge 'specific_file cannot parse it to double' . IT IS A NORMAL BEHAVIOR");
+        logger.info("This test will invoke a warning log messge 'specific_file cannot parse it to double' . " +
+                "IT IS A NORMAL BEHAVIOR");
         Property property = new Property(
                 System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
         assertNull(property.getDoubleProperty("str"));
@@ -113,5 +115,4 @@ public class PropertyTest {
         // put it back
         property.setProperty("for_remove", "forRemove");
     }
-
 }
