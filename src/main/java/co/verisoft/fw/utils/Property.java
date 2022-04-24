@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -54,7 +55,7 @@ import java.util.Properties;
 public class Property {
 
     @Getter
-    private Properties properties;
+    private final Properties properties;
 
     /**
      * private c-tor. Handle c-tor with path parm and without param initial instance
@@ -100,11 +101,22 @@ public class Property {
      */
     private Properties initPropertyObject(String path) {
         Properties prop = new Properties();
+
+        ClassLoader classLoader = getClass().getClassLoader();
+
+        String absolutePath = "";
         try {
-            if (!path.isEmpty() && new File(path).exists()) {
+            absolutePath = getClass().getClassLoader().getResource(path).getPath();
+        } catch (NullPointerException e) {
+            log.error("Failed to load resource file " + path +  " System will load default property file");
+        }
+
+
+        try {
+            if (!path.isEmpty() && !absolutePath.isEmpty()) {
                 // load properties file according to parameter
-                FileInputStream inputStream = new FileInputStream(path);
-                prop.load(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+                FileInputStream inputStream = new FileInputStream(absolutePath);
+                prop.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             } else {
                 // load default properties file
                 prop.load(Property.class.getClassLoader().getResourceAsStream("root.config.properties"));
@@ -160,8 +172,7 @@ public class Property {
             return Integer.parseInt(getProperty(key));
         } catch (NumberFormatException numberFormatExeption) {
             log.warn("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to int");
-            return (Integer) null;
-
+            return null;
         }
     }
 

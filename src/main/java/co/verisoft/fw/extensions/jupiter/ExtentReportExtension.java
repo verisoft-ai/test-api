@@ -23,6 +23,10 @@ import com.aventstack.extentreports.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
 
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
@@ -65,7 +69,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
      * (from property file into system property), additional test information if supplied etc..
      */
     @Override
-    public synchronized void beforeAll(ExtensionContext context) throws Exception {
+    public synchronized void beforeAll(ExtensionContext context) {
 
         if (!didRun) {
             // The following line registers a callback hook when the root test context is shut down
@@ -82,14 +86,18 @@ public class ExtentReportExtension implements BeforeAllCallback,
                 ReportManager.getInstance().getReport().setSystemInfo("Test Group Executed: ",
                         System.getProperty("test.included.groups"));
 
+            // Create an object to hold screenshots
+            Map<String, List<String>> screenShots = new HashMap<>();
+            StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
+
             didRun = true;
         }
     }
 
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
-        /** no-op. Satisfy the interface**/
+    public void beforeEach(ExtensionContext context) {
+        /* no-op. Satisfy the interface */
     }
 
 
@@ -100,7 +108,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
      * @param context Junit 5 context object
      */
     @Override
-    public void beforeTestExecution(ExtensionContext context) throws Exception {
+    public void beforeTestExecution(ExtensionContext context) {
 
         // Create a UUID for test
         UUID uuid = UUID.randomUUID();
@@ -113,16 +121,22 @@ public class ExtentReportExtension implements BeforeAllCallback,
     }
 
 
+    @Override
+    public void afterTestExecution(ExtensionContext context) {
+        /* no-op. Satisfy the interface */
+    }
+
+
     /**
-     * Callback that is invoked <em>immediately after</em> an individual test is
-     * executed but after any user-defined setup methods have been executed
-     * for that test.
+     * Callback that is invoked after an individual test is
      * Checks if the test have failed, and if so, it collects a screenshot
      *
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void afterTestExecution(ExtensionContext context) throws Exception {
+    public void afterEach(ExtensionContext context) {
+
+
         if (context.getExecutionException().isPresent()) {
             ReportManager.getInstance().getCurrentTest().fail("An Error occured. Reason: " +
                     context.getExecutionException().toString() + "  See logs for further details");
@@ -130,20 +144,21 @@ public class ExtentReportExtension implements BeforeAllCallback,
             throw new AssertionError("Report fail caused test to fail");
         }
 
-        //TODO: Find a way to add screen shot without specifically using selenium or playwright
-        // ReportManager.getInstance().currentTest().addScreenCaptureFromPath(file.getAbsolutePath(), "Error Screenshot");
+        // Find out if there are screenshots collected during the test
+        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
+                .getValueFromStore("screenshots");
+
+        List<String> paths = screenShots.get(context.getDisplayName());
+        for (String path : paths) {
+            ReportManager.getInstance().getCurrentTest().addScreenCaptureFromPath(path, "Error Screenshot");
+        }
+
     }
 
 
     @Override
-    public void afterEach(ExtensionContext context) throws Exception {
-        /** no-op. Satisfy the interface **/
-    }
-
-
-    @Override
-    public void afterAll(ExtensionContext context) throws Exception {
-        /** no-op. Satisfy the interface **/
+    public void afterAll(ExtensionContext context) {
+        /* no-op. Satisfy the interface */
     }
 
 

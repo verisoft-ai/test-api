@@ -30,16 +30,14 @@ public class PropertyTest {
 
     @Test
     public void loadPropertiesFileByPath() {
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertEquals("specific_file", property.getProperty("str"));
     }
 
 
     @Test
     public void getIntProperty() {
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertEquals(500, property.getIntProperty("int"));
     }
 
@@ -47,31 +45,28 @@ public class PropertyTest {
     public void getIntPropertyValueIsString() {
         logger.info("This test will invoke a warning log messge 'specific_file cannot parse it to int' . " +
                 "IT IS A NORMAL BEHAVIOR");
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+
+        Property property = new Property("specific.config.properties");
         assertNull(property.getIntProperty("str"));
     }
 
     @Test
     public void getBooleanPropertyValueIsTrue() {
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertEquals(true, property.getBooleanProperty("boolean_True"));
     }
 
     @Test
     public void getBooleanPropertyValueIsFalse() {
 
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertEquals(false, property.getBooleanProperty("boolean_false"));
     }
 
     @Test
     public void getDoubleProperty() {
 
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertEquals(52.23, property.getDoubleProperty("double"));
     }
 
@@ -79,15 +74,13 @@ public class PropertyTest {
     public void getDoublePropertyValueIsString() {
         logger.info("This test will invoke a warning log messge 'specific_file cannot parse it to double' . " +
                 "IT IS A NORMAL BEHAVIOR");
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertNull(property.getDoubleProperty("str"));
     }
 
     @Test
     public void setNewValue() {
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         property.setProperty("new", "new value");
         assertEquals("new value", property.getProperty("new"));
     }
@@ -106,8 +99,7 @@ public class PropertyTest {
 
     @Test
     public void removeValue() {
-        Property property = new Property(
-                System.getProperty("user.dir") + "/src/test/resources/specific.config.properties");
+        Property property = new Property("specific.config.properties");
         assertEquals("forRemove", property.getProperty("for_remove"));
         property.removeProperty("for_remove");
         assertEquals(null, property.getProperty("for_remove"));
