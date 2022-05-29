@@ -23,11 +23,7 @@ import com.aventstack.extentreports.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
 
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 
@@ -148,10 +144,11 @@ public class ExtentReportExtension implements BeforeAllCallback,
         Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
                 .getValueFromStore("screenshots");
 
-        List<String> paths = screenShots.get(context.getDisplayName());
-        for (String path : paths) {
-            ReportManager.getInstance().getCurrentTest().addScreenCaptureFromPath(path, "Error Screenshot");
-        }
+        List<String> paths = (screenShots.get(context.getDisplayName()));
+        if (!Objects.isNull(paths))
+            for (String path : paths) {
+                ReportManager.getInstance().getCurrentTest().addScreenCaptureFromPath(path, "Error Screenshot");
+            }
 
     }
 
