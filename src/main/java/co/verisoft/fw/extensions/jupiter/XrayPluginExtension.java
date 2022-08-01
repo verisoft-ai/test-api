@@ -135,7 +135,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             return;
 
         // Decide if test has failed
-        Status status = extensionContext.getExecutionException().isPresent() ? Status.FAILED : Status.PASSED;
+        Status status = extensionContext.getExecutionException().isPresent() ? Status.FAIL : Status.PASS;
 
         // Simple case - just one test id
         if (xrayValues.length == 1) {
