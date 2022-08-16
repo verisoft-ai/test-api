@@ -248,4 +248,5 @@ public class XrayJsonTestObjectTest {
                 .build();
         return Stream.of(infoBase);
     }
+
 }
