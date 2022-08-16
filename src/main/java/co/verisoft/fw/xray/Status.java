@@ -30,8 +30,8 @@ import java.util.Locale;
 )
 public enum Status {
     TODO,
-    FAIL,
-    PASS,
+    FAILED,
+    PASSED,
     EXECUTING;
 
 
@@ -45,10 +45,10 @@ public enum Status {
         Status result;
         switch (status.toUpperCase(Locale.ROOT)) {
             case "FAILED":
-                result = Status.FAIL;
+                result = Status.FAILED;
                 break;
             case "PASSED":
-                result = Status.PASS;
+                result = Status.PASSED;
                 break;
             case "EXECUTING":
                 result = Status.EXECUTING;

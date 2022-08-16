@@ -44,7 +44,7 @@ public class TestResultImportExampleTest {
                 .start(ZonedDateTime.parse("2022-01-06T11:40:11+02"))
                 .finish(ZonedDateTime.parse("2022-01-06T11:44:24+02"))
                 .testKey("VER-3")
-                .status(Status.PASS)
+                .status(Status.PASSED)
                 .build();
         //noinspection MismatchedQueryAndUpdateOfCollection
         JSONObject obj = new JSONObject();
@@ -64,7 +64,7 @@ public class TestResultImportExampleTest {
                 .comment("This is a comment")
                 .testKey("VER-3")
                 .defect("VER-6")
-                .status(Status.PASS)
+                .status(Status.PASSED)
                 .build();
 
         XrayJsonInfoObject info1 = new XrayJsonInfoObject.XrayInfoObjectBuilder()
