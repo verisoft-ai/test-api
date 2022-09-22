@@ -14,30 +14,45 @@ package co.verisoft.fw.extensions.jupiter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * After each run the XrayResult json file imports automatically to Jira.
+ * New Test Execution creates with all the tests run results
+ * for this feature you need:
+ * 1. know your jira type. - cloud or server/DataCenter.
+ * 2. Go to xray-plugin.properties file and fill the properties according to the document in the file.
  */
 
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
+import co.verisoft.fw.utils.ExtendedLog;
 import co.verisoft.fw.xray.Status;
 import co.verisoft.fw.xray.XrayIdentifier;
 import co.verisoft.fw.xray.XrayJsonTestObject;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import okhttp3.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.slf4j.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Properties;
+import java.util.Date;
 
 /**
  * Extension to create Xray report.
@@ -51,6 +66,8 @@ import java.util.Map;
 @Slf4j
 public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallback,
         BeforeAllCallback, ExtensionContext.Store.CloseableResource {
+
+    private static final Logger logger = new ExtendedLog(XrayPluginExtension.class);
 
     private static boolean executed = false;
 
@@ -160,10 +177,199 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
 
     /**
+     * load xray properties from xray-plugin-properties file
+     * @return Properties - all xray properties
+     */
+    public Properties getXrayPluginProperties(){
+        // Load xray properties
+        String xrayConfigPath = System.getProperty("user.dir") + "/src/test/resources/xray-plugin.properties";
+        Properties appProps = new Properties();
+        try {
+            appProps.load(new FileInputStream(xrayConfigPath));
+        } catch (Exception e) {
+            // No property file found - rely on -D only
+            log.warn("No property file were found: " + xrayConfigPath + ", will rely on injection (-D) only");
+        }
+        return appProps;
+    }
+
+
+    /**
+     * Automatically import xray json result file to jira server/DataCenter
+     * Creates a new Test Execution with the results in your Jira xray server/DC project board
+     * @param reportFile - xray result file path
+     * @return String - the API call response
+     * @throws IOException
+     */
+    private String importJsonResultToJiraServerDC(String reportFile) throws IOException{
+
+        // Load xray properties from xray-plugin.properties file
+//        Properties appProps = getXrayPluginProperties();
+
+        // Defined the import file type
+        final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
+
+        // Initial necessary jira properties
+//        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", appProps.getProperty("JIRA_BASE_URL"));
+//        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", appProps.getProperty("JIRA_USERNAME"));
+//        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", appProps.getProperty("JIRA_PASSWORD"));
+//        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", appProps.getProperty("JIRA_TOKEN"));
+
+        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", "http://localhost:8090");
+        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", "efrat.cohen");
+        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", "Ec123456");
+        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", null);
+        logger.info("Importing a Xray JSON report to a Xray Server/Data Center instance");
+
+        // Create authenticate token
+        OkHttpClient client = new OkHttpClient();
+        String credentials;
+
+        // With PersonalAccessToken Authentication
+        if (jiraPersonalAccessToken!= null) {
+            credentials = "Bearer " + jiraPersonalAccessToken;
+        }
+        // With basic Authentication - userName and password
+        else {
+            credentials = Credentials.basic(jiraUsername, jiraPassword);
+        }
+
+        String endpointUrl = jiraBaseUrl + "/rest/raven/1.0/import/execution";
+        RequestBody requestBody = null;
+        try {
+            // Get xray Json result file content
+            String reportContent = new String ( Files.readAllBytes( Paths.get(reportFile) ) );
+            requestBody = RequestBody.create(reportContent, MEDIA_TYPE_JSON);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        // Build the request
+        Request request = new Request.Builder().url(endpointUrl).post(requestBody).addHeader("Authorization", credentials).build();
+        Response response = null;
+        try {
+            // Execute import xray json result endpoint
+            response = client.newCall(request).execute();
+            // Get response
+            String responseBody = response.body().string();
+
+            if (response.isSuccessful()){
+                logger.info("request done successfully, new created Test Execution: " + responseBody);
+                return(responseBody);
+            } else {
+                logger.warn("request failed, logs: " + response);
+                throw new IOException("Unexpected HTTP code ");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw(e);
+        }
+    }
+
+
+    /**
+     * Automatically import xray json result file to jira cloud
+     * Creates a new Test Execution with tests results in your Jira xray cloud project board
+     * @param reportFile - xray result file path
+     * @return String - the API call response
+     * @throws IOException
+     */
+    private String importJsonResultToJiraCloud(String reportFile) throws IOException {
+
+        // Load xray properties from xray-plugin.properties file
+        Properties appProps = getXrayPluginProperties();
+
+        // Defined the import file type
+        final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
+
+        // Initial necessary jira properties
+        String clientId = System.getenv().getOrDefault("CLIENT_ID", appProps.getProperty("CLIENT_ID"));
+        String clientSecret = System.getenv().getOrDefault("CLIENT_SECRET", appProps.getProperty("CLIENT_SECRET"));
+        String xrayCloudApiBaseUrl = appProps.getProperty("XRAY_CLOUD_API_BASE_URL");
+        String authenticateUrl = xrayCloudApiBaseUrl + "/authenticate";
+
+        logger.info("Importing a Xray JSON report to a Xray Cloud instance");
+
+        // Create authenticate token
+        OkHttpClient client = new OkHttpClient();
+        String authenticationPayload = "{ \"client_id\": \"" + clientId +"\", \"client_secret\": \"" + clientSecret +"\" }";
+
+        // Build create authenticate depends on jira properties
+        RequestBody body = RequestBody.create(authenticationPayload, MEDIA_TYPE_JSON);
+        Request request = new Request.Builder().url(authenticateUrl).post(body).build();
+
+        Response response = null;
+        String authToken = null;
+        try {
+            // Execute the generated authenticate request
+            response = client.newCall(request).execute();
+            // Get the response
+            String responseBody = response.body().string();
+
+            if (response.isSuccessful()){
+                authToken = responseBody.replace("\"", "");
+                logger.info("successfully generated authenticate token: " + authToken);
+            } else {
+                logger.warn("failed to authenticate " + response);
+                throw new IOException("failed to authenticate " + response);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String credentials = "Bearer " + authToken;
+        String xrayCloudApiUploadUrl = "https://xray.cloud.getxray.app/api/v1";
+
+        String endpointUrl =  xrayCloudApiUploadUrl + "/import/execution";
+        RequestBody requestBody = null;
+        try {
+            // Get xray Json result file content
+            String reportContent = new String ( Files.readAllBytes( Paths.get(reportFile) ) );
+            requestBody = RequestBody.create(reportContent, MEDIA_TYPE_JSON);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            throw e1;
+        }
+
+        // Build the auto import xray result file to jira request
+        request = new Request.Builder().url(endpointUrl).post(requestBody).addHeader("Authorization", credentials).build();
+        response = null;
+        try {
+            // Execute import xray json result endpoint
+            response = client.newCall(request).execute();
+            // Get response
+            String responseBody = response.body().string();
+            if (response.isSuccessful()){
+                logger.info("request done successfully, new created Test Execution: " + responseBody);
+                return(responseBody);
+            } else {
+                logger.warn("request failed, logs: " + response);
+                throw new IOException("Unexpected HTTP code " + response);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    /**
      * At the end of the execution, create the report and save it to the target/XrayReport directory
+     * Import the report to your Jira instance - creates new Test Execution with the tests run results
      */
     @Override
     public void close() {
+        // Data definition for the new TestExecution
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.mm");
+
+        String testExecutionSummary = "Tests Report " + dateFormat.format(new Date());
+        String testExecutionDescription = "This report created Automatically after tests run";
+
+        HashMap<String, String> infoJson = new HashMap<>();
+        infoJson.put("summary", testExecutionSummary);
+        infoJson.put("description", testExecutionDescription);
+
         // Get the object from store
         Map<String, XrayJsonTestObject> tests = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("tests");
 
@@ -174,7 +380,8 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
         // Create the Report Json object
         JSONObject obj = new JSONObject();
-        obj.put("testExecutionKey", System.getProperty("xray.testExecution.key"));
+        // Info key creates a new TestExecution
+        obj.put("info", infoJson);
 
         JSONArray arr = new JSONArray();
         for (val result : testReuslts)
@@ -201,6 +408,8 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             file.write(obj.toJSONString());
             file.flush();
             file.close();
+            // Import xrayResult Json file to Jira cloud or server/DC depends on the properties values
+            importJsonResultToJiraServerDC(localPath + "/XrayResult.json");
         } catch (Exception e) {
             log.error("Could not create xray report. Error is " + e.getMessage());
         }
