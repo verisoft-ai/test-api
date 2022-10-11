@@ -412,8 +412,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             file.write(obj.toJSONString());
             file.flush();
             file.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Could not create xray report. Error is " + e.getMessage());
         }
         // Import xrayResult Json file to Jira cloud or server/DC based on xray.type property value
