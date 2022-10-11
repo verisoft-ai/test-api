@@ -14,12 +14,6 @@ package co.verisoft.fw.extensions.jupiter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * After each run the XrayResult json file imports automatically to Jira.
- * New Test Execution creates with all the tests run results
- * for this feature you need:
- * 1. know your jira type. - cloud or server/DataCenter.
- * 2. Go to xray-plugin.properties file and fill the properties according to the document in the file.
  */
 
 import co.verisoft.fw.store.StoreManager;
@@ -59,6 +53,19 @@ import java.util.Date;
  * Xray report is based on the XrayIdentifier annotation. If present, the test instance will be logged
  * and reported to XrayReporter. Test reports are stored in the global store space
  *
+ * After each run the XrayResult json file imports automatically to Xray.
+ * New Test Execution creates in jira board with all the current tests run results.
+ * <b> for this feature you need: </b>
+ * 1. know your jira type - cloud or server/DataCenter.
+ * You can know your Jira type based on the URL. if Jira project URL contains 'atlassian.net' after the project name it means that you use Jira cloud.
+ * otherwise, you use Jira server or DataCenter that behave the same.
+ * 2. Create Personal Access Token for Authentication:
+ * In jira cloud go to Settings -> Apps -> API Keys. and create API key.
+ * In jira server/DataCenter go to User Profile -> Profile -> Personal Access Token. and Create token.
+ * Another option for Authentication in Jira server/DataCenter is to create Applicative user with admin permissions and make Authentication based on userName and password.
+ * 3. Go to xray-plugin.properties file and fill the properties according to the document in the file. -
+ * first you need to fill the Jira type property - cloud, or server. in both server and DataCenter -  fill server. then, fill all the parameters you need like persona access token e.c.
+ *
  * @author Nir Gallner
  * @since 0.0.2 (Jan 2022)
  */
@@ -70,6 +77,9 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
     private static final Logger logger = new ExtendedLog(XrayPluginExtension.class);
 
     private static boolean executed = false;
+
+    // Load xray properties from xray-plugin.properties file
+    public static Properties appProps = getXrayPluginProperties();
 
 
     /**
@@ -151,9 +161,8 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         if (xrayValues.length == 0)
             return;
 
-        // Decide if test has failed
-        Status status = extensionContext.getExecutionException().isPresent() ? Status.FAILED : Status.PASSED;
-
+        // Set the test status based on xray.type property value in Jira server/DC - set the status to PASS/FAIL, in cloud set the status to PASSED/FAILED
+        Status status = extensionContext.getExecutionException().isPresent() ? appProps.getProperty("xray.type").equals("server") ? Status.FAIL : Status.FAILED : appProps.getProperty("xray.type").equals("server") ? Status.PASS : Status.PASSED;
         // Simple case - just one test id
         if (xrayValues.length == 1) {
             Map<String, XrayJsonTestObject> tests = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("tests");
@@ -180,8 +189,9 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * load xray properties from xray-plugin-properties file
      * @return Properties - all xray properties
      */
-    public Properties getXrayPluginProperties(){
+    public static Properties getXrayPluginProperties(){
         // Load xray properties
+        // TODO fix it! user.dir is not the framework path, maybe move this file to project?
         String xrayConfigPath = System.getProperty("user.dir") + "/src/test/resources/xray-plugin.properties";
         Properties appProps = new Properties();
         try {
@@ -203,22 +213,14 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      */
     private String importJsonResultToJiraServerDC(String reportFile) throws IOException{
 
-        // Load xray properties from xray-plugin.properties file
-//        Properties appProps = getXrayPluginProperties();
-
         // Defined the import file type
         final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
 
         // Initial necessary jira properties
-//        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", appProps.getProperty("JIRA_BASE_URL"));
-//        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", appProps.getProperty("JIRA_USERNAME"));
-//        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", appProps.getProperty("JIRA_PASSWORD"));
-//        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", appProps.getProperty("JIRA_TOKEN"));
-
-        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", "http://localhost:8090");
-        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", "efrat.cohen");
-        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", "Ec123456");
-        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", null);
+        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", appProps.getProperty("JIRA_BASE_URL"));
+        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", appProps.getProperty("JIRA_USERNAME"));
+        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", appProps.getProperty("JIRA_PASSWORD"));
+        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", appProps.getProperty("JIRA_TOKEN"));
         logger.info("Importing a Xray JSON report to a Xray Server/Data Center instance");
 
         // Create authenticate token
@@ -226,7 +228,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         String credentials;
 
         // With PersonalAccessToken Authentication
-        if (jiraPersonalAccessToken!= null) {
+        if (!jiraPersonalAccessToken.equals("null")) {
             credentials = "Bearer " + jiraPersonalAccessToken;
         }
         // With basic Authentication - userName and password
@@ -258,7 +260,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
                 logger.info("request done successfully, new created Test Execution: " + responseBody);
                 return(responseBody);
             } else {
-                logger.warn("request failed, logs: " + response);
+                logger.warn("request failed, logs: " + response.message());
                 throw new IOException("Unexpected HTTP code ");
             }
         } catch (IOException e) {
@@ -276,9 +278,6 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * @throws IOException
      */
     private String importJsonResultToJiraCloud(String reportFile) throws IOException {
-
-        // Load xray properties from xray-plugin.properties file
-        Properties appProps = getXrayPluginProperties();
 
         // Defined the import file type
         final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
@@ -311,7 +310,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
                 authToken = responseBody.replace("\"", "");
                 logger.info("successfully generated authenticate token: " + authToken);
             } else {
-                logger.warn("failed to authenticate " + response);
+                logger.warn("failed to authenticate " + response.message());
                 throw new IOException("failed to authenticate " + response);
             }
         } catch (IOException e) {
@@ -344,7 +343,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
                 logger.info("request done successfully, new created Test Execution: " + responseBody);
                 return(responseBody);
             } else {
-                logger.warn("request failed, logs: " + response);
+                logger.warn("request failed, logs: " + response.message());
                 throw new IOException("Unexpected HTTP code " + response);
             }
         } catch (IOException e) {
@@ -359,7 +358,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * Import the report to your Jira instance - creates new Test Execution with the tests run results
      */
     @Override
-    public void close() {
+    public void close() throws IOException {
         // Data definition for the new TestExecution
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.mm");
 
@@ -408,10 +407,23 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             file.write(obj.toJSONString());
             file.flush();
             file.close();
-            // Import xrayResult Json file to Jira cloud or server/DC depends on the properties values
-            importJsonResultToJiraServerDC(localPath + "/XrayResult.json");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error("Could not create xray report. Error is " + e.getMessage());
         }
+        // Import xrayResult Json file to Jira cloud or server/DC based on xray.type property value
+        // Server/DataCenter
+        if(appProps.getProperty("xray.type").equals("server")){
+            importJsonResultToJiraServerDC(localPath + "/XrayResult.json");
+        }
+        // Cloud
+        else if(appProps.getProperty("xray.type").equals("cloud")){
+            importJsonResultToJiraCloud(localPath + "/XrayResult.json");
+        }
+        // If xray.type is empty or contains uncorrected value
+        else{
+            logger.warn("The Xray result json file created but not imported because of uncorrected xray type in properties file, fix it and fill server or cloud");
+        }
+
     }
 }

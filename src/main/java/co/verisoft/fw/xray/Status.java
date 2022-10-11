@@ -31,7 +31,9 @@ import java.util.Locale;
 public enum Status {
     TODO,
     FAILED,
+    FAIL,
     PASSED,
+    PASS,
     EXECUTING;
 
 
