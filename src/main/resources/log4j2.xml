@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration packages="co.verisoft" status="WARN">
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout
@@ -35,6 +35,7 @@
             <ThresholdFilter level="trace"/>
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
+        <Log4jObserverAppender name="Log4jObserverAppender"/>
     </Appenders>
 
     <Loggers>
@@ -45,6 +46,7 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="RollingFileAppender"/>
             <AppenderRef ref="RollingFileTraceAppender"/>
+            <AppenderRef ref="Log4jObserverAppender"/>
         </Root>
 
     </Loggers>
