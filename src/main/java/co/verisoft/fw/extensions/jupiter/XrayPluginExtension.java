@@ -41,7 +41,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -52,7 +51,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Date;
 
 /**
@@ -215,7 +213,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * @return String - the API call response
      * @throws IOException
      */
-    private String importJsonResultToJiraServerDC(String reportFile) throws IOException{
+    private String exportJsonResultToJiraServerDC(String reportFile) throws IOException{
 
         // Defined the import file type
         final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
@@ -281,7 +279,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * @return String - the API call response
      * @throws IOException
      */
-    private String importJsonResultToJiraCloud(String reportFile) throws IOException {
+    private String exportJsonResultToJiraCloud(String reportFile) throws IOException {
 
         // Defined the import file type
         final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
@@ -313,7 +311,8 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             if (response.isSuccessful()){
                 authToken = responseBody.replace("\"", "");
                 logger.info("successfully generated authenticate token: " + authToken);
-            } else {
+            }
+            else {
                 logger.warn("failed to authenticate " + response.message());
                 throw new IOException("failed to authenticate " + response);
             }
@@ -417,11 +416,11 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         // Import xrayResult Json file to Jira cloud or server/DC based on xray.type property value
         // Server/DataCenter
         if(xrayPropertiesObject.getXrayType().equals("server")){
-            importJsonResultToJiraServerDC(localPath + "/XrayResult.json");
+            exportJsonResultToJiraServerDC(localPath + "/XrayResult.json");
         }
         // Cloud
         else if(xrayPropertiesObject.getXrayType().equals("cloud")){
-            importJsonResultToJiraCloud(localPath + "/XrayResult.json");
+            exportJsonResultToJiraCloud(localPath + "/XrayResult.json");
         }
         // If xray.type is empty or contains uncorrected value
         else{

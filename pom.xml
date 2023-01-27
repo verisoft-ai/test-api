@@ -7,7 +7,7 @@
     <groupId>co.verisoft</groupId>
     <artifactId>test-api</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.5</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>VeriSoft framewordk for testing web and mobile applications. junit 5 Module</description>
     <url>https://bitbucket.org/nir_gallner/test.api</url>
@@ -36,31 +36,31 @@
     <properties>
 
         <!-- Dependencies -->
-        <log4j2.version>2.17.2</log4j2.version>
-        <slf4j.version>2.0.0-alpha7</slf4j.version>
+        <log4j2.version>2.19.0</log4j2.version>
+        <slf4j.version>2.0.6</slf4j.version>
         <aspectj.version>1.9.7</aspectj.version>
-        <maven.compiler.version>3.9.0</maven.compiler.version>
+        <maven.compiler.version>3.10.1</maven.compiler.version>
         <lombok.version>1.18.24</lombok.version>
         <json.simple.version>1.1.1</json.simple.version>
-        <xmlBeans.version>5.0.3</xmlBeans.version>
-        <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
+        <xmlBeans.version>5.1.1</xmlBeans.version>
+        <jetbrains.annotations.version>24.0.0</jetbrains.annotations.version>
         <com.aventstack.extentReport.version>5.0.9</com.aventstack.extentReport.version>
 
 
 
         <!-- Maven plugins versions-->
-        <maven.javadoc.version>3.3.1</maven.javadoc.version>
+        <maven.javadoc.version>3.4.1</maven.javadoc.version>
         <maven.source.plugin.version>3.2.1</maven.source.plugin.version>
         <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version> <!--after change to 3.0.0-M5 break -->
         <maven.javadoc.plugin.version>3.3.1</maven.javadoc.plugin.version>
-        <jacoco.maven.plugin.version>0.8.7</jacoco.maven.plugin.version>
-        <nexus.staging.maven.version>1.6.7</nexus.staging.maven.version>
+        <jacoco.maven.plugin.version>0.8.8</jacoco.maven.plugin.version>
+        <nexus.staging.maven.version>1.6.13</nexus.staging.maven.version>
         <maven.gpg.plugin.version>3.0.1</maven.gpg.plugin.version>
 
         <!-- Test dependencies -->
-        <junit.platform.version>1.8.2</junit.platform.version>
-        <junit.jupiter.version>5.8.2</junit.jupiter.version>
-        <assertJ.version>3.22.0</assertJ.version>
+        <junit.platform.version>1.9.2</junit.platform.version>
+        <junit.jupiter.version>5.9.2</junit.jupiter.version>
+        <assertJ.version>3.24.2</assertJ.version>
 
         <!-- Java -->
         <java.version>1.8</java.version>
@@ -200,6 +200,15 @@
             <artifactId>okhttp</artifactId>
             <version>4.10.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${maven.compiler.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <distributionManagement>
