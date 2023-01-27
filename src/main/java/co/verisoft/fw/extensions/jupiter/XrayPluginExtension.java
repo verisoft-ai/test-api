@@ -65,8 +65,8 @@ import java.util.Date;
  * You can know your Jira type based on the URL. if Jira project URL contains 'atlassian.net' after the project name it means that you use Jira cloud.
  * otherwise, you use Jira server or DataCenter that behave the same.
  * 2. Create Personal Access Token for Authentication:
- * In jira cloud go to Settings -> Apps -> API Keys. and create API key.
- * In jira server/DataCenter go to User Profile -> Profile -> Personal Access Token. and Create token.
+ * In jira cloud go to Settings - Apps - API Keys. and create API key.
+ * In jira server/DataCenter go to User Profile - Profile - Personal Access Token. and Create token.
  * Another option for Authentication in Jira server/DataCenter is to create Applicative user with admin permissions and make Authentication based on userName and password.
  * 3. Go to xray-plugin.properties file and fill the properties according to the document in the file. -
  * first you need to fill the Jira type property - cloud, or server. in both server and DataCenter -  fill server. then, fill all the parameters you need like persona access token e.c.

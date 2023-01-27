@@ -69,7 +69,7 @@ public class ActionTime {
 	 * @param timeUnit time unit to add
 	 * @param amount amount to add
 	 * @return new time after adding the time unit
-	 * @throws ParseException
+	 * @throws ParseException If did not parse corretly
 	 */
 	public static String addTimeToTime(String myTime, int timeUnit, int amount) throws ParseException {
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
@@ -84,7 +84,7 @@ public class ActionTime {
 	 * convert string to LocalDate
 	 * @param date - date as string
 	 * @param format - format of date to convert
-	 * @return
+	 * @return local time parsed as LocalDate
 	 */
 	public static LocalDate convertStringToLocalDate(String date, String format){
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
