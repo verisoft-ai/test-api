@@ -19,9 +19,11 @@ package co.verisoft.fw.extensions.jupiter;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import co.verisoft.fw.utils.ExtendedLog;
+import co.verisoft.fw.utils.Property;
 import co.verisoft.fw.xray.Status;
 import co.verisoft.fw.xray.XrayIdentifier;
 import co.verisoft.fw.xray.XrayJsonTestObject;
+import co.verisoft.fw.xray.XrayPropertiesObject;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import okhttp3.Credentials;
@@ -83,8 +85,8 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
     private static boolean executed = false;
 
-    // Load xray properties from xray-plugin.properties file
-    public static Properties appProps = getXrayPluginProperties();
+    public  XrayPropertiesObject xrayPropertiesObject;
+
 
 
     /**
@@ -95,9 +97,25 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      */
     @Override
     public void beforeAll(ExtensionContext extensionContext) {
+
         if (!executed) {
 
-            // Set the callback for clase method at the end of the session
+            // load properties builder from root config properties
+            String xrayType = new Property().getProperty("xray.type");
+            if(xrayType.equals("cloud")){
+                xrayPropertiesObject = new XrayPropertiesObject.XrayPropertiesObjectBuilder(xrayType)
+                        .setXrayCloudApiBaseUrl(new Property().getProperty("XRAY_CLOUD_API_BASE_URL"))
+                        .setClientId(new Property().getProperty("CLIENT_ID"))
+                        .setClientSecret(new Property().getProperty("CLIENT_SECRET")).build();
+            } else {
+                xrayPropertiesObject = new XrayPropertiesObject.XrayPropertiesObjectBuilder(xrayType)
+                        .setJiraBaseUrl(new Property().getProperty("JIRA_BASE_URL"))
+                        .setJiraUserName(new Property().getProperty("JIRA_USERNAME"))
+                        .setJiraPassword(new Property().getProperty("JIRA_PASSWORD"))
+                        .setJiraToken(new Property().getProperty("JIRA_TOKEN")).build();
+            }
+
+            // Set the callback for class method at the end of the session
             extensionContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("XrayCallback", this);
 
             Map<String, XrayJsonTestObject> xrayTestInstances = new HashMap<>();
@@ -167,7 +185,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             return;
 
         // Set the test status based on xray.type property value in Jira server/DC - set the status to PASS/FAIL, in cloud set the status to PASSED/FAILED
-        Status status = extensionContext.getExecutionException().isPresent() ? appProps.getProperty("xray.type").equals("server") ? Status.FAIL : Status.FAILED : appProps.getProperty("xray.type").equals("server") ? Status.PASS : Status.PASSED;
+        Status status = extensionContext.getExecutionException().isPresent() ? xrayPropertiesObject.getXrayType().equals("server") ? Status.FAIL : Status.FAILED : xrayPropertiesObject.getXrayType().equals("server") ? Status.PASS : Status.PASSED;
         // Simple case - just one test id
         if (xrayValues.length == 1) {
             Map<String, XrayJsonTestObject> tests = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("tests");
@@ -191,25 +209,6 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
 
     /**
-     * load xray properties from xray-plugin-properties file
-     * @return Properties - all xray properties
-     */
-    public static Properties getXrayPluginProperties(){
-        // Load xray properties
-        // TODO fix it! user.dir is not the framework path, maybe move this file to project?
-        String xrayConfigPath = System.getProperty("user.dir") + "/src/test/resources/xray-plugin.properties";
-        Properties appProps = new Properties();
-        try {
-            appProps.load(new FileInputStream(xrayConfigPath));
-        } catch (Exception e) {
-            // No property file found - rely on -D only
-            log.warn("No property file were found: " + xrayConfigPath + ", will rely on injection (-D) only");
-        }
-        return appProps;
-    }
-
-
-    /**
      * Automatically import xray json result file to jira server/DataCenter
      * Creates a new Test Execution with the results in your Jira xray server/DC project board
      * @param reportFile - xray result file path
@@ -222,10 +221,10 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
 
         // Initial necessary jira properties
-        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", appProps.getProperty("JIRA_BASE_URL"));
-        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", appProps.getProperty("JIRA_USERNAME"));
-        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", appProps.getProperty("JIRA_PASSWORD"));
-        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", appProps.getProperty("JIRA_TOKEN"));
+        String jiraBaseUrl = System.getenv().getOrDefault("JIRA_BASE_URL", xrayPropertiesObject.getJiraBaseUrl());
+        String jiraUsername = System.getenv().getOrDefault("JIRA_USERNAME", xrayPropertiesObject.getJiraUserName());
+        String jiraPassword = System.getenv().getOrDefault("JIRA_PASSWORD", xrayPropertiesObject.getJiraPassword());
+        String jiraPersonalAccessToken = System.getenv().getOrDefault("JIRA_TOKEN", xrayPropertiesObject.getJiraToken());
         logger.info("Importing a Xray JSON report to a Xray Server/Data Center instance");
 
         // Create authenticate token
@@ -288,9 +287,9 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
 
         // Initial necessary jira properties
-        String clientId = System.getenv().getOrDefault("CLIENT_ID", appProps.getProperty("CLIENT_ID"));
-        String clientSecret = System.getenv().getOrDefault("CLIENT_SECRET", appProps.getProperty("CLIENT_SECRET"));
-        String xrayCloudApiBaseUrl = appProps.getProperty("XRAY_CLOUD_API_BASE_URL");
+        String clientId = System.getenv().getOrDefault("CLIENT_ID", xrayPropertiesObject.getClientId());
+        String clientSecret = System.getenv().getOrDefault("CLIENT_SECRET", xrayPropertiesObject.getClientSecret());
+        String xrayCloudApiBaseUrl = xrayPropertiesObject.getXrayCloudApiBaseUrl();
         String authenticateUrl = xrayCloudApiBaseUrl + "/authenticate";
 
         logger.info("Importing a Xray JSON report to a Xray Cloud instance");
@@ -417,11 +416,11 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         }
         // Import xrayResult Json file to Jira cloud or server/DC based on xray.type property value
         // Server/DataCenter
-        if(appProps.getProperty("xray.type").equals("server")){
+        if(xrayPropertiesObject.getXrayType().equals("server")){
             importJsonResultToJiraServerDC(localPath + "/XrayResult.json");
         }
         // Cloud
-        else if(appProps.getProperty("xray.type").equals("cloud")){
+        else if(xrayPropertiesObject.getXrayType().equals("cloud")){
             importJsonResultToJiraCloud(localPath + "/XrayResult.json");
         }
         // If xray.type is empty or contains uncorrected value
