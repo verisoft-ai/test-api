@@ -18,7 +18,7 @@ package co.verisoft.fw.store;
 
 
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 0.0.2 (Jan 2022)
  */
 @ToString
-@Slf4j
+@Log4j2
 public class StoreImp implements Store {
     private final Map<Object, Object> store;
 
@@ -45,7 +45,6 @@ public class StoreImp implements Store {
 
     @Override
     public <T> T getValueFromStore(Object key) {
-        //noinspection unchecked
         Object obj = store.get(key);
         log.debug("Retrieved " + obj + " from store using key " + key);
         return (T) obj;

@@ -24,7 +24,7 @@ import com.aventstack.extentreports.markuputils.Markup;
 import com.aventstack.extentreports.model.Media;
 import com.aventstack.extentreports.model.Test;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
 
@@ -37,10 +37,11 @@ import java.util.Arrays;
  * @see DelegateExtentReports
  */
 @ToString
-@Slf4j
+@Log4j2
+@SuppressWarnings("unused")
 public class DelegateExtentTest {
 
-    private ExtentTest test;
+    private final ExtentTest test;
     
     DelegateExtentTest(ExtentTest test) {
         synchronized (test) {

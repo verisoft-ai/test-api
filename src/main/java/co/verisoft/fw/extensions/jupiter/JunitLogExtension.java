@@ -17,7 +17,7 @@ package co.verisoft.fw.extensions.jupiter;
  */
 
 import co.verisoft.fw.utils.Utils;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.extension.*;
 
 /**
@@ -27,13 +27,14 @@ import org.junit.jupiter.api.extension.*;
  * @author David Yehezkel
  * @since 1.9.6
  */
-@Slf4j
+@Log4j2
+@SuppressWarnings("unused")
 public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback, BeforeTestExecutionCallback, AfterTestExecutionCallback, AfterEachCallback, AfterAllCallback {
 
 
     @Override
     public void afterAll(ExtensionContext context) {
-        if (!context.getTestClass().isPresent())
+        if (context.getTestClass().isEmpty())
             return;
 
         log.info("After All : " + context.getTestClass().get().getName());
@@ -42,7 +43,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
     @Override
     public void afterEach(ExtensionContext context) {
-        if (!context.getTestClass().isPresent())
+        if (context.getTestClass().isEmpty())
             return;
 
         //noinspection OptionalGetWithoutIsPresent
@@ -54,7 +55,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
     @Override
     public void afterTestExecution(ExtensionContext context) {
 
-        if (!context.getTestClass().isPresent())
+        if (context.getTestClass().isEmpty())
             return;
 
         if (context.getExecutionException().isPresent()) {
@@ -68,7 +69,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     public void beforeTestExecution(ExtensionContext context) {
-        if (!context.getTestClass().isPresent())
+        if (context.getTestClass().isEmpty())
             return;
 
         log.info("Before Test Execution : " + context.getTestMethod().get().getName());
@@ -77,7 +78,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        if (!context.getTestClass().isPresent())
+        if (context.getTestClass().isEmpty())
             return;
 
         //noinspection OptionalGetWithoutIsPresent
@@ -87,7 +88,7 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        if (!context.getTestClass().isPresent())
+        if (context.getTestClass().isEmpty())
             return;
 
         log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());

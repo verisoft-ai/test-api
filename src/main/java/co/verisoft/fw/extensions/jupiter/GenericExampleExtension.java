@@ -16,7 +16,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.extension.*;
 
 import java.util.Optional;
@@ -47,7 +47,8 @@ import java.util.Optional;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a> @ <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 2.0.3.9
  */
-@Slf4j
+@Log4j2
+@SuppressWarnings("unused")
 public class GenericExampleExtension implements
         AfterTestExecutionCallback,
         AfterAllCallback,

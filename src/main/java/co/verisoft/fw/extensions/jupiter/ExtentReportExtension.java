@@ -16,11 +16,15 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
+import co.verisoft.fw.extentreport.ExtentReportReportObserver;
 import co.verisoft.fw.extentreport.ReportManager;
+import co.verisoft.fw.report.observer.Report;
+import co.verisoft.fw.report.observer.ReportLevel;
+import co.verisoft.fw.report.observer.ReportSource;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import com.aventstack.extentreports.Status;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.extension.*;
 
 import java.util.*;
@@ -46,7 +50,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
  * @author David Yehezkel, VeriSoft
  * @since 1.9.6
  */
-@Slf4j
+@Log4j2
 public class ExtentReportExtension implements BeforeAllCallback,
         BeforeEachCallback,
         BeforeTestExecutionCallback,
@@ -82,6 +86,10 @@ public class ExtentReportExtension implements BeforeAllCallback,
                 ReportManager.getInstance().getReport().setSystemInfo("Test Group Executed: ",
                         System.getProperty("test.included.groups"));
 
+            // Register a report observer
+            @SuppressWarnings("unused")
+            ExtentReportReportObserver extentReportReportObserver = new ExtentReportReportObserver(ReportLevel.INFO);
+
             // Create an object to hold screenshots
             Map<String, List<String>> screenShots = new HashMap<>();
             StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
@@ -110,10 +118,14 @@ public class ExtentReportExtension implements BeforeAllCallback,
         UUID uuid = UUID.randomUUID();
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("testId", uuid);
 
-        // Create a new test
-        ReportManager.getInstance().newTest(context.getTestMethod().get().getName());
+        // Get test name
+        String testName = context.getTestMethod().get().getName();
 
-        ReportManager.getInstance().getCurrentTest().info("KEY: testId VALUE: " + uuid);
+        // Create a new test
+        ReportManager.getInstance().newTest(testName);
+
+        Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Start. Test name: " + testName);
+        Report.report(ReportSource.REPORT, ReportLevel.INFO, "Test Name: "+testName+", KEY: testId VALUE: " + uuid);
     }
 
 
@@ -134,9 +146,11 @@ public class ExtentReportExtension implements BeforeAllCallback,
 
 
         if (context.getExecutionException().isPresent()) {
-            ReportManager.getInstance().getCurrentTest().fail("An Error occured. Reason: " +
-                    context.getExecutionException().toString() + "  See logs for further details");
-        } else if (ReportManager.getInstance().getCurrentTest().getStatus() == Status.FAIL) {
+            String msg = "An Error occured. Reason: " +
+                    context.getExecutionException().toString() + "  See logs for further details";
+            Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).fail(msg);
+            log.error(msg);
+        } else if (Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).getStatus() == Status.FAIL) {
             throw new AssertionError("Report fail caused test to fail");
         }
 
@@ -149,6 +163,22 @@ public class ExtentReportExtension implements BeforeAllCallback,
             for (String path : paths) {
                 ReportManager.getInstance().getCurrentTest().addScreenCaptureFromPath(path, "Error Screenshot");
             }
+
+        // Get the test name
+        String testName = context.getTestMethod().get().getName();
+
+        // Finally, fail / pass the test
+        if (context.getExecutionException().isPresent()){
+            ReportManager.getInstance().getCurrentTest().fail("Test Result - FAIL");
+            Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
+                    "Test Result - FAIL");
+        }
+        else{
+            ReportManager.getInstance().getCurrentTest().pass("Test Result - PASS");
+            Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
+                    "Test Result - PASS");
+        }
+
 
     }
 
