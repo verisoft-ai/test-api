@@ -27,11 +27,16 @@ public final class Report {
     }
 
 
-    public static void report(ReportSource type, ReportLevel level, String msg, Object object) {
+    public static void report(ReportEntry reportEntry) {
+        ReportPublisher.getInstance().notifyObserver(reportEntry);
+    }
+
+
+    public static void report(ReportSource source, ReportLevel level, String msg, Object object) {
         ReportEntry reportEntry = ReportEntry.builder()
-                .reportSource(type)
+                .reportSource(source)
                 .reportLevel(level)
-                .msg(msg)
+                .msg(msg + " (Report source: " + ReportSource.OTHER + ")")
                 .additionalObject(object)
                 .build();
 
@@ -39,62 +44,26 @@ public final class Report {
     }
 
 
-    public static void report(ReportSource type, ReportLevel level, String msg) {
-        ReportEntry reportEntry = ReportEntry.builder()
-                .reportSource(type)
-                .reportLevel(level)
-                .msg(msg)
-                .build();
-
-        ReportPublisher.getInstance().notifyObserver(reportEntry);
+    public static void report(ReportSource source, ReportLevel level, String msg) {
+        report(source, level, msg, null);
     }
 
 
     public static void report(ReportLevel level, String msg) {
-        ReportEntry reportEntry = ReportEntry.builder()
-                .reportSource(ReportSource.OTHER)
-                .reportLevel(level)
-                .msg(msg)
-                .build();
-
-        ReportPublisher.getInstance().notifyObserver(reportEntry);
+        report(ReportSource.OTHER, level, msg, null);
     }
 
 
     public static void report(ReportSource type, String msg) {
-        ReportEntry reportEntry = ReportEntry.builder()
-                .reportSource(type)
-                .reportLevel(ReportLevel.INFO)
-                .msg(msg)
-                .build();
-
-        ReportPublisher.getInstance().notifyObserver(reportEntry);
+        report(type, ReportLevel.INFO, msg, null);
     }
 
 
     public static void report(String msg) {
-        ReportEntry reportEntry = ReportEntry.builder()
-                .reportSource(ReportSource.OTHER)
-                .reportLevel(ReportLevel.INFO)
-                .msg(msg)
-                .build();
-
-        ReportPublisher.getInstance().notifyObserver(reportEntry);
+        report(ReportSource.OTHER, ReportLevel.INFO, msg, null);
     }
 
     public static void report(String msg, Object object) {
-        ReportEntry reportEntry = ReportEntry.builder()
-                .reportSource(ReportSource.OTHER)
-                .reportLevel(ReportLevel.INFO)
-                .msg(msg)
-                .additionalObject(object)
-                .build();
-
-        ReportPublisher.getInstance().notifyObserver(reportEntry);
-    }
-
-
-    public static void report(ReportEntry reportEntry) {
-        ReportPublisher.getInstance().notifyObserver(reportEntry);
+        report(ReportSource.OTHER, ReportLevel.INFO, msg, object);
     }
 }

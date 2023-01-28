@@ -51,6 +51,10 @@ public final class ReportPublisher implements Publisher {
 
     @Override
     public void register(Observer newObserver) {
+        int observerIndex = observers.indexOf(newObserver);
+        if (observerIndex >= 0) // Avoid duplication. Will only work if THE SAME OBJECT wants to register again
+            return;
+
         this.observers.add(newObserver);
     }
 

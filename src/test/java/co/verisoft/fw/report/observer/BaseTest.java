@@ -16,18 +16,15 @@ package co.verisoft.fw.report.observer;
  * limitations under the License.
  */
 
-/**
- * A simple and basic Observer interface, follows the GO4 Observer pattern
- * This interface is the publisher / subject interface of the observer
- *
- * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
- * @since 0.0.5 (Jan 2023)
- */
 
-public interface Publisher {
-    void register(Observer o);
+import co.verisoft.fw.utils.Slf4jObserver;
+import org.junit.jupiter.api.BeforeAll;
 
-    void unregister(Observer o);
+public class BaseTest {
 
-    void notifyObserver(ReportEntry reportEntry);
+    @BeforeAll
+    @SuppressWarnings("unused")
+    public static void beforeAll() {
+        Slf4jObserver slf4jObserver = new Slf4jObserver();
+    }
 }

@@ -35,7 +35,6 @@
             <ThresholdFilter level="trace"/>
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
-        <Log4jObserverAppender name="Log4jObserverAppender"/>
     </Appenders>
 
     <Loggers>
@@ -46,7 +45,6 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="RollingFileAppender"/>
             <AppenderRef ref="RollingFileTraceAppender"/>
-            <AppenderRef ref="Log4jObserverAppender"/>
         </Root>
 
     </Loggers>
