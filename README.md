@@ -1,4 +1,6 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/co.verisoft/test.api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/co.verisoft/test-api)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/co.verisoft/test-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/co.verisoft/test-api)
+
+
 
 # What is Verisoft's test-api?
 It is a collection of utilities, to help test automation 
@@ -26,12 +28,28 @@ It assists the developer in passing objects between classes,
 without coupling or building any connections between them.
 For instance, you can put an object in store in a Junit 5 
 extension and use it in your tests or other parts of your code.
+Example:
+
+    String storeExample = "Example";
+    StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("storeValue", name);
+
+    // The next line will put the string 'Example' in receiveName
+    String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("storeValue");
 
 ### Extent Report Mechanism
 A simple and easy way to add an extent report object to your 
 code, without having to write any initialization / evaluation
 or packing code. You just add an extension, and all is done 
-for you.
+for you. Just add `@ExtentReport` on top of the class and your'e done!
+
+    @ExtentReport
+    public class SomeTest {
+    
+        @Test
+        public void shouldDoSomething() {
+            // Write test code here
+        }
+    }
 
 ### Extended Logging
 Add logging mechanism for test life-cycle. 

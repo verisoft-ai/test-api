@@ -124,8 +124,9 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Create a new test
         ReportManager.getInstance().newTest(testName);
 
-        Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Start. Test name: " + testName);
-        Report.report(ReportSource.REPORT, ReportLevel.INFO, "Test Name: "+testName+", KEY: testId VALUE: " + uuid);
+        Report.debug(ReportSource.REPORT, "Test Start. Test name: " + testName);
+        Report.info(ReportSource.REPORT, "Test Name: " + testName);
+        Report.info(ReportSource.REPORT, "KEY: testId  VALUE: " + uuid);
     }
 
 
@@ -168,12 +169,11 @@ public class ExtentReportExtension implements BeforeAllCallback,
         String testName = context.getTestMethod().get().getName();
 
         // Finally, fail / pass the test
-        if (context.getExecutionException().isPresent()){
+        if (context.getExecutionException().isPresent()) {
             ReportManager.getInstance().getCurrentTest().fail("Test Result - FAIL");
             Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
                     "Test Result - FAIL");
-        }
-        else{
+        } else {
             ReportManager.getInstance().getCurrentTest().pass("Test Result - PASS");
             Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
                     "Test Result - PASS");

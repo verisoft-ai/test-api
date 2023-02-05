@@ -16,22 +16,19 @@ package co.verisoft.fw.report.observer;
  * limitations under the License.
  */
 
-import co.verisoft.fw.extensions.jupiter.ExtentReportExtension;
 import co.verisoft.fw.extentreport.DelegateExtentTest;
+import co.verisoft.fw.extentreport.ExtentReport;
 import co.verisoft.fw.extentreport.ReportManager;
 import com.aventstack.extentreports.model.Log;
-import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@ExtendWith({ExtentReportExtension.class})
-@Log4j2
+@ExtentReport
 public class ExtentReportObserverTest extends BaseTest {
 
     @Test
@@ -43,22 +40,22 @@ public class ExtentReportObserverTest extends BaseTest {
         List<Log> list = test.getModel().getLogs();
 
         // Test
-        Report.report(ReportLevel.TRACE, "Trace message - should only appear on log");
+        Report.trace("Trace message - should only appear on log");
         Assertions.assertFalse(list.stream().anyMatch(x -> x.getDetails().contains("Trace message")));
 
-        Report.report(ReportLevel.DEBUG, "Debug message - should only appear on log");
+        Report.debug("Debug message - should only appear on log");
         Assertions.assertFalse(list.stream().anyMatch(x -> x.getDetails().contains("Debug message")));
 
-        Report.report(ReportLevel.INFO, "Info message - SHOULD appear on log");
+        Report.info("Info message - SHOULD appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.getDetails().contains("Info message")));
 
-        Report.report(ReportLevel.WARNING, "Warn message - SHOULD appear on log");
+        Report.warn("Warn message - SHOULD appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.getDetails().contains("Warn message")));
 
-        Report.report(ReportLevel.ERROR, "Error message - SHOULD appear on log");
+        Report.error("Error message - SHOULD appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.getDetails().contains("Error message")));
 
-        Report.report(ReportLevel.FATAL, "Fatal message - SHOULD appear on log");
+        Report.fatal("Fatal message - SHOULD appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.getDetails().contains("Fatal message")));
     }
 }

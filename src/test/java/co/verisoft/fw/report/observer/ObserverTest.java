@@ -44,7 +44,7 @@ public class ObserverTest extends BaseTest {
         List<String> list = sampleObserver.getEntries();
 
         // Test
-        Report.report(ReportLevel.TRACE, "Trace message - should only appear on log");
+        Report.trace("Trace message - should only appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.contains("Trace message")));
     }
 
@@ -56,13 +56,13 @@ public class ObserverTest extends BaseTest {
         List<String> list = sampleObserver.getEntries();
 
         // Test
-        Report.report(ReportLevel.TRACE, "Trace message - should only appear on log");
+        Report.trace("Trace message - should only appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.contains("Trace message")));
 
 
         ReportPublisher.getInstance().unregister(sampleObserver);
 
-        Report.report(ReportLevel.ERROR, "Error message - SHOULD appear on log");
+        Report.error("Error message - SHOULD appear on log");
         Assertions.assertFalse(list.stream().anyMatch(x -> x.contains("Error message")));
 
         // Cleanup
@@ -79,13 +79,13 @@ public class ObserverTest extends BaseTest {
 
 
         // Test
-        Report.report(ReportLevel.INFO, "Info message - SHOULD appear on log");
+        Report.info("Info message - SHOULD appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.contains("Info message")));
 
         ReportPublisher.getInstance().register(sampleObserver); // Will not register twice
         ReportPublisher.getInstance().unregister(sampleObserver); // Will unregister - no listener
 
-        Report.report(ReportLevel.WARNING, "Warn message - SHOULD appear on log");
+        Report.warn("Warn message - SHOULD appear on log");
         Assertions.assertFalse(list.stream().anyMatch(x -> x.contains("Warn message")));
 
 

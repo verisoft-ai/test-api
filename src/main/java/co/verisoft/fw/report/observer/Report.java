@@ -49,21 +49,123 @@ public final class Report {
     }
 
 
-    public static void report(ReportLevel level, String msg) {
-        report(ReportSource.OTHER, level, msg, null);
+
+    public static void trace(ReportSource source, String msg, Object object) {
+        report(source, ReportLevel.TRACE, msg, object);
     }
 
 
-    public static void report(ReportSource type, String msg) {
-        report(type, ReportLevel.INFO, msg, null);
+    public static void trace(ReportSource source, String msg) {
+        report(source, ReportLevel.TRACE, msg);
     }
 
 
-    public static void report(String msg) {
-        report(ReportSource.OTHER, ReportLevel.INFO, msg, null);
+    public static void trace(String msg, Object object) {
+        report(ReportSource.OTHER, ReportLevel.TRACE, msg, object);
     }
 
-    public static void report(String msg, Object object) {
+
+    public static void trace(String msg) {
+        report(ReportSource.OTHER, ReportLevel.TRACE, msg);
+    }
+
+
+    public static void debug(ReportSource source, String msg, Object object) {
+        report(source, ReportLevel.DEBUG, msg, object);
+    }
+
+
+    public static void debug(ReportSource source, String msg) {
+        report(source, ReportLevel.DEBUG, msg);
+    }
+
+
+    public static void debug(String msg, Object object) {
+        report(ReportSource.OTHER, ReportLevel.DEBUG, msg, object);
+    }
+
+
+    public static void debug(String msg) {
+        report(ReportSource.OTHER, ReportLevel.DEBUG, msg);
+    }
+
+
+    public static void info(ReportSource source, String msg, Object object) {
+        report(source, ReportLevel.INFO, msg, object);
+    }
+
+
+    public static void info(ReportSource source, String msg) {
+        report(source, ReportLevel.INFO, msg);
+    }
+
+
+    public static void info(String msg, Object object) {
         report(ReportSource.OTHER, ReportLevel.INFO, msg, object);
+    }
+
+
+    public static void info(String msg) {
+        report(ReportSource.OTHER, ReportLevel.INFO, msg);
+    }
+
+
+    public static void warn(ReportSource source, String msg, Object object) {
+        report(source, ReportLevel.WARNING, msg, object);
+    }
+
+
+    public static void warn(ReportSource source, String msg) {
+        report(source, ReportLevel.WARNING, msg);
+    }
+
+
+    public static void warn(String msg, Object object) {
+        report(ReportSource.OTHER, ReportLevel.WARNING, msg, object);
+    }
+
+
+    public static void warn(String msg) {
+        report(ReportSource.OTHER, ReportLevel.WARNING, msg);
+    }
+
+
+    public static void error(ReportSource source, String msg, Object object) {
+        report(source, ReportLevel.ERROR, msg, object);
+    }
+
+
+    public static void error(ReportSource source, String msg) {
+        report(source, ReportLevel.ERROR, msg);
+    }
+
+
+    public static void error(String msg, Object object) {
+        report(ReportSource.OTHER, ReportLevel.ERROR, msg, object);
+    }
+
+
+    public static void error(String msg) {
+        report(ReportSource.OTHER, ReportLevel.ERROR, msg);
+    }
+
+
+    public static void fatal(ReportSource source, String msg, Object object) {
+        report(source, ReportLevel.FATAL, msg, object);
+    }
+
+
+    public static void fatal(ReportSource source, String msg) {
+        report(source, ReportLevel.FATAL, msg);
+    }
+
+
+    public static void fatal(String msg, Object object) {
+        report(ReportSource.OTHER, ReportLevel.FATAL, msg, object);
+    }
+
+
+    public static void fatal(String msg) {
+        report(ReportSource.OTHER, ReportLevel.FATAL, msg);
     }
 }
