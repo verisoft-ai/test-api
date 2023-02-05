@@ -18,13 +18,12 @@ package co.verisoft.fw.utils;
 
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -40,7 +39,6 @@ import java.util.Properties;
  * using java.util.Properties functionality <b>Example #1</b><br>
  * The following example get int property from default project properties file
  * final int i = new Property().getIntProperty("keyForintVal");
- *
  * <b>Example #2</b><br>
  * The following example get boolean property from specific properties file
  * boolean b=new
@@ -51,7 +49,7 @@ import java.util.Properties;
  * @since 2.0.3.9
  */
 @ToString
-@Slf4j
+@Log4j2
 public class Property {
 
     @Getter
@@ -102,11 +100,9 @@ public class Property {
     private Properties initPropertyObject(String path) {
         Properties prop = new Properties();
 
-        ClassLoader classLoader = getClass().getClassLoader();
-
         String absolutePath = "";
         try {
-            absolutePath = getClass().getClassLoader().getResource(path).getPath();
+            absolutePath = Objects.requireNonNull(getClass().getClassLoader().getResource(path)).getPath();
         } catch (NullPointerException e) {
             log.error("Failed to load resource file " + path +  " System will load default property file");
         }
@@ -190,7 +186,7 @@ public class Property {
             return Double.parseDouble(getProperty(key));
         } catch (NumberFormatException numberFormatExeption) {
             log.warn("KEY: " + key + " VALUE: " + getProperty(key) + " - cannot parse to double");
-            return (Double) null;
+            return null;
         }
     }
 

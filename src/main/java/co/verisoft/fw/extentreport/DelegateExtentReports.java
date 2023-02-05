@@ -24,7 +24,7 @@ import com.aventstack.extentreports.model.ReportStats;
 import com.aventstack.extentreports.observer.ExtentObserver;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import java.util.List;
  */
 @NoArgsConstructor
 @ToString
-@Slf4j
+@Log4j2
 public class DelegateExtentReports extends ExtentReports {
     
     @Override
@@ -53,42 +53,42 @@ public class DelegateExtentReports extends ExtentReports {
 
     @Override
     public ExtentTest createTest(Class<? extends IGherkinFormatterModel> type, String name, String description) {
-        log.debug(new StringBuilder().append("Creates new Test. type: ").append(type).append(", name: ").append(name)
-                .append(", description: ").append(description).toString());
+        log.debug("Creates new Test. type: " + type + ", name: " + name +
+                ", description: " + description);
         return super.createTest(type, name, description);
     }
 
     @Override
     public ExtentTest createTest(Class<? extends IGherkinFormatterModel> type, String name) {
-        log.debug(new StringBuilder().append("Creates new Test. type: ").append(type).append(", name: ")
-                .append(name).toString());
+        log.debug("Creates new Test. type: " + type + ", name: " +
+                name);
         return super.createTest(type, name);
     }
 
     @Override
     public ExtentTest createTest(GherkinKeyword gherkinKeyword, String name, String description) {
-        log.debug(new StringBuilder().append("Creates new Test. GherkinKeyword: ").append(gherkinKeyword)
-                .append(", name: ").append(name).append(", description: ").append(description).toString());
+        log.debug("Creates new Test. GherkinKeyword: " + gherkinKeyword +
+                ", name: " + name + ", description: " + description);
         return super.createTest(gherkinKeyword, name, description);
     }
 
     @Override
     public ExtentTest createTest(GherkinKeyword gherkinKeyword, String testName) {
-        log.debug(new StringBuilder().append("Creates new Test. GherkinKeyword: ").append(gherkinKeyword)
-                .append(", test name: ").append(testName).toString());
+        log.debug("Creates new Test. GherkinKeyword: " + gherkinKeyword +
+                ", test name: " + testName);
         return super.createTest(gherkinKeyword, testName);
     }
 
     @Override
     public ExtentTest createTest(String name, String description) {
-        log.debug(new StringBuilder().append("Creates new Test. Name: ").append(name)
-                .append(", description: ").append(description).toString());
+        log.debug("Creates new Test. Name: " + name +
+                ", description: " + description);
         return super.createTest(name, description);
     }
 
     @Override
     public ExtentTest createTest(String name) {
-        log.debug(new StringBuilder().append("Creates new Test. Name: ").append(name).toString());
+        log.debug("Creates new Test. Name: " + name);
         return super.createTest(name);
     }
 
@@ -117,15 +117,15 @@ public class DelegateExtentReports extends ExtentReports {
     }
 
     @Override
-    public void addTestRunnerOutput(List<String> log) {
-        this.log.debug("Add test runner output " + Arrays.toString(log.toArray()));
-        super.addTestRunnerOutput(log);
+    public void addTestRunnerOutput(List<String> reportLlog) {
+        log.debug("Add test runner output " + Arrays.toString(reportLlog.toArray()));
+        super.addTestRunnerOutput(reportLlog);
     }
 
     @Override
-    public void addTestRunnerOutput(String log) {
-        this.log.debug("Add test runner output " + log);
-        super.addTestRunnerOutput(log);
+    public void addTestRunnerOutput(String reportLlog) {
+        log.debug("Add test runner output " + reportLlog);
+        super.addTestRunnerOutput(reportLlog);
     }
 
     @Override
