@@ -25,6 +25,7 @@ import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import com.aventstack.extentreports.Status;
 import lombok.extern.log4j.Log4j2;
+import org.codehaus.plexus.util.ExceptionUtils;
 import org.junit.jupiter.api.extension.*;
 
 import java.util.*;
@@ -147,8 +148,10 @@ public class ExtentReportExtension implements BeforeAllCallback,
 
 
         if (context.getExecutionException().isPresent()) {
-            String msg = "An Error occured. Reason: " +
-                    context.getExecutionException().toString() + "  See logs for further details";
+            String stackTrace = ExceptionUtils.getStackTrace(context.getExecutionException().get());
+            String msg = "An Error occured during test. Reason: " +
+                    context.getExecutionException().toString() + "  See logs for further details \n" + stackTrace
+                    ;
             Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).fail(msg);
             log.error(msg);
         } else if (Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).getStatus() == Status.FAIL) {
