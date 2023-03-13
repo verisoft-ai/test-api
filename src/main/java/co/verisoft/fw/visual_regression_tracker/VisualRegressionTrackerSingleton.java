@@ -14,7 +14,6 @@ import java.util.Properties;
 public class VisualRegressionTrackerSingleton {
 
     private static VisualRegressionTrackerConfig instance = null;
-    public static Properties appProps;
 
     /**
      * load VRT properties from visual-regression-tracker.properties file
@@ -44,7 +43,7 @@ public class VisualRegressionTrackerSingleton {
 
         if (instance == null) {
             // Load VRT properties from visual-regression-tracker.properties file
-            appProps = getVisualRegressionTrackerProperties();
+            Properties appProps = getVisualRegressionTrackerProperties();
             // Init the instance with the desired configuration values from the properties file
             instance = VisualRegressionTrackerConfig.builder()
                     .apiUrl(appProps.getProperty("api.url"))

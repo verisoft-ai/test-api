@@ -30,12 +30,10 @@ import java.io.IOException;
  */
 public class VisualRegressionTrackerExtension implements BeforeEachCallback, AfterEachCallback {
 
-    static VisualRegressionTracker vrt;
-
     /**
      * create a VRT instance from the singleton.getInstance() to init this object once in very running
+     * store the instance in ExtensionContext global parameter to enable this object in other functions here and in the tests that use this extension
      * start the vrt
-     * store the instance in ExtensionContext global parameter to enable this object in the tests that use this extension
      *
      * @param context - ExtensionContext to store the VRT object
      * @throws IOException - IOException
@@ -43,15 +41,15 @@ public class VisualRegressionTrackerExtension implements BeforeEachCallback, Aft
      */
     @Override
     public void beforeEach(ExtensionContext context) throws IOException, InterruptedException {
-        vrt = new VisualRegressionTracker(VisualRegressionTrackerSingleton.getInstance());
-        vrt.start();
-
         Store store = context.getStore(ExtensionContext.Namespace.GLOBAL);
-        store.put("VRT_instance", vrt);
+        store.put("VRT_instance", new VisualRegressionTracker(VisualRegressionTrackerSingleton.getInstance()));
+        VisualRegressionTracker vrt = (VisualRegressionTracker) store.get("VRT_instance");
+        vrt.start();
     }
 
 
     /**
+     * get the VRT instance from store
      * stop the VRT
      *
      * @param context - ExtensionContext
@@ -60,6 +58,8 @@ public class VisualRegressionTrackerExtension implements BeforeEachCallback, Aft
      */
     @Override
     public void afterEach(ExtensionContext context) throws IOException, InterruptedException {
+        Store store = context.getStore(ExtensionContext.Namespace.GLOBAL);
+        VisualRegressionTracker vrt = (VisualRegressionTracker) store.get("VRT_instance");
         vrt.stop();
     }
 }
