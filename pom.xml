@@ -208,6 +208,25 @@
             <version>${maven.compiler.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.Visual-Regression-Tracker</groupId>
+            <artifactId>sdk-java</artifactId>
+            <version>5.2.1</version>
+        </dependency>
+
+<!--these 2 dependencies below are just for tests example, I can remove the usage in the tests and these dependencies if prefer-->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+
 
     </dependencies>
 
