@@ -1,7 +1,8 @@
 package co.verisoft.fw.visualRegressionTracker;
 
 import co.verisoft.fw.extensions.jupiter.VisualRegressionTrackerExtension;
-import co.verisoft.fw.visual_regression_tracker.VRTParameterResolver;
+import co.verisoft.fw.store.StoreManager;
+import co.verisoft.fw.store.StoreType;
 import co.verisoft.fw.visual_regression_tracker.VRTResponseStatusEnum;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.visual_regression_tracker.sdk_java.TestRunResult;
@@ -10,13 +11,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.io.IOException;
-import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -28,8 +27,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
  * @author Efrat Cohen
  * @since March 2023
  */
-// Required extensions
-@ExtendWith({VisualRegressionTrackerExtension.class, VRTParameterResolver.class})
+// Required extension
+@ExtendWith(VisualRegressionTrackerExtension.class)
 public class VisualRegressionTrackerTest {
 
     /**
@@ -55,7 +54,7 @@ public class VisualRegressionTrackerTest {
 
 
     @Test
-    public void UsingVRTTestExample(ExtensionContext context) throws InterruptedException, IOException {
+    public void UsingVRTTestExample() throws InterruptedException, IOException {
 
         // Check if VRT is running on localhost if not - skip the test
         boolean isVrtRunning = checkIfVrtIsRunningOnLocalhost();
@@ -67,9 +66,8 @@ public class VisualRegressionTrackerTest {
         // Navigate to URL you want to take screenshot to compare with VRT
         driver.get("site.url");
 
-        // Get the VisualRegressionTracker instance from ExtensionContext store
-        Store store = context.getStore(ExtensionContext.Namespace.GLOBAL);
-        VisualRegressionTracker vrt = (VisualRegressionTracker) store.get("VRT_instance");
+        // Get the VisualRegressionTracker instance from StoreManager
+        VisualRegressionTracker vrt = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("VRT_instance");
 
         // Track new image in current page to compare with the baseline image name
         TestRunResult result = vrt.track(
