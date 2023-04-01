@@ -39,11 +39,6 @@ public class Slf4jObserver extends BaseObserver {
 
         // Build the report message
         String reportMsg = reportEntry.getMsg();
-        reportMsg += " (Report source: " + reportEntry.getReportSource() + ")";
-
-        if (reportEntry.getAdditionalObject() != null)
-            reportMsg += " Additional object data is: " + reportEntry.getAdditionalObject();
-
 
         ReportLevel reportLevel = reportEntry.getReportLevel();
 

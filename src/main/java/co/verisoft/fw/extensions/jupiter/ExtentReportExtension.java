@@ -16,6 +16,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
+import co.verisoft.fw.extentreport.ExtentReportData;
 import co.verisoft.fw.extentreport.ExtentReportReportObserver;
 import co.verisoft.fw.extentreport.ReportManager;
 import co.verisoft.fw.report.observer.Report;
@@ -149,11 +150,8 @@ public class ExtentReportExtension implements BeforeAllCallback,
 
         if (context.getExecutionException().isPresent()) {
             String stackTrace = ExceptionUtils.getStackTrace(context.getExecutionException().get());
-            String msg = "An Error occured during test. Reason: " +
-                    context.getExecutionException().toString() + "  See logs for further details \n" + stackTrace
-                    ;
-            Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).fail(msg);
-            log.error(msg);
+            String msg = "An Error occured during test.";
+            Report.error(msg, ExtentReportData.builder().data(context.getExecutionException().get()).type(ExtentReportData.Type.THROWABLE).build());
         } else if (Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).getStatus() == Status.FAIL) {
             throw new AssertionError("Report fail caused test to fail");
         }
@@ -162,10 +160,10 @@ public class ExtentReportExtension implements BeforeAllCallback,
         Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
                 .getValueFromStore("screenshots");
 
-        List<String> paths = (screenShots.get(context.getDisplayName()));
-        if (!Objects.isNull(paths))
-            for (String path : paths) {
-                ReportManager.getInstance().getCurrentTest().addScreenCaptureFromPath(path, "Error Screenshot");
+        List<String> images = (screenShots.get(context.getDisplayName()));
+        if (!Objects.isNull(images))
+            for (String image : images) {
+                Report.error("Error Screenshot", ExtentReportData.builder().data(image).type(ExtentReportData.Type.SCREENSHOT).build());
             }
 
         // Get the test name
@@ -181,8 +179,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
             Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
                     "Test Result - PASS");
         }
-
-
     }
 
 

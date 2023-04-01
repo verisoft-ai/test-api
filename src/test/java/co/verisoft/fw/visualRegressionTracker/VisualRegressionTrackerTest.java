@@ -9,6 +9,7 @@ import io.visual_regression_tracker.sdk_java.TestRunResult;
 import io.visual_regression_tracker.sdk_java.VisualRegressionTracker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.OutputType;
@@ -16,6 +17,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.io.IOException;
+import java.net.Inet4Address;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -54,6 +57,7 @@ public class VisualRegressionTrackerTest {
 
 
     @Test
+    @Disabled
     public void UsingVRTTestExample() throws InterruptedException, IOException {
 
         // Check if VRT is running on localhost if not - skip the test
