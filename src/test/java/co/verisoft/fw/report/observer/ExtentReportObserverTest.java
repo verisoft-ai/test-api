@@ -18,13 +18,23 @@ package co.verisoft.fw.report.observer;
 
 import co.verisoft.fw.extentreport.DelegateExtentTest;
 import co.verisoft.fw.extentreport.ExtentReport;
+import co.verisoft.fw.extentreport.ExtentReportData;
 import co.verisoft.fw.extentreport.ReportManager;
+import co.verisoft.fw.store.StoreManager;
+import co.verisoft.fw.store.StoreType;
 import com.aventstack.extentreports.model.Log;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 import java.util.List;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -57,5 +67,35 @@ public class ExtentReportObserverTest extends BaseTest {
 
         Report.fatal("Fatal message - SHOULD appear on log");
         Assertions.assertTrue(list.stream().anyMatch(x -> x.getDetails().contains("Fatal message")));
+    }
+
+    @Test
+    public void shouldattachScreenShotToStep() throws AWTException, IOException {
+        Robot robot = new Robot();
+        BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+        ByteArrayOutputStream out = new ByteArrayOutputStream(8192);
+        ImageIO.write(screenShot, "png", out);
+        String base64ScreenShot =  Base64.getEncoder().encodeToString(out.toByteArray());
+
+        DelegateExtentTest test = ReportManager.getInstance().getCurrentTest();
+        ExtentReportData extentReportData = ExtentReportData.builder().type(ExtentReportData.Type.SCREENSHOT).data(base64ScreenShot).build();
+        Report.info("good", extentReportData);
+    }
+
+    @Test
+    @Disabled("Test results in error for testing services, so should not be automatically executed")
+    public void shouldCollectScreenShotFromStore() throws AWTException, IOException {
+        Robot robot = new Robot();
+        BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+        ByteArrayOutputStream out = new ByteArrayOutputStream(8192);
+        ImageIO.write(screenShot, "png", out);
+        String base64ScreenShot =  Base64.getEncoder().encodeToString(out.toByteArray());
+
+        List<String> images = new ArrayList<>();
+        images.add(base64ScreenShot);
+        Map<String, List<String>> shots = new HashMap<>();
+        shots.put("shouldCollectScreenShotFromStore()", images);
+        StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", shots);
+        Assertions.fail("oops");
     }
 }

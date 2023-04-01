@@ -36,7 +36,7 @@ public final class Report {
         ReportEntry reportEntry = ReportEntry.builder()
                 .reportSource(source)
                 .reportLevel(level)
-                .msg(msg + " (Report source: " + ReportSource.OTHER + ")")
+                .msg(msg)
                 .additionalObject(object)
                 .build();
 
