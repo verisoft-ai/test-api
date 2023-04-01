@@ -19,7 +19,9 @@ package co.verisoft.fw.extentreport;
 import co.verisoft.fw.report.observer.BaseObserver;
 import co.verisoft.fw.report.observer.ReportEntry;
 import co.verisoft.fw.report.observer.ReportLevel;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.Media;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -64,10 +66,22 @@ public class ExtentReportReportObserver extends BaseObserver {
         // Build the report message
         String reportMsg = reportEntry.getMsg();
 
-        if (reportEntry.getAdditionalObject() != null)
-            reportMsg += " Additional object data is: " + reportEntry.getAdditionalObject();
-
         // Write to report
-        Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg);
+        if(reportEntry.getAdditionalObject() == null){
+            Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg);
+        }
+        else if(reportEntry.getAdditionalObject() instanceof ExtentReportData){
+            ExtentReportData extentReportData = (ExtentReportData) reportEntry.getAdditionalObject();
+            if (extentReportData.getType() == ExtentReportData.Type.SCREENSHOT){
+                Media media = MediaEntityBuilder
+                        .createScreenCaptureFromBase64String((String)((ExtentReportData) reportEntry.getAdditionalObject()).getData()).build();
+                Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg, media);
+            }
+            else if (extentReportData.getType() == ExtentReportData.Type.THROWABLE){
+                Throwable throwable = (Throwable) extentReportData.getData();
+                Objects.requireNonNull(ReportManager.getInstance().getCurrentTest())
+                        .log(status, reportMsg + " Exception Message: " + throwable.getLocalizedMessage());
+            }
+        }
     }
 }
