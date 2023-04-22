@@ -121,7 +121,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("testId", uuid);
 
         // Get test name
-        String testName = context.getTestMethod().get().getName();
+        String testName = context.getDisplayName();
 
         // Create a new test
         ReportManager.getInstance().newTest(testName);
