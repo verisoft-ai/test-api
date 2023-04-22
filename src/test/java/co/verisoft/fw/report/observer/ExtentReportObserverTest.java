@@ -25,6 +25,7 @@ import co.verisoft.fw.store.StoreType;
 import com.aventstack.extentreports.model.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -42,6 +43,7 @@ import java.util.List;
 public class ExtentReportObserverTest extends BaseTest {
 
     @Test
+    @DisplayName("Test to filter out messages from ExtentReport")
     public void shouldFilterOutMessagesForExtentReport() {
 
         // Setup

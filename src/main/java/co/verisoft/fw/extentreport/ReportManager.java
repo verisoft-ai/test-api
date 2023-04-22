@@ -57,7 +57,9 @@ public final class ReportManager {
         ReportManager.reportName = reportHtmlNameAndPath;
         report = new DelegateExtentReports();
         ExtentSparkReporter esr = new ExtentSparkReporter(reportName);
+        esr.config().enableOfflineMode(true);
         report.attachReporter(esr);
+
     }
 
 
