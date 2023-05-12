@@ -2,6 +2,7 @@ package co.verisoft.fw;
 
 import co.verisoft.fw.extensions.jupiter.GenericExampleExtension;
 import co.verisoft.fw.extentreport.ExtentReport;
+import co.verisoft.fw.report.observer.Report;
 import com.epam.reportportal.junit5.ReportPortalExtension;
 import com.epam.reportportal.listeners.LogLevel;
 import com.epam.reportportal.service.ReportPortal;
@@ -30,7 +31,7 @@ public class ReportPortalTest {
     @ParameterizedTest
     @EnumSource (TestParams.class)
     public void testParameters(TestParams param) throws AWTException, IOException {
-        System.out.println("Test: " + param.name());
+        Report.info("Test: " + param.name());
 
         Robot robot = new Robot();
         BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
@@ -38,7 +39,7 @@ public class ReportPortalTest {
         ImageIO.write(screenShot, "png", out);
         String base64ScreenShot =  Base64.getEncoder().encodeToString(out.toByteArray());
         ReportPortal.emitLog("This is my log", LogLevel.INFO.name(), new Date());
-        System.out.println(base64ScreenShot);
+        Report.debug(base64ScreenShot);
 
     }
 }
