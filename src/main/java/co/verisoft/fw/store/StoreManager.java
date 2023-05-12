@@ -19,7 +19,7 @@ package co.verisoft.fw.store;
 
 import lombok.Synchronized;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +45,7 @@ import java.util.Map;
  * @since 0.0.2 (Jan 2022)
  */
 @ToString
-@Log4j2
+@Slf4j
 public class StoreManager {
 
     private static final Map<Long, Store> storeMap = new HashMap<>();

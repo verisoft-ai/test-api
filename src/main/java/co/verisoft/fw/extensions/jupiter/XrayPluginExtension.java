@@ -21,7 +21,7 @@ import co.verisoft.fw.store.StoreType;
 import co.verisoft.fw.xray.Status;
 import co.verisoft.fw.xray.XrayIdentifier;
 import co.verisoft.fw.xray.XrayJsonTestObject;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import okhttp3.*;
 import org.json.simple.JSONArray;
@@ -63,7 +63,7 @@ import java.util.*;
  * @since 0.0.2 (Jan 2022)
  */
 @SuppressWarnings("unchecked")
-@Log4j2
+@Slf4j
 public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallback,
         BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 

@@ -19,7 +19,7 @@ package co.verisoft.fw.utils;
 import co.verisoft.fw.report.observer.BaseObserver;
 import co.verisoft.fw.report.observer.ReportEntry;
 import co.verisoft.fw.report.observer.ReportLevel;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -30,7 +30,7 @@ import lombok.extern.log4j.Log4j2;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  * @since 0.0.5 (Jan 2023)
  */
-@Log4j2
+@Slf4j
 public class Slf4jObserver extends BaseObserver {
 
 

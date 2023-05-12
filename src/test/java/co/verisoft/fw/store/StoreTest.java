@@ -17,8 +17,11 @@ package co.verisoft.fw.store;
  */
 
 
+import co.verisoft.fw.CustomReportPortalExtension;
+import co.verisoft.fw.report.observer.Report;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -29,6 +32,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
  * @since 0.0.2 (Jan 2022)
  */
 @Execution(ExecutionMode.CONCURRENT)
+@ExtendWith({CustomReportPortalExtension.class})
 public class StoreTest {
 
     @Test

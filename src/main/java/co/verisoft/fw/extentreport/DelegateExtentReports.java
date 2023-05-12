@@ -24,7 +24,7 @@ import com.aventstack.extentreports.model.ReportStats;
 import com.aventstack.extentreports.observer.ExtentObserver;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import java.util.List;
  */
 @NoArgsConstructor
 @ToString
-@Log4j2
+@Slf4j
 public class DelegateExtentReports extends ExtentReports {
     
     @Override

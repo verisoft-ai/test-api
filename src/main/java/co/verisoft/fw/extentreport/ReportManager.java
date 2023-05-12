@@ -20,7 +20,7 @@ package co.verisoft.fw.extentreport;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -40,7 +40,7 @@ import java.util.Map;
  * @since 1.9.6, updated 0.0.3 (Jan 2022)
  */
 @ToString
-@Log4j2
+@Slf4j
 public final class ReportManager {
 
     private static ReportManager instance;

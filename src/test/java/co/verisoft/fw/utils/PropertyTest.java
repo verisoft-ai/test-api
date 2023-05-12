@@ -15,7 +15,9 @@ package co.verisoft.fw.utils;
  * limitations under the License.
  */
 
+import co.verisoft.fw.CustomReportPortalExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import org.slf4j.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@ExtendWith({CustomReportPortalExtension.class})
 @Execution(ExecutionMode.CONCURRENT)
 public class PropertyTest {
 

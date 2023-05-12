@@ -1,4 +1,4 @@
-package co.verisoft.fw.extentreport;
+package co.verisoft.fw;
 
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,71 +19,58 @@ package co.verisoft.fw.extentreport;
 import co.verisoft.fw.report.observer.BaseObserver;
 import co.verisoft.fw.report.observer.ReportEntry;
 import co.verisoft.fw.report.observer.ReportLevel;
-import com.aventstack.extentreports.MediaEntityBuilder;
-import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.model.Media;
+import com.epam.reportportal.service.ReportPortal;
 import lombok.Getter;
-import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Objects;
+import java.io.File;
+import java.util.Date;
 
 
 /**
- * An implementation of the rerport observer mechanism for extent report.
+ * An implementation of the rerport observer mechanism for report portal.
  * Currently, only info level entries and higher are written t
  */
 @Slf4j
-public class ExtentReportReportObserver extends BaseObserver {
+public class ReportPortalObserver extends BaseObserver {
 
     @Getter
     private final ReportLevel minReportLevel;
 
-    public ExtentReportReportObserver(ReportLevel minReportLevel) {
+    public ReportPortalObserver(ReportLevel minReportLevel) {
         this.minReportLevel = minReportLevel;
     }
 
     @Override
-    @Synchronized
     public void update(ReportEntry reportEntry) {
 
         if (reportEntry.getReportLevel().compareTo(minReportLevel) < 0)
             return;
 
         // Determine if entry should be printed to extent report, and the proper level of entry
-        Status status;
+        ReportLevel level;
         if (reportEntry.getReportLevel() == ReportLevel.DEBUG)
-            status = Status.INFO;
+            level = ReportLevel.DEBUG;
         else if (reportEntry.getReportLevel() == ReportLevel.INFO)
-            status = Status.INFO;
+            level = ReportLevel.INFO;
         else if (reportEntry.getReportLevel() == ReportLevel.WARNING)
-            status = Status.WARNING;
+            level = ReportLevel.WARNING;
         else if (reportEntry.getReportLevel() == ReportLevel.ERROR)
-            status = Status.WARNING;
+            level = ReportLevel.ERROR;
         else if (reportEntry.getReportLevel() == ReportLevel.FATAL)
-            status = Status.WARNING;
+            level = ReportLevel.FATAL;
         else
-            status = Status.INFO;
+            level = ReportLevel.INFO;
 
         // Build the report message
         String reportMsg = reportEntry.getMsg();
 
         // Write to report
         if(reportEntry.getAdditionalObject() == null){
-            Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg);
+            ReportPortal.emitLog(reportMsg, level.name(), new Date());
         }
-        else if(reportEntry.getAdditionalObject() instanceof ExtentReportData){
-            ExtentReportData extentReportData = (ExtentReportData) reportEntry.getAdditionalObject();
-            if (extentReportData.getType() == ExtentReportData.Type.SCREENSHOT){
-                Media media = MediaEntityBuilder
-                        .createScreenCaptureFromPath((String)((ExtentReportData) reportEntry.getAdditionalObject()).getData()).build();
-                Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg, media);
-            }
-            else if (extentReportData.getType() == ExtentReportData.Type.THROWABLE){
-                Throwable throwable = (Throwable) extentReportData.getData();
-                Objects.requireNonNull(ReportManager.getInstance().getCurrentTest())
-                        .log(status, reportMsg + " Exception Message: " + throwable.getLocalizedMessage());
-            }
+        else if (reportEntry.getAdditionalObject() instanceof File){
+            ReportPortal.emitLog(reportMsg, level.name(), new Date(), ((File) reportEntry.getAdditionalObject()));
         }
     }
 }

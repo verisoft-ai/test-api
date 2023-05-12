@@ -16,6 +16,8 @@ package co.verisoft.fw.report.observer;
  * limitations under the License.
  */
 
+import lombok.Synchronized;
+
 /**
  * Utility class to simplify the creation of a report entry.
  *
@@ -32,6 +34,7 @@ public final class Report {
     }
 
 
+    @Synchronized
     public static void report(ReportSource source, ReportLevel level, String msg, Object object) {
         ReportEntry reportEntry = ReportEntry.builder()
                 .reportSource(source)

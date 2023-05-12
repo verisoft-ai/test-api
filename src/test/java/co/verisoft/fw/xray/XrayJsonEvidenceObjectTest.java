@@ -15,11 +15,13 @@ package co.verisoft.fw.xray;
  * limitations under the License.
  */
 
+import co.verisoft.fw.CustomReportPortalExtension;
 import lombok.Synchronized;
 import org.assertj.core.api.SoftAssertions;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,6 +32,7 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("ALL")
 @Execution(ExecutionMode.CONCURRENT)
+@ExtendWith({CustomReportPortalExtension.class})
 public class XrayJsonEvidenceObjectTest {
 
     @ParameterizedTest

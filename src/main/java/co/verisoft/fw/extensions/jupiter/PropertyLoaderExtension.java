@@ -15,7 +15,7 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -34,7 +34,7 @@ import java.util.Properties;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a> @ <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 0.0.2 (Jan 2022)
  */
-@Log4j2
+@Slf4j
 public class PropertyLoaderExtension implements BeforeAllCallback {
 
     private static boolean didRun = false;

@@ -15,6 +15,7 @@ package co.verisoft.fw.xray;
  * limitations under the License.
  */
 
+import co.verisoft.fw.CustomReportPortalExtension;
 import co.verisoft.fw.extensions.jupiter.PropertyLoaderExtension;
 import co.verisoft.fw.extensions.jupiter.XrayPluginExtension;
 import org.apache.xmlbeans.SystemProperties;
@@ -33,7 +34,7 @@ import java.time.ZonedDateTime;
  * @since 0.0.2 (Jan 2022)
  */
 @SuppressWarnings("unchecked")
-@ExtendWith({XrayPluginExtension.class, PropertyLoaderExtension.class})
+@ExtendWith({CustomReportPortalExtension.class, XrayPluginExtension.class, PropertyLoaderExtension.class})
 public class TestResultImportExampleTest {
 
     @Test

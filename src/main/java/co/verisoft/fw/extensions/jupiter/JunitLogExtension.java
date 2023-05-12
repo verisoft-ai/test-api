@@ -17,7 +17,7 @@ package co.verisoft.fw.extensions.jupiter;
  */
 
 import co.verisoft.fw.utils.Utils;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
 
 /**
@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.*;
  * @author David Yehezkel
  * @since 1.9.6
  */
-@Log4j2
+@Slf4j
 @SuppressWarnings("unused")
 public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback, BeforeTestExecutionCallback, AfterTestExecutionCallback, AfterEachCallback, AfterAllCallback {
 

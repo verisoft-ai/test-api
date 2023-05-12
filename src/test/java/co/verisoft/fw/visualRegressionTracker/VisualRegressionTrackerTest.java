@@ -1,5 +1,6 @@
 package co.verisoft.fw.visualRegressionTracker;
 
+import co.verisoft.fw.CustomReportPortalExtension;
 import co.verisoft.fw.extensions.jupiter.VisualRegressionTrackerExtension;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
@@ -31,7 +32,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
  * @since March 2023
  */
 // Required extension
-@ExtendWith(VisualRegressionTrackerExtension.class)
+@ExtendWith({CustomReportPortalExtension.class, VisualRegressionTrackerExtension.class})
 public class VisualRegressionTrackerTest {
 
     /**

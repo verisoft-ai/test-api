@@ -16,9 +16,11 @@ package co.verisoft.fw.report.observer;
  * limitations under the License.
  */
 
-import lombok.extern.log4j.Log4j2;
+import co.verisoft.fw.CustomReportPortalExtension;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -26,7 +28,8 @@ import java.util.List;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Log4j2
+@ExtendWith({CustomReportPortalExtension.class})
+@Slf4j
 @SuppressWarnings("unused")
 public class ObserverTest extends BaseTest {
 

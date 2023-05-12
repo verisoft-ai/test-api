@@ -16,6 +16,7 @@ package co.verisoft.fw.report.observer;
  * limitations under the License.
  */
 
+import co.verisoft.fw.CustomReportPortalExtension;
 import co.verisoft.fw.extentreport.DelegateExtentTest;
 import co.verisoft.fw.extentreport.ExtentReport;
 import co.verisoft.fw.extentreport.ExtentReportData;
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -39,6 +41,7 @@ import java.util.*;
 import java.util.List;
 
 @Execution(ExecutionMode.SAME_THREAD)
+@ExtendWith({CustomReportPortalExtension.class})
 @ExtentReport
 public class ExtentReportObserverTest extends BaseTest {
 

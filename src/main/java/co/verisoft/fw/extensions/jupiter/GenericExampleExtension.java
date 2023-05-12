@@ -16,9 +16,12 @@ package co.verisoft.fw.extensions.jupiter;
  * limitations under the License.
  */
 
-import lombok.extern.log4j.Log4j2;
+import com.epam.reportportal.listeners.LogLevel;
+import com.epam.reportportal.service.ReportPortal;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -47,7 +50,7 @@ import java.util.Optional;
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a> @ <a href="http://www.verisoft.co">www.VeriSoft.co</a>
  * @since 2.0.3.9
  */
-@Log4j2
+@Slf4j
 @SuppressWarnings("unused")
 public class GenericExampleExtension implements
         AfterTestExecutionCallback,
@@ -75,6 +78,7 @@ public class GenericExampleExtension implements
     public void afterAll(ExtensionContext context) {
 
         log.info("GeneralExampleExtension- In afterAll");
+        ReportPortal.emitLog("GeneralExampleExtension- In afterAll", LogLevel.INFO.name(), new Date());
 
     }
 
@@ -88,6 +92,7 @@ public class GenericExampleExtension implements
     @Override
     public void afterEach(ExtensionContext context) {
         log.info("GeneralExampleExtension- In afterEach");
+        ReportPortal.emitLog("GeneralExampleExtension- In afterEach", LogLevel.INFO.name(), new Date());
     }
 
 
@@ -101,6 +106,7 @@ public class GenericExampleExtension implements
     @Override
     public void afterTestExecution(ExtensionContext context) {
         log.info("GeneralExampleExtension- In afterTestExecution");
+        ReportPortal.emitLog("GeneralExampleExtension- In afterTestExecution", LogLevel.INFO.name(), new Date());
     }
 
 
@@ -123,6 +129,7 @@ public class GenericExampleExtension implements
 
         log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
         log.info("GeneralExampleExtension- In beforeAll");
+        ReportPortal.emitLog("GeneralExampleExtension- In beforeAll", LogLevel.INFO.name(), new Date());
     }
 
 
@@ -135,6 +142,8 @@ public class GenericExampleExtension implements
     @Override
     public void beforeEach(ExtensionContext context) {
         log.info("GeneralExampleExtension- In beforeEach");
+        ReportPortal.emitLog("GeneralExampleExtension- In beforeEach", LogLevel.INFO.name(), new Date());
+
     }
 
 
@@ -148,6 +157,7 @@ public class GenericExampleExtension implements
     @Override
     public void beforeTestExecution(ExtensionContext context) {
         log.info("GeneralExampleExtension- In beforeTestExecution");
+        ReportPortal.emitLog("GeneralExampleExtension- In beforeTestExecution", LogLevel.INFO.name(), new Date());
     }
 
 
@@ -168,6 +178,7 @@ public class GenericExampleExtension implements
             s += ", reason: " + reason;
 
         log.info(s);
+        ReportPortal.emitLog(s, LogLevel.INFO.name(), new Date());
     }
 
 
@@ -183,6 +194,7 @@ public class GenericExampleExtension implements
     public void testSuccessful(ExtensionContext context) {
         String s = "GeneralExampleExtension- Test " + context.getDisplayName() + " passed";
         log.info(s);
+        ReportPortal.emitLog(s, LogLevel.INFO.name(), new Date());
     }
 
 
@@ -201,6 +213,7 @@ public class GenericExampleExtension implements
         s += ", cause: " + cause.getMessage();
 
         log.info(s);
+        ReportPortal.emitLog(s, LogLevel.INFO.name(), new Date());
     }
 
 
@@ -219,6 +232,7 @@ public class GenericExampleExtension implements
         s += ", cause: " + cause.getMessage();
 
         log.info(s);
+        ReportPortal.emitLog(s, LogLevel.INFO.name(), new Date());
     }
 
 

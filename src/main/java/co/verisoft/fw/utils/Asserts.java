@@ -19,7 +19,7 @@ package co.verisoft.fw.utils;
 
 import co.verisoft.fw.extentreport.DelegateExtentTest;
 import co.verisoft.fw.extentreport.ReportManager;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
 
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.function.Executable;
  *
  * @author <a href="mailto:nir@verisoft.co">Nir Gallner</a>
  */
-@Log4j2
+@Slf4j
 @SuppressWarnings("unused")
 public class Asserts {
 

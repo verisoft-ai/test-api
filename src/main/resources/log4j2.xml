@@ -35,6 +35,10 @@
             <ThresholdFilter level="trace"/>
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
+<!--        <ReportPortalLog4j2Appender name="ReportPortalAppender">-->
+<!--            <PatternLayout-->
+<!--                    pattern="%d [%t] %-5level %logger{36} - %msg%n%throwable"/>-->
+<!--        </ReportPortalLog4j2Appender>-->
     </Appenders>
 
     <Loggers>
@@ -45,6 +49,7 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="RollingFileAppender"/>
             <AppenderRef ref="RollingFileTraceAppender"/>
+<!--            <AppenderRef ref="ReportPortalAppender"/>-->
         </Root>
 
     </Loggers>

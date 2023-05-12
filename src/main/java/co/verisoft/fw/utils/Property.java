@@ -18,7 +18,7 @@ package co.verisoft.fw.utils;
 
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -49,7 +49,7 @@ import java.util.Properties;
  * @since 2.0.3.9
  */
 @ToString
-@Log4j2
+@Slf4j
 public class Property {
 
     @Getter

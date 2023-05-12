@@ -17,6 +17,8 @@ package co.verisoft.fw.report.observer;
  */
 
 
+import lombok.Synchronized;
+
 /**
  * A simple and basic Observer interface, follows the GO4 Observer pattern
  *
@@ -24,5 +26,6 @@ package co.verisoft.fw.report.observer;
  * @since 0.0.5 (Jan 2023)
  */
 public interface Observer {
+
     void update(ReportEntry reportEntry);
 }

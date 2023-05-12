@@ -1,6 +1,8 @@
 package co.verisoft.fw.visual_regression_tracker;
+
 import io.visual_regression_tracker.sdk_java.VisualRegressionTrackerConfig;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.FileInputStream;
 import java.util.Properties;
 
@@ -10,7 +12,7 @@ import java.util.Properties;
  * @author Efrat Cohen
  * @since March 2023
  */
-@Log4j2
+@Slf4j
 public class VisualRegressionTrackerSingleton {
 
     private static VisualRegressionTrackerConfig instance = null;
