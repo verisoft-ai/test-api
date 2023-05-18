@@ -17,6 +17,7 @@
  */
 package co.verisoft.fw.extensions.jupiter;
 
+import co.verisoft.fw.ReportPortalObserver;
 import co.verisoft.fw.extentreport.Description;
 import co.verisoft.fw.extentreport.ExtentReportData;
 import co.verisoft.fw.extentreport.ExtentReportReportObserver;
@@ -28,7 +29,7 @@ import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import co.verisoft.fw.xray.XrayIdentifier;
 import com.aventstack.extentreports.Status;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.ExceptionUtils;
 import org.junit.jupiter.api.extension.*;
 import org.opentest4j.TestAbortedException;
@@ -56,7 +57,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
  * @author David Yehezkel, VeriSoft
  * @since 1.9.6
  */
-@Log4j2
+@Slf4j
 public class ExtentReportExtension implements BeforeAllCallback,
         BeforeEachCallback,
         BeforeTestExecutionCallback,
@@ -95,10 +96,11 @@ public class ExtentReportExtension implements BeforeAllCallback,
             // Register a report observer
             @SuppressWarnings("unused")
             ExtentReportReportObserver extentReportReportObserver = new ExtentReportReportObserver(ReportLevel.INFO);
+            ReportPortalObserver reportPortalObserver = new ReportPortalObserver(ReportLevel.INFO);
 
             // Create an object to hold screenshots
             Map<String, List<String>> screenShots = new HashMap<>();
-            StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
+            StoreManager.getStore(StoreType.GLOBAL).putValueInStore("screenshots", screenShots);
 
             didRun = true;
         }
@@ -128,7 +130,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
         String testName = context.getDisplayName();
 
         // Create a new test
-
         //If we have description, we should create test with it,otherwise not
         if (context.getElement().isPresent() && context.getElement().get().isAnnotationPresent(Description.class))
         {
@@ -168,7 +169,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
     @Override
     public void afterEach(ExtensionContext context) {
 
-
         if (context.getExecutionException().isPresent()) {
             String stackTrace = ExceptionUtils.getStackTrace(context.getExecutionException().get());
             String msg = "An Error occured during test.";
@@ -178,10 +178,11 @@ public class ExtentReportExtension implements BeforeAllCallback,
         }
 
         // Find out if there are screenshots collected during the test
-        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
+        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.GLOBAL)
                 .getValueFromStore("screenshots");
 
-        List<String> images = (screenShots.get(context.getDisplayName()));
+        List<String> images = Objects.isNull(screenShots) ? null : screenShots.get(context.getDisplayName());
+
         if (!Objects.isNull(images))
             for (String image : images) {
                 Report.error("Error Screenshot", ExtentReportData.builder().data(image).type(ExtentReportData.Type.SCREENSHOT).build());
@@ -190,7 +191,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Get the test name
         String testName = context.getTestMethod().get().getName();
 
-        // Finally, fail / pass /skip the test
+        // Finally, fail / pass / skip the test
         if (context.getExecutionException().isPresent()) //we have an exception-skip or fail
         {
             if (context.getExecutionException().get() instanceof TestAbortedException)//this type of exception means the test was skipped- not failed
