@@ -17,7 +17,7 @@
  */
 package co.verisoft.fw.extensions.jupiter;
 
-import co.verisoft.fw.ReportPortalObserver;
+import co.verisoft.fw.extentreport.Description;
 import co.verisoft.fw.extentreport.ExtentReportData;
 import co.verisoft.fw.extentreport.ExtentReportReportObserver;
 import co.verisoft.fw.extentreport.ReportManager;
@@ -26,10 +26,12 @@ import co.verisoft.fw.report.observer.ReportLevel;
 import co.verisoft.fw.report.observer.ReportSource;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
+import co.verisoft.fw.xray.XrayIdentifier;
 import com.aventstack.extentreports.Status;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.codehaus.plexus.util.ExceptionUtils;
 import org.junit.jupiter.api.extension.*;
+import org.opentest4j.TestAbortedException;
 
 import java.util.*;
 
@@ -54,7 +56,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
  * @author David Yehezkel, VeriSoft
  * @since 1.9.6
  */
-@Slf4j
+@Log4j2
 public class ExtentReportExtension implements BeforeAllCallback,
         BeforeEachCallback,
         BeforeTestExecutionCallback,
@@ -93,16 +95,13 @@ public class ExtentReportExtension implements BeforeAllCallback,
             // Register a report observer
             @SuppressWarnings("unused")
             ExtentReportReportObserver extentReportReportObserver = new ExtentReportReportObserver(ReportLevel.INFO);
-            ReportPortalObserver reportPortalObserver = new ReportPortalObserver(ReportLevel.INFO);
 
             // Create an object to hold screenshots
             Map<String, List<String>> screenShots = new HashMap<>();
-            StoreManager.getStore(StoreType.GLOBAL).putValueInStore("screenshots", screenShots);
+            StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
 
             didRun = true;
         }
-
-
     }
 
 
@@ -129,11 +128,28 @@ public class ExtentReportExtension implements BeforeAllCallback,
         String testName = context.getDisplayName();
 
         // Create a new test
-        ReportManager.getInstance().newTest(testName);
 
+        //If we have description, we should create test with it,otherwise not
+        if (context.getElement().isPresent() && context.getElement().get().isAnnotationPresent(Description.class))
+        {
+            String description=context.getElement().get().getAnnotation(Description.class).value();
+            ReportManager.getInstance().newTest(testName,description);
+            Report.info(ReportSource.REPORT, "Test Description: " + description);
+        }
+        else {
+            ReportManager.getInstance().newTest(testName);
+        }
         Report.debug(ReportSource.REPORT, "Test Start. Test name: " + testName);
         Report.info(ReportSource.REPORT, "Test Name: " + testName);
         Report.info(ReportSource.REPORT, "KEY: testId  VALUE: " + uuid);
+
+        //If we have XrayIdentifier annotation, write it to report
+        if (context.getElement().isPresent() && context.getElement().get().isAnnotationPresent(XrayIdentifier.class))
+        {
+            String [] xrayIdentifier=context.getElement().get().getAnnotation(XrayIdentifier.class).value();
+            Report.info(ReportSource.REPORT, "XrayIdentifier " + Arrays.toString(xrayIdentifier));
+        }
+
     }
 
 
@@ -152,6 +168,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
     @Override
     public void afterEach(ExtensionContext context) {
 
+
         if (context.getExecutionException().isPresent()) {
             String stackTrace = ExceptionUtils.getStackTrace(context.getExecutionException().get());
             String msg = "An Error occured during test.";
@@ -161,11 +178,10 @@ public class ExtentReportExtension implements BeforeAllCallback,
         }
 
         // Find out if there are screenshots collected during the test
-        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.GLOBAL)
+        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
                 .getValueFromStore("screenshots");
 
-        List<String> images = Objects.isNull(screenShots) ? null : screenShots.get(context.getDisplayName());
-
+        List<String> images = (screenShots.get(context.getDisplayName()));
         if (!Objects.isNull(images))
             for (String image : images) {
                 Report.error("Error Screenshot", ExtentReportData.builder().data(image).type(ExtentReportData.Type.SCREENSHOT).build());
@@ -174,11 +190,21 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Get the test name
         String testName = context.getTestMethod().get().getName();
 
-        // Finally, fail / pass the test
-        if (context.getExecutionException().isPresent()) {
-            ReportManager.getInstance().getCurrentTest().fail("Test Result - FAIL");
-            Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
-                    "Test Result - FAIL");
+        // Finally, fail / pass /skip the test
+        if (context.getExecutionException().isPresent()) //we have an exception-skip or fail
+        {
+            if (context.getExecutionException().get() instanceof TestAbortedException)//this type of exception means the test was skipped- not failed
+            {
+                ReportManager.getInstance().getCurrentTest().skip("Test Result - SKIP");
+                Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
+                        "Test Result - SKIP");
+            }
+            else
+            {
+                ReportManager.getInstance().getCurrentTest().fail("Test Result - FAIL");
+                Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
+                        "Test Result - FAIL");
+            }
         } else {
             ReportManager.getInstance().getCurrentTest().pass("Test Result - PASS");
             Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
