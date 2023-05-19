@@ -113,6 +113,20 @@ public final class ReportManager {
 
 
     /**
+     * Creates a new test for the extent report with a description
+     *
+     * @param name test name
+     * @param description test description
+     * @return new test instance
+     * @author Gili Eliach
+     */
+    public synchronized DelegateExtentTest newTest(String name,String description) {
+        DelegateExtentTest test = new DelegateExtentTest(report.createTest(name,description));
+        tests.put((int) (Thread.currentThread().getId()), test);
+        return test;
+    }
+
+    /**
      * flush the file and creates the report html
      */
     public synchronized void flush() {

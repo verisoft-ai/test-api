@@ -18,6 +18,7 @@
 package co.verisoft.fw.extensions.jupiter;
 
 import co.verisoft.fw.ReportPortalObserver;
+import co.verisoft.fw.extentreport.Description;
 import co.verisoft.fw.extentreport.ExtentReportData;
 import co.verisoft.fw.extentreport.ExtentReportReportObserver;
 import co.verisoft.fw.extentreport.ReportManager;
@@ -26,10 +27,12 @@ import co.verisoft.fw.report.observer.ReportLevel;
 import co.verisoft.fw.report.observer.ReportSource;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
+import co.verisoft.fw.xray.XrayIdentifier;
 import com.aventstack.extentreports.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.ExceptionUtils;
 import org.junit.jupiter.api.extension.*;
+import org.opentest4j.TestAbortedException;
 
 import java.util.*;
 
@@ -101,8 +104,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
 
             didRun = true;
         }
-
-
     }
 
 
@@ -129,11 +130,27 @@ public class ExtentReportExtension implements BeforeAllCallback,
         String testName = context.getDisplayName();
 
         // Create a new test
-        ReportManager.getInstance().newTest(testName);
-
+        //If we have description, we should create test with it,otherwise not
+        if (context.getElement().isPresent() && context.getElement().get().isAnnotationPresent(Description.class))
+        {
+            String description=context.getElement().get().getAnnotation(Description.class).value();
+            ReportManager.getInstance().newTest(testName,description);
+            Report.info(ReportSource.REPORT, "Test Description: " + description);
+        }
+        else {
+            ReportManager.getInstance().newTest(testName);
+        }
         Report.debug(ReportSource.REPORT, "Test Start. Test name: " + testName);
         Report.info(ReportSource.REPORT, "Test Name: " + testName);
         Report.info(ReportSource.REPORT, "KEY: testId  VALUE: " + uuid);
+
+        //If we have XrayIdentifier annotation, write it to report
+        if (context.getElement().isPresent() && context.getElement().get().isAnnotationPresent(XrayIdentifier.class))
+        {
+            String [] xrayIdentifier=context.getElement().get().getAnnotation(XrayIdentifier.class).value();
+            Report.info(ReportSource.REPORT, "XrayIdentifier " + Arrays.toString(xrayIdentifier));
+        }
+
     }
 
 
@@ -174,11 +191,21 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Get the test name
         String testName = context.getTestMethod().get().getName();
 
-        // Finally, fail / pass the test
-        if (context.getExecutionException().isPresent()) {
-            ReportManager.getInstance().getCurrentTest().fail("Test Result - FAIL");
-            Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
-                    "Test Result - FAIL");
+        // Finally, fail / pass / skip the test
+        if (context.getExecutionException().isPresent()) //we have an exception-skip or fail
+        {
+            if (context.getExecutionException().get() instanceof TestAbortedException)//this type of exception means the test was skipped- not failed
+            {
+                ReportManager.getInstance().getCurrentTest().skip("Test Result - SKIP");
+                Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
+                        "Test Result - SKIP");
+            }
+            else
+            {
+                ReportManager.getInstance().getCurrentTest().fail("Test Result - FAIL");
+                Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
+                        "Test Result - FAIL");
+            }
         } else {
             ReportManager.getInstance().getCurrentTest().pass("Test Result - PASS");
             Report.report(ReportSource.REPORT, ReportLevel.DEBUG, "Test Ended. Test name: " + testName +
