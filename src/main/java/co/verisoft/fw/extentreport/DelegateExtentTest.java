@@ -53,32 +53,32 @@ public class DelegateExtentTest {
 
 
     public synchronized ExtentTest createNode(Class<? extends IGherkinFormatterModel> type, String name, String description) {
-        log.info("Report Log - create node name: " + name + " description: " + description + " type: " + type.toString());
+        log.debug("Report Log - create node name: " + name + " description: " + description + " type: " + type.toString());
         return test.createNode(type, name, description);
     }
 
     public synchronized ExtentTest createNode(String name, String description) {
-        log.info("Report Log - create node name: " + name + " description: " + description);
+        log.debug("Report Log - create node name: " + name + " description: " + description);
         return test.createNode(name, description);
     }
 
     public synchronized ExtentTest createNode(Class<? extends IGherkinFormatterModel> type, String name) {
-        log.info("Report Log - create node name: " + name + " type: " + type.toString());
+        log.debug("Report Log - create node name: " + name + " type: " + type.toString());
         return test.createNode(type, name);
     }
 
     public synchronized ExtentTest createNode(GherkinKeyword gherkinKeyword, String name, String description) {
-        log.info("Report Log - create node name: " + name + " GherkinKeyword: " + gherkinKeyword.toString() + " description: " + description);
+        log.debug("Report Log - create node name: " + name + " GherkinKeyword: " + gherkinKeyword.toString() + " description: " + description);
         return test.createNode(gherkinKeyword, name, description);
     }
 
     public synchronized ExtentTest createNode(GherkinKeyword gherkinKeyword, String name) {
-        log.info("Report Log - create node name: " + name + " GherkinKeyword: " + gherkinKeyword.toString());
+        log.debug("Report Log - create node name: " + name + " GherkinKeyword: " + gherkinKeyword.toString());
         return test.createNode(gherkinKeyword, name);
     }
 
     public synchronized ExtentTest createNode(String name) {
-        log.info("Report Log - create node name: " + name);
+        log.debug("Report Log - create node name: " + name);
         return test.createNode(name);
     }
 
@@ -93,21 +93,20 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest log(Status status, String details, Throwable t, Media media) {
-        log.info(String.format("Report Log - Log. Status: %s, detils: %s, Throwable: %s, Media %s",
-                status, details, t.getMessage(), media.getPath()));
+        log.info(String.format("Report Log - Log. Status: %s, detils: %s, Throwable: %s",
+                status, details, t.getMessage()));
         return test.log(status, details, t, media);
     }
 
     public ExtentTest log(Status status, String details, Media media) {
-        log.info(String.format("Report Log - Log. Status: %s, detils: %s, Media %s",
-                status, details, media.getPath()));
+        log.info(String.format("Report Log - Log. Status: %s, detils: %s",
+                status, details));
         return test.log(status, details, media);
     }
 
     public ExtentTest log(Status status, Media media) {
-
-        log.info(String.format("Report Log - Log. Status: %s,  Media %s",
-                status, media.getPath()));
+        log.info(String.format("Report Log - Log. Status: %s",
+                status));
         return test.log(status, media);
     }
 
@@ -126,8 +125,8 @@ public class DelegateExtentTest {
 
     public ExtentTest log(Status status, Throwable t, Media media) {
 
-        log.info(String.format("Report Log - Log. Status: %s, Throwable: %s, Media %s",
-                status, t.getMessage(), media.getPath()));
+        log.info(String.format("Report Log - Log. Status: %s, Throwable: %s",
+                status, t.getMessage()));
         return test.log(status, t, media);
     }
 
@@ -140,7 +139,7 @@ public class DelegateExtentTest {
 
     public ExtentTest info(String details, Media media) {
         log.info(String.format("Report Log - Info. Details: %s, Media: %s",
-                details, media.getTitle()));
+                details));
         return test.info(details, media);
     }
 
@@ -152,8 +151,8 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest info(Throwable t, Media media) {
-        log.info(String.format("Report Log - Info. Throwable: %s, Meida: %s",
-                t.getMessage(), media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - Info. Throwable: %s",
+                t.getMessage()));
         return test.info(t, media);
     }
 
@@ -170,14 +169,13 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest info(Media media) {
-        log.info(String.format("Report Log - Info. Media: %s",
-                media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - Info. Media attached"));
         return test.info(media);
     }
 
     public ExtentTest pass(String details, Media media) {
-        log.info(String.format("Report Log - Pass. Details: %s, Media: %s",
-                details, media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - Pass. Details: %s",
+                details));
         return test.pass(details, media);
     }
 
@@ -189,8 +187,8 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest pass(Throwable t, Media media) {
-        log.info(String.format("Report Log - Pass. Throwable: %s, Media: %s",
-                t.getMessage(), media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - Pass. Throwable: %s",
+                t.getMessage()));
         return test.pass(t, media);
     }
 
@@ -207,14 +205,13 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest pass(Media media) {
-        log.info(String.format("Report Log - Pass. Media: %s",
-                media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - Pass. Media attached"));
         return test.pass(media);
     }
 
     public ExtentTest fail(String details, Media media) {
-        log.info(String.format("Report Log - FAIL. Details: %s, Media: %s",
-                details, media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - FAIL. Details: %s",
+                details));
         return test.fail(details, media);
     }
 
@@ -226,8 +223,8 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest fail(Throwable t, Media media) {
-        log.info(String.format("Report Log - FAIL. Throwable: %s, Media: %s",
-                t.getMessage(), media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - FAIL. Throwable: %s",
+                t.getMessage()));
         return test.fail(t, media);
     }
 
@@ -245,14 +242,13 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest fail(Media media) {
-        log.info(String.format("Report Log - FAIL. Media: %s",
-                media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - FAIL. Media attached"));
         return test.fail(media);
     }
 
     public ExtentTest warning(String details, Media media) {
-        log.info(String.format("Report Log - WARNING. Details: %s, Media: %s",
-                details, media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - WARNING. Details: %s",
+                details));
         return test.warning(details, media);
     }
 
@@ -264,8 +260,8 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest warning(Throwable t, Media media) {
-        log.info(String.format("Report Log - WARNING. Throwable: %s, Media: %s",
-                t.getMessage(), media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - WARNING. Throwable: %s",
+                t.getMessage()));
         return test.warning(t, media);
     }
 
@@ -283,14 +279,13 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest warning(Media media) {
-        log.info(String.format("Report Log - WARNING. Media: %s",
-                media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - WARNING. Media attached"));
         return test.warning(media);
     }
 
     public ExtentTest skip(String details, Media media) {
-        log.info(String.format("Report Log - SKIP. Details: %s, Media: %s",
-                details, media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - SKIP. Details: %s",
+                details));
         return test.skip(details, media);
     }
 
@@ -301,8 +296,8 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest skip(Throwable t, Media media) {
-        log.info(String.format("Report Log - SKIP. Throwable: %s, Media: %s",
-                t.getMessage(), media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - SKIP. Throwable: %s",
+                t.getMessage()));
         return test.skip(t, media);
     }
 
@@ -319,8 +314,7 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest skip(Media media) {
-        log.info(String.format("Report Log - SKIP. Media: %s",
-                media.getResolvedPath() + " " + media.getTitle()));
+        log.info(String.format("Report Log - SKIP. Media attached"));
         return test.skip(media);
     }
 
