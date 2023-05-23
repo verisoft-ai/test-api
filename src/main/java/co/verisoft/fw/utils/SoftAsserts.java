@@ -10,7 +10,11 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Utility class for performing soft assertions in tests.
+ * Soft assertions allow multiple assertions to be executed even if some of them fail
+ * @author Gili Eliach
+ */
 @Slf4j
 public class SoftAsserts {
 
@@ -20,6 +24,7 @@ public class SoftAsserts {
      * Constructs a new co.verisoft.SoftAsserts object.
      */
     public SoftAsserts() {}
+
 
     public void assertTrue(boolean condition, String message) {
 
@@ -35,6 +40,7 @@ public class SoftAsserts {
             failures.add(message);
         }
     }
+
     public static void assertFalse(boolean condition, String message) {
 
         DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
@@ -70,7 +76,6 @@ public class SoftAsserts {
         }
     }
 
-
     public static void assertNotNull(Object actual, String message) {
 
         DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
@@ -87,7 +92,6 @@ public class SoftAsserts {
             failures.add(message);
         }
     }
-
 
     public static void assertEquals(short expected, short actual, String message) {
 
@@ -106,7 +110,6 @@ public class SoftAsserts {
         }
     }
 
-
     public static void assertEquals(byte expected, byte actual, String message) {
 
         DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
@@ -123,7 +126,6 @@ public class SoftAsserts {
             failures.add(message);
         }
     }
-
 
     public static void assertEquals(int expected, int actual, String message) {
 
@@ -142,7 +144,6 @@ public class SoftAsserts {
         }
     }
 
-
     public static void assertEquals(long expected, long actual, String message) {
 
         DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
@@ -159,7 +160,6 @@ public class SoftAsserts {
             failures.add(message);
         }
     }
-
 
     public static void assertEquals(char expected, char actual, String message) {
 
@@ -465,6 +465,12 @@ public class SoftAsserts {
         }
     }
 
+    /**
+     * Checks all the recorded failures and throws an AssertionError
+     * if there are any failures.
+     *
+     * @throws AssertionError if there are recorded failures
+     */
     public void assertAll() {
         if (!failures.isEmpty()) {
             StringBuilder message = new StringBuilder("\nThe following assertions failed:\n");
