@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class softAssertsTest {
 
     @Test
-    public void shouldPass()
+    public void shouldContinueButFail()
     {
         SoftAsserts softAsserts=new SoftAsserts();
         softAsserts.assertTrue(false,"The 1st softAssert should FAIL");

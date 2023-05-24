@@ -36,7 +36,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -53,7 +53,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
 
@@ -71,7 +71,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -88,7 +88,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -105,7 +105,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -122,7 +122,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -139,7 +139,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -156,7 +156,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -173,7 +173,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -191,7 +191,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -209,7 +209,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -227,7 +227,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -245,7 +245,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -263,7 +263,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -281,7 +281,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -298,7 +298,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -316,7 +316,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -334,7 +334,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -352,7 +352,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -370,7 +370,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -388,7 +388,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -406,7 +406,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -424,7 +424,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -442,7 +442,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
@@ -460,7 +460,7 @@ public class SoftAsserts {
         } catch (AssertionError e) {
             if (null != testCase)
                 testCase.fail(message);
-            Report.error(ReportSource.REPORT,"Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            log.error("Soft assert failure. message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             failures.add(message);
         }
     }
