@@ -93,13 +93,13 @@ public class DelegateExtentTest {
     }
 
     public ExtentTest log(Status status, String details, Throwable t, Media media) {
-        log.info(String.format("Report Log - Log. Status: %s, details: %s, Throwable: %s, Media %s",
+        log.info(String.format("Report Log - Log. Status: %s, detils: %s, Throwable: %s, Media %s",
                 status, details, t.getMessage(), media.getPath()));
         return test.log(status, details, t, media);
     }
 
     public ExtentTest log(Status status, String details, Media media) {
-        log.info(String.format("Report Log - Log. Status: %s, details: %s, Media %s",
+        log.info(String.format("Report Log - Log. Status: %s, detils: %s, Media %s",
                 status, details, media.getPath()));
         return test.log(status, details, media);
     }
@@ -113,7 +113,7 @@ public class DelegateExtentTest {
 
     public ExtentTest log(Status status, String details) {
 
-        log.info(String.format("Report Log - Log. Status: %s, details: %s",
+        log.info(String.format("Report Log - Log. Status: %s, detils: %s",
                 status, details));
         return test.log(status, details);
     }
