@@ -1,3 +1,5 @@
+#!groovy
+
 pipeline {
 
     agent {
@@ -12,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository
-                git url: 'https://NirGallner@bitbucket.org/nir_gallner/test.api.git', branch: 'TestForJenkins'
+                git url: 'https://NirGallner@bitbucket.org/nir_gallner/test.api.git', branch: 'develop'
 
                 // Run Maven on a Unix agent.
                 sh "mvn -Dmaven.test.failure.ignore=true clean test"
