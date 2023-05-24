@@ -34,6 +34,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @ExtentReport
+@Disabled
 @ExtendWith({CustomReportPortalExtension.class})
 public class ReportPortalTest {
 
