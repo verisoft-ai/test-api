@@ -1,14 +1,13 @@
-#!groovy
-
 pipeline {
-
     agent {
         node {
             label 'demo-docker-slave'
         }
-
     }
 
+    triggers {
+        bitbucketPush()
+    }
 
     stages {
         stage('Build') {
@@ -17,10 +16,10 @@ pipeline {
                 git url: 'https://NirGallner@bitbucket.org/nir_gallner/test.api.git', branch: 'develop'
 
                 // Run Maven on a Unix agent.
-                sh "mvn -Dmaven.test.failure.ignore=true clean test"
+                sh 'mvn -Dmaven.test.failure.ignore=true clean test'
 
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            // To run Maven on a Windows agent, use
+            // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
             post {
@@ -28,9 +27,10 @@ pipeline {
                 // failed, record the test results and archive the jar file.
                 success {
                     junit '**/target/surefire-reports/TEST-*.xml'
-                    //archiveArtifacts 'target/*.jar'
+                //archiveArtifacts 'target/*.jar'
                 }
             }
         }
     }
 }
+
