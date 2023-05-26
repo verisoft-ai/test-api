@@ -1,7 +1,8 @@
 pipeline {
     agent {
         node {
-            label 'demo-docker-slave'
+            // label 'demo-docker-slave'
+            label 'Built-In Node'
         }
     }
 
@@ -10,16 +11,18 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Clone') {
             steps {
-                // Get some code from a GitHub repository
                 git url: 'https://NirGallner@bitbucket.org/nir_gallner/test.api.git', branch: 'develop'
 
-                // Run Maven on a Unix agent.
+            }
+        }
+        stage('Build'){
+            steps{
                 sh 'mvn -Dmaven.test.failure.ignore=true clean test'
 
-            // To run Maven on a Windows agent, use
-            // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
             post {
@@ -30,17 +33,29 @@ pipeline {
                 }
             }
         }
+        
     }
 
     post{
-        failure{
-            slackSend( channel: "#infra", token: "slack_webhook token", color: "bad", message: "FAILED: ${custom_msg()} no", notifyCommitters: true)
+        always{
+        //    archiveArtifacts artifacts: '**/Extent-Report/**/*.*', allowEmptyArchive: true, fingerprint: true, onlyIfSuccessful: false
+        //    archiveArtifacts artifacts: '**/logs/**/*.*', allowEmptyArchive: true, fingerprint: true, onlyIfSuccessful: false
+           archiveArtifacts artifacts: '**/XrayReport/**/*.*', allowEmptyArchive: true, fingerprint: true, onlyIfSuccessful: false
+
+           publishHTML (target : [allowMissing: false,  alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/Extent-Report/', reportFiles: 'TestReport.html',
+                        reportName: 'Results', reportTitles: 'Results'])
+
         }
-        success{
-            slackSend( channel: "#infra", token: "slack_webhook token", color: "good", message: "PASSED: ${custom_msg()} @Nir Gallner ")
-        }
+        // failure{
+            
+        //     slackSend( channel: "#infra", token: "slack_webhook token", color: "bad", message: "FAILED: ${custom_msg()} no", notifyCommitters: true)
+        // }
+        // success{
+        //     slackSend( channel: "#infra", token: "slack_webhook token", color: "good", message: "PASSED: ${custom_msg()}", notifyCommitters: true)
+        // }
     }
 }
+
 
 def custom_msg()
 {
