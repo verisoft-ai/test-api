@@ -16,9 +16,15 @@ pipeline {
 
             }
         }
-        stage('Build'){
+        stage('Compile'){
             steps{
-                sh 'mvn -Dmaven.test.failure.ignore=true clean test'
+                sh 'mvn -Dmaven.test.failure.ignore=true clean compile validate'
+            }
+        }
+
+        stage('Test'){
+            steps{
+                sh 'mvn -Dmaven.test.failure.ignore=true test'
 
                 // To run Maven on a Windows agent, use
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
