@@ -18,8 +18,10 @@
 package co.verisoft.fw.report.observer;
 
 import co.verisoft.fw.utils.Slf4jObserver;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 
+@Slf4j
 public class BaseTest {
 
     @BeforeAll
