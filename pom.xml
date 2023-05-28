@@ -7,7 +7,7 @@
     <groupId>co.verisoft</groupId>
     <artifactId>test-api</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>VeriSoft framewordk for testing web and mobile applications. junit 5 Module</description>
     <url>https://bitbucket.org/nir_gallner/test.api</url>
@@ -191,13 +191,6 @@
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.3.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.141.59</version>
             <scope>test</scope>
         </dependency>
 
