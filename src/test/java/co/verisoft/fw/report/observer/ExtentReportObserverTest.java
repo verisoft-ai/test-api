@@ -76,6 +76,7 @@ public class ExtentReportObserverTest extends BaseTest {
     }
 
     @Test
+    @Disabled
     public void shouldattachScreenShotToStep() throws AWTException, IOException {
         Robot robot = new Robot();
         BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));

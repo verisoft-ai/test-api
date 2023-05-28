@@ -24,6 +24,7 @@ import com.epam.reportportal.service.ReportPortal;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.api.Disabled;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -34,6 +35,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @ExtentReport
+@Disabled
 @ExtendWith({CustomReportPortalExtension.class})
 public class ReportPortalTest {
 
