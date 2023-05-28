@@ -17,6 +17,7 @@
  */
 package co.verisoft.fw.report.observer;
 
+import com.google.common.html.HtmlEscapers;
 import lombok.Synchronized;
 
 /**
@@ -40,7 +41,7 @@ public final class Report {
         ReportEntry reportEntry = ReportEntry.builder()
                 .reportSource(source)
                 .reportLevel(level)
-                .msg(msg)
+                .msg(HtmlEscapers.htmlEscaper().escape(msg))
                 .additionalObject(object)
                 .build();
 
