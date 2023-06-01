@@ -15,10 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package co.verisoft.fw.utils;
+package co.verisoft.fw.asserts;
 
 import co.verisoft.fw.extentreport.DelegateExtentTest;
 import co.verisoft.fw.extentreport.ReportManager;
+import co.verisoft.fw.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
