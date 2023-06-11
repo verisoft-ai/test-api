@@ -31,9 +31,11 @@ import co.verisoft.fw.xray.XrayIdentifier;
 import com.aventstack.extentreports.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.ExceptionUtils;
+import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.extension.*;
 import org.opentest4j.TestAbortedException;
 
+import java.io.File;
 import java.util.*;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
@@ -185,6 +187,14 @@ public class ExtentReportExtension implements BeforeAllCallback,
 
         if (!Objects.isNull(images))
             for (String image : images) {
+                File file = new File(image);
+                try{
+                    FileUtils.copyFile(file, new File("/target/Extent-Report"));
+                }
+                catch(Exception e){
+                    log.warn("Could not copy screenshot " + image);
+                }
+
                 Report.error("Error Screenshot", ExtentReportData.builder().data(image).type(ExtentReportData.Type.SCREENSHOT).build());
             }
 

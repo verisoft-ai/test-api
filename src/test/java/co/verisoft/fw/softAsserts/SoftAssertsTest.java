@@ -20,6 +20,7 @@ package co.verisoft.fw.softAsserts;
 import co.verisoft.fw.asserts.SoftAssertionError;
 import co.verisoft.fw.extentreport.ExtentReport;
 import co.verisoft.fw.asserts.SoftAsserts;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 //TODO: Add all types of asserts to unit tests.
 public class SoftAssertsTest {
 
-    private SoftAsserts softAsserts;
+    private SoftAsserts softAsserts = new SoftAsserts();
 
     @BeforeEach
     void setUp() {
