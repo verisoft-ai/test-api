@@ -7,7 +7,7 @@
     <groupId>co.verisoft</groupId>
     <artifactId>test-api</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.6-SNAPSHOT</version>
+    <version>0.1.6</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>VeriSoft framewordk for testing web and mobile applications. junit 5 Module</description>
     <url>https://bitbucket.org/nir_gallner/test.api</url>
