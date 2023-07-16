@@ -185,15 +185,11 @@ public class ExtentReportExtension implements BeforeAllCallback,
 
         List<String> images = Objects.isNull(screenShots) ? null : screenShots.get(context.getDisplayName());
 
-        if (!Objects.isNull(images)) {
+        if (!Objects.isNull(images))
             for (String image : images) {
                 File file = new File(image);
                 Report.error("Error Screenshot", ExtentReportData.builder().data(image).type(ExtentReportData.Type.SCREENSHOT).build());
             }
-        }
-        else{
-            Report.info("We have no screenshots");
-        }
 
         // Get the test name
         String testName = context.getTestMethod().get().getName();
