@@ -17,8 +17,7 @@
  */
 package co.verisoft.fw.asserts;
 
-import co.verisoft.fw.extentreport.DelegateExtentTest;
-import co.verisoft.fw.extentreport.ReportManager;
+import co.verisoft.fw.report.observer.Report;
 import co.verisoft.fw.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -47,27 +46,17 @@ public class Asserts {
     public static <V> V fail(String message) {
 
         log.info("Assert - FAIL. " + message);
-
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-        if (testCase != null)
-            testCase.fail(message);
-
         Assertions.fail(message);
-
         return null; // satisfying the compiler: this line will never be executed.
     }
 
 
     public static void assertTrue(boolean condition, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
         try {
             Assertions.assertTrue(condition);
-            if (null != testCase)
-                testCase.pass(message);
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -76,17 +65,11 @@ public class Asserts {
 
     public static void assertFalse(boolean condition, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertFalse(condition);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
 
@@ -95,17 +78,11 @@ public class Asserts {
 
     public static void assertNull(Object actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertNull(actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -113,17 +90,11 @@ public class Asserts {
 
     public static void assertNotNull(Object actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertNotNull(actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -131,17 +102,11 @@ public class Asserts {
 
     public static void assertEquals(short expected, short actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -149,17 +114,11 @@ public class Asserts {
 
     public static void assertEquals(byte expected, byte actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -167,17 +126,11 @@ public class Asserts {
 
     public static void assertEquals(int expected, int actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -185,17 +138,11 @@ public class Asserts {
 
     public static void assertEquals(long expected, long actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -203,17 +150,11 @@ public class Asserts {
 
     public static void assertEquals(char expected, char actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -221,17 +162,11 @@ public class Asserts {
 
     public static void assertEquals(float expected, float actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -239,17 +174,11 @@ public class Asserts {
 
     public static void assertEquals(double expected, double actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -257,17 +186,12 @@ public class Asserts {
 
     public static void assertEquals(Object expected, Object actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
 
         try {
             Assertions.assertEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -275,17 +199,11 @@ public class Asserts {
 
     public static void assertArrayEquals(boolean[] expected, boolean[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -293,17 +211,11 @@ public class Asserts {
 
     public static void assertArrayEquals(char[] expected, char[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
-            log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
+            Report.error("Assertion failure. message: " + message + " error: " + e);
+            log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
     }
@@ -311,16 +223,10 @@ public class Asserts {
 
     public static void assertArrayEquals(byte[] expected, byte[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -328,16 +234,10 @@ public class Asserts {
 
     public static void assertArrayEquals(short[] expected, short[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -346,16 +246,10 @@ public class Asserts {
 
     public static void assertArrayEquals(int[] expected, int[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -364,16 +258,11 @@ public class Asserts {
 
     public static void assertArrayEquals(long[] expected, long[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
 
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -382,16 +271,10 @@ public class Asserts {
 
     public static void assertArrayEquals(float[] expected, float[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -400,16 +283,10 @@ public class Asserts {
 
     public static void assertArrayEquals(double[] expected, double[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -418,16 +295,10 @@ public class Asserts {
 
     public static void assertArrayEquals(Object[] expected, Object[] actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertArrayEquals(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -436,16 +307,10 @@ public class Asserts {
 
     public static void assertNotEquals(Object unexpected, Object actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertNotEquals(unexpected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -454,16 +319,10 @@ public class Asserts {
 
     public static void assertSame(Object expected, Object actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertSame(expected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -472,16 +331,10 @@ public class Asserts {
 
     public static void assertNotSame(Object unexpected, Object actual, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertNotSame(unexpected, actual);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
@@ -490,16 +343,10 @@ public class Asserts {
 
     public static void assertDoesNotThrow(Executable executable, String message) {
 
-        DelegateExtentTest testCase = ReportManager.getInstance().getCurrentTest();
-
         try {
             Assertions.assertDoesNotThrow(executable);
-            if (null != testCase)
-                testCase.pass(message);
-
         } catch (AssertionError e) {
-            if (null != testCase)
-                testCase.fail(message);
+            Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
             throw e;
         }
