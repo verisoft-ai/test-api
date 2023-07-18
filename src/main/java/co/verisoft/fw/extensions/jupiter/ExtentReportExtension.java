@@ -99,7 +99,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
             // Register a report observer
             @SuppressWarnings("unused")
             ExtentReportReportObserver extentReportReportObserver = new ExtentReportReportObserver(ReportLevel.INFO);
-            ReportPortalObserver reportPortalObserver = new ReportPortalObserver(ReportLevel.INFO);
 
             // Create an object to hold screenshots
             Map<String, List<String>> screenShots = new HashMap<>();
