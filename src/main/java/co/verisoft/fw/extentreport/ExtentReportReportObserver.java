@@ -50,6 +50,8 @@ public class ExtentReportReportObserver extends BaseObserver {
 
         if (reportEntry.getReportLevel().compareTo(minReportLevel) < 0)
             return;
+        if (Objects.isNull(ReportManager.getInstance().getCurrentTest()))
+            return;
 
         // Determine if entry should be printed to extent report, and the proper level of entry
         Status status;
