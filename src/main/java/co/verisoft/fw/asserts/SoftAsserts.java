@@ -49,6 +49,7 @@ public class SoftAsserts {
     public void assertTrue(boolean condition, String message) {
         try {
             Assertions.assertTrue(condition);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -60,6 +61,7 @@ public class SoftAsserts {
     public void assertFalse(boolean condition, String message) {
         try {
             Assertions.assertFalse(condition);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -72,6 +74,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertNull(actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -84,6 +87,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertNotNull(actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -96,6 +100,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -107,6 +112,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -118,6 +124,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -130,6 +137,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -142,6 +150,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -154,6 +163,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -166,6 +176,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -178,6 +189,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -190,6 +202,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -202,6 +215,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -214,6 +228,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -226,6 +241,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -238,6 +254,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -250,6 +267,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -262,6 +280,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -274,6 +293,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -286,6 +306,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -298,6 +319,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertNotEquals(unexpected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -310,6 +332,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertSame(expected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -322,6 +345,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertNotSame(unexpected, actual);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));
@@ -334,6 +358,7 @@ public class SoftAsserts {
 
         try {
             Assertions.assertDoesNotThrow(executable);
+            Report.info("Soft assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Soft assert failure. message: " + message + " error: " + e);
             log.error("Stack trace is: " + Utils.getStackTrace(e));

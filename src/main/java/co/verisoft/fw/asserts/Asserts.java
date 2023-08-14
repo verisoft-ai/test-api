@@ -55,6 +55,7 @@ public class Asserts {
 
         try {
             Assertions.assertTrue(condition);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -67,6 +68,7 @@ public class Asserts {
 
         try {
             Assertions.assertFalse(condition);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -80,6 +82,7 @@ public class Asserts {
 
         try {
             Assertions.assertNull(actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -92,6 +95,7 @@ public class Asserts {
 
         try {
             Assertions.assertNotNull(actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -104,6 +108,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -116,6 +121,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -128,6 +134,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -140,6 +147,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -152,6 +160,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -164,6 +173,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -176,6 +186,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -189,6 +200,7 @@ public class Asserts {
 
         try {
             Assertions.assertEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -201,6 +213,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -213,6 +226,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: '" + message + "' Stack trace is: " + Utils.getStackTrace(e));
@@ -225,6 +239,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -236,6 +251,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -248,6 +264,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -261,6 +278,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -273,6 +291,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -285,6 +304,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -297,6 +317,7 @@ public class Asserts {
 
         try {
             Assertions.assertArrayEquals(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -309,6 +330,7 @@ public class Asserts {
 
         try {
             Assertions.assertNotEquals(unexpected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -321,6 +343,7 @@ public class Asserts {
 
         try {
             Assertions.assertSame(expected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -333,6 +356,7 @@ public class Asserts {
 
         try {
             Assertions.assertNotSame(unexpected, actual);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
@@ -345,6 +369,7 @@ public class Asserts {
 
         try {
             Assertions.assertDoesNotThrow(executable);
+            Report.info("Assertion is ok, message: "+message);
         } catch (AssertionError e) {
             Report.error("Assertion failure. message: " + message + " error: " + e);
             log.error("Fail message: " + message + " Stack trace is: " + Utils.getStackTrace(e));
