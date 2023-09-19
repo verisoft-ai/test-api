@@ -17,7 +17,6 @@
  */
 package co.verisoft.fw.extensions.jupiter;
 
-import co.verisoft.fw.ReportPortalObserver;
 import co.verisoft.fw.extentreport.Description;
 import co.verisoft.fw.extentreport.ExtentReportData;
 import co.verisoft.fw.extentreport.ExtentReportReportObserver;
@@ -100,10 +99,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
             @SuppressWarnings("unused")
             ExtentReportReportObserver extentReportReportObserver = new ExtentReportReportObserver(ReportLevel.INFO);
 
-            // Create an object to hold screenshots
-            Map<String, List<String>> screenShots = new HashMap<>();
-            StoreManager.getStore(StoreType.GLOBAL).putValueInStore("screenshots", screenShots);
-
             didRun = true;
         }
     }
@@ -127,6 +122,9 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Create a UUID for test
         UUID uuid = UUID.randomUUID();
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("testId", uuid);
+        // Create an object to hold screenshots
+        Map<String, List<String>> screenShots = new HashMap<>();
+        StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
 
         // Get test name
         String testName = context.getDisplayName();
@@ -180,7 +178,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
         }
 
         // Find out if there are screenshots collected during the test
-        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.GLOBAL)
+        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
                 .getValueFromStore("screenshots");
 
         List<String> images = Objects.isNull(screenShots) ? null : screenShots.get(context.getDisplayName());
