@@ -75,7 +75,7 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
     @Override
     public void afterTestExecution(ExtensionContext context) {
         // Find out if there are screenshots collected during the test
-        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.GLOBAL)
+        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
                 .getValueFromStore("screenshots");
 
         List<String> images = Objects.isNull(screenShots) ? null : screenShots.get(context.getDisplayName());
