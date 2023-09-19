@@ -88,8 +88,8 @@ public class StoreTest {
     @Test
     public void valueFromOtherNotFoundInGlobal() {
         String name = "Lior";
-        StoreManager.getStore("example2").putValueInStore("LIOR", name);
-        String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("LIOR");
+        StoreManager.getStore("example2").putValueInStore("LIOR2", name);
+        String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("LIOR2");
         Assertions.assertNull(receivedName, "Should not contain any value");
     }
 
