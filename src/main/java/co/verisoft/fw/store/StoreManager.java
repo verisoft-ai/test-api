@@ -48,7 +48,7 @@ import java.util.Map;
 @Slf4j
 public class StoreManager {
 
-    private static final Map<Long, Store> storeMap = new HashMap<>();
+    private static final Map<Object, Store> storeMap = new HashMap<>();
 
     private StoreManager() {
     }
@@ -81,6 +81,23 @@ public class StoreManager {
         return storeMap.get(threadId);
     }
 
+    /**
+     * Retrieve store from the store object, according to name selected.
+     * If there is no store, which previously registered, it will create a new store and retrieve it
+     *
+     * @param storeName Name of store to retrieve (The key will be the name + "Store" for example: name=example so the name=exampleStore)
+     * @return Store object, according to name selected
+     * @author Gili Eliach
+     */
+    @Synchronized
+    public static Store getStore(String storeName) {
+        String newStoreName=storeName+"Store";
+        // If store not exist, create a store
+        if (storeMap.get(newStoreName) == null)
+            storeMap.put(newStoreName, new StoreImp());
+
+        return storeMap.get(newStoreName);
+    }
 
     /**
      * Deletes a Store object from the map, or does nothing if there was no object to begin with
@@ -93,5 +110,17 @@ public class StoreManager {
                 Thread.currentThread().getId() : 0;
         log.debug("Remove store of thread (0 means global) " + threadId);
         storeMap.remove(threadId);
+    }
+
+    /**
+     * Deletes a Store object from the map, or does nothing if there was no object to begin with
+     *
+     * @param storeName name of store to remove
+     * @author Gili Eliach
+     */
+    @Synchronized
+    public static void removeStore(String storeName) {
+        log.debug("Remove store " + storeName);
+        storeMap.remove(storeName+"Store");
     }
 }
