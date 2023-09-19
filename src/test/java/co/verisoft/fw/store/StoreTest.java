@@ -18,7 +18,6 @@
 package co.verisoft.fw.store;
 
 import co.verisoft.fw.CustomReportPortalExtension;
-import co.verisoft.fw.report.observer.Report;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,6 +51,14 @@ public class StoreTest {
         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
     }
 
+    @Test
+    public void shouldSaveAndRetrieveValueFromOtherStore() {
+        String name = "Irit";
+        StoreManager.getStore("example").putValueInStore("IRIT", name);
+        String receivedName = StoreManager.getStore("example").getValueFromStore("IRIT");
+        Assertions.assertEquals(name, receivedName, "Should have retrieved from example store");
+    }
+
 
     @Test
     public void valueFromLocalNotFoundInGlobal() {
@@ -67,6 +74,22 @@ public class StoreTest {
         String name = "Lior";
         StoreManager.getStore(StoreType.GLOBAL).putValueInStore("LIOR", name);
         String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("LIOR");
+        Assertions.assertNull(receivedName, "Should not contain any value");
+    }
+
+    @Test
+    public void valueFromOtherNotFoundInLocal() {
+        String name = "Lior";
+        StoreManager.getStore("example1").putValueInStore("LIOR", name);
+        String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("LIOR");
+        Assertions.assertNull(receivedName, "Should not contain any value");
+    }
+
+    @Test
+    public void valueFromOtherNotFoundInGlobal() {
+        String name = "Lior";
+        StoreManager.getStore("example2").putValueInStore("LIOR", name);
+        String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("LIOR");
         Assertions.assertNull(receivedName, "Should not contain any value");
     }
 
@@ -86,6 +109,21 @@ public class StoreTest {
         Assertions.assertNull(receivedName, "Should not contain any value");
     }
 
+    @Test
+    public void valueDoesNotAppearAfterRemoveOther() {
+        String name = "Ofir";
+
+        // Step 1 - create a value and put in store. Make sure it is there.
+        StoreManager.getStore("Ofir's").putValueInStore("OFIR", name);
+        String receivedName = StoreManager.getStore("Ofir's").getValueFromStore("OFIR");
+        Assertions.assertEquals(name, receivedName, "Should not contain any value");
+
+        // Step 2 - remove from store and check again. Value should be gone
+        StoreManager.getStore("Ofir's").removeValueFromStore("OFIR");
+        receivedName = StoreManager.getStore("Ofir's").getValueFromStore("OFIR");
+        Assertions.assertNull(receivedName, "Should not contain any value");
+    }
+
 
     @Test
     public void shouldUseOtherValueThanString() {
@@ -95,6 +133,13 @@ public class StoreTest {
         Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
     }
 
+    @Test
+    public void shouldUseOtherValueThanStringOther() {
+        String name = "Nir";
+        StoreManager.getStore("Nir's").putValueInStore(12, name);
+        String receivedName = StoreManager.getStore("Nir's").getValueFromStore(12);
+        Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
+    }
 
     @Test
     public void shouldUseOBject() {
@@ -107,12 +152,32 @@ public class StoreTest {
 
 
     @Test
+    public void shouldUseOBjectOther() {
+        Object key = new Object();
+        String name = "Nir";
+        StoreManager.getStore("Nir's").putValueInStore(key, name);
+        String receivedName = StoreManager.getStore("Nir's").getValueFromStore(key);
+        Assertions.assertEquals(name, receivedName, "Should have retrieved from store");
+    }
+
+
+    @Test
     public void shouldNotUse2OBject() {
         Object key1 = new Object();
         Object key2 = new Object();
         String name = "Nir";
         StoreManager.getStore(StoreType.GLOBAL).putValueInStore(key1, name);
         String receivedName = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore(key2);
+        Assertions.assertNull(receivedName, "Should have retrieved from store");
+    }
+
+    @Test
+    public void shouldNotUse2OBjectOther() {
+        Object key1 = new Object();
+        Object key2 = new Object();
+        String name = "Irit";
+        StoreManager.getStore("Irit's").putValueInStore(key1, name);
+        String receivedName = StoreManager.getStore("Irit's").getValueFromStore(key2);
         Assertions.assertNull(receivedName, "Should have retrieved from store");
     }
 
@@ -130,6 +195,19 @@ public class StoreTest {
         Assertions.assertNull(receivedName, "Store should have been empty");
     }
 
+    @Test
+    public void shouldRemoveStoreOther() {
+        String key = "key";
+        String val = "val";
+
+        StoreManager.getStore("key&val").putValueInStore(key, val);
+        StoreManager.removeStore("key&val");
+
+        // Value expected not to be present after removing the store.
+        String receivedName = StoreManager.getStore("key&val").getValueFromStore(key);
+        Assertions.assertNull(receivedName, "Store should have been empty");
+    }
+
 
     @Test
     public void shouldReplaceValueInStore() {
@@ -138,6 +216,16 @@ public class StoreTest {
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("key", "val2");
 
         String receivedName = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("key");
+        Assertions.assertEquals(receivedName, "val2", "Store should replace the original value");
+    }
+
+    @Test
+    public void shouldReplaceValueInStoreOther() {
+
+        StoreManager.getStore("keys&values").putValueInStore("key", "val1");
+        StoreManager.getStore("keys&values").putValueInStore("key", "val2");
+
+        String receivedName = StoreManager.getStore("keys&values").getValueFromStore("key");
         Assertions.assertEquals(receivedName, "val2", "Store should replace the original value");
     }
 }
