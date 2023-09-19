@@ -18,7 +18,6 @@
 package co.verisoft.fw.store;
 
 import co.verisoft.fw.CustomReportPortalExtension;
-import co.verisoft.fw.report.observer.Report;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
