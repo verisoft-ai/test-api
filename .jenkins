@@ -53,10 +53,10 @@ pipeline {
         }
         failure{
             
-            slackSend( channel: "#infra", token: "slack", color: "bad", message: "FAILED: ${custom_msg()} no", notifyCommitters: true)
+          //  slackSend( channel: "#infra", token: "slack_webhook token", color: "bad", message: "FAILED: ${custom_msg()} no", notifyCommitters: true)
         }
         success{
-            slackSend( channel: "#infra", token: "slack", color: "good", message: "PASSED: ${custom_msg()}", notifyCommitters: true)
+          //  slackSend( channel: "#infra", token: "slack_webhook token", color: "good", message: "PASSED: ${custom_msg()}", notifyCommitters: true)
         }
     }
 }
