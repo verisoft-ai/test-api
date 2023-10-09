@@ -1,20 +1,13 @@
 package co.verisoft.fw.perfecto;
 
-import co.verisoft.fw.ReportPortalObserver;
-import co.verisoft.fw.extentreport.ReportManager;
-import co.verisoft.fw.report.observer.Report;
-import co.verisoft.fw.report.observer.ReportLevel;
-import co.verisoft.fw.report.observer.ReportSource;
 import co.verisoft.fw.store.Store;
 import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import com.perfecto.reportium.client.ReportiumClient;
 import com.perfecto.reportium.test.result.TestResultFactory;
 import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.opentest4j.TestAbortedException;
 
 public class PerfectoLogExtension implements BeforeEachCallback, AfterEachCallback {
 
@@ -29,8 +22,6 @@ public class PerfectoLogExtension implements BeforeEachCallback, AfterEachCallba
      * @param extensionContext The ExtensionContext representing the current test context.
      * @throws Exception if any error occurs during the execution of the method.
      * @author Gili Eliach
-     * @see StoreManager#getStore(StoreType) StoreManager.getStore(StoreType.LOCAL_THREAD)
-     * @see Store#getValueFromStore(Object) Store.getValueFromStore(Object)
      * @since 09.23
      */
     @Override
@@ -70,6 +61,13 @@ public class PerfectoLogExtension implements BeforeEachCallback, AfterEachCallba
         }
     }
 
+    /**
+     * This function retrieves tags and a test name, storing them in the thread-local store for later use in reporting.
+     * @see StoreManager#getStore(StoreType) StoreManager.getStore(StoreType.LOCAL_THREAD)
+     * @see Store#getValueFromStore(Object) Store.getValueFromStore(Object)
+     * @author Gili Eliach
+     * @since 10.23
+     */
     public static void setTagsAndTestName(String[] tags, String testName) {
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("TAGS", tags);
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("TESTNAME", testName);
