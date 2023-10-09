@@ -13,7 +13,7 @@ You can add test-api to your maven pom.xml file using: <br>
     <dependency>
     <groupId>co.verisoft</groupId>
     <artifactId>test-api</artifactId>
-    <version>0.0.5</version>
+    <version>0.1.18</version>
     </dependency>
 
 ## Features
