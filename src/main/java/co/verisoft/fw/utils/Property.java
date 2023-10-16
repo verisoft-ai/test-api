@@ -105,7 +105,7 @@ public class Property {
         try {
             absolutePath = Objects.requireNonNull(getClass().getClassLoader().getResource(path)).getPath();
         } catch (NullPointerException e) {
-            log.error("Failed to load resource file " + path +  " System will load default property file");
+            log.warn("Failed to load resource file " + path +  " System will load default property file");
         }
 
 
