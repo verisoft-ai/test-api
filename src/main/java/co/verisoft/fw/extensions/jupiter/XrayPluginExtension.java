@@ -403,19 +403,32 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         } catch (Exception e) {
             log.error("Could not create xray report. Error is " + e.getMessage());
         }
-        // Import xrayResult Json file to Jira cloud or server/DC based on xray.type property value
+
+        exportResultsToJira(localPath);
+    }
+
+
+    private void exportResultsToJira(String localPath) throws IOException {
+
+        // Validations
+        if (appProps.isEmpty()) {
+            log.warn("The Xray result json file created but no values are present");
+            return;
+        }
+
+        else if(!appProps.getProperty("xray.enabled").equalsIgnoreCase("true")){
+            log.warn("The Xray result json file created but the xray plugin is disabled");
+            return;
+        }
+
+        // Export xrayResult Json file to Jira cloud or server/DC based on xray.type property value
         // Server/DataCenter
-        if (appProps.size() > 0 && appProps.getProperty("xray.type").equals("server")) {
+        if (appProps.getProperty("xray.type").equals("server")) {
             exportJsonResultToJiraServerDC(localPath + "/XrayResult.json");
         }
         // Cloud
-        else if (appProps.size() > 0 && appProps.getProperty("xray.type").equals("cloud")) {
+        else if (appProps.getProperty("xray.type").equals("cloud")) {
             exportJsonResultToJiraCloud(localPath + "/XrayResult.json");
         }
-        // If xray.type is empty or contains uncorrected value
-        else {
-            log.warn("The Xray result json file created but not imported because of uncorrected xray type in properties file in " + System.getProperty("user.dir") + "/src/test/resources/xray-plugin.properties" + " path, fix it and fill necessary values, then rerun the script");
-        }
-
     }
 }
