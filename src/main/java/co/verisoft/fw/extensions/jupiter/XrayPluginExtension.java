@@ -416,6 +416,11 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             return;
         }
 
+        else if (Objects.isNull(appProps.getProperty("xray.enabled"))){
+            log.warn("The Xray result json file created but the xray plugin is disabled");
+            return;
+        }
+
         else if(!appProps.getProperty("xray.enabled").equalsIgnoreCase("true")){
             log.warn("The Xray result json file created but the xray plugin is disabled");
             return;
