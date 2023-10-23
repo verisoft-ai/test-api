@@ -41,16 +41,17 @@ import java.util.List;
 
 public class CustomReportPortalExtension extends ReportPortalExtension implements BeforeAllCallback,AfterEachCallback {
     private static boolean didRun = false;
-
+    private static final Object lock = new Object();
     @Override
     public void beforeAll(ExtensionContext context)  {
-        if (!didRun) {
-            @SuppressWarnings("unused")
-            ReportPortalObserver reportPortalObserver = new ReportPortalObserver(ReportLevel.INFO);
-            didRun = true;
+        synchronized (lock) {
+            if (!didRun) {
+                @SuppressWarnings("unused")
+                ReportPortalObserver reportPortalObserver = new ReportPortalObserver(ReportLevel.INFO);
+                didRun = true;
+            }
+            super.beforeAll(context);
         }
-        super.beforeAll(context);
-
     }
 
     @NotNull

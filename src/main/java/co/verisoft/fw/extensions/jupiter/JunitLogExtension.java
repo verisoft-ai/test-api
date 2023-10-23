@@ -31,7 +31,7 @@ import org.junit.jupiter.api.extension.*;
 @Slf4j
 @SuppressWarnings("unused")
 public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback, BeforeTestExecutionCallback, AfterTestExecutionCallback, AfterEachCallback, AfterAllCallback {
-
+    private static final Object lock = new Object();
 
     @Override
     public void afterAll(ExtensionContext context) {
@@ -89,10 +89,12 @@ public class JunitLogExtension implements BeforeAllCallback, BeforeEachCallback,
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        if (context.getTestClass().isEmpty())
-            return;
+        synchronized (lock) {
+            if (context.getTestClass().isEmpty())
+                return;
 
-        log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
-        log.info("Before All : " + context.getTestClass().get().getName());
+            log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());
+            log.info("Before All : " + context.getTestClass().get().getName());
+        }
     }
 }

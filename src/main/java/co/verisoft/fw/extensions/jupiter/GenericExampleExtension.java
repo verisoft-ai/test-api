@@ -68,7 +68,7 @@ public class GenericExampleExtension implements
     // of code we wish to run ONLY ONCE per execution, we mark this flag and use it in the beforeAll method
     private static boolean didRun = false;
 
-
+    private static final Object lock = new Object();
     /**
      * Callback that is invoked once <em>after</em> all tests in the current
      * container.
@@ -119,13 +119,15 @@ public class GenericExampleExtension implements
      */
     @Override
     public void beforeAll(ExtensionContext context) {
+        synchronized (lock) {
 
-        // This part will run ONLY ONCE per execution, no matter how many classes register the extension
-        if (!didRun) {
-            // Set the callback for close method at the end of the session
-            context.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("ExtensionCallback", this);
+            // This part will run ONLY ONCE per execution, no matter how many classes register the extension
+            if (!didRun) {
+                // Set the callback for close method at the end of the session
+                context.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("ExtensionCallback", this);
 
-            didRun = true;
+                didRun = true;
+            }
         }
 
         log.debug("Registered " + this.getClass().getName() + " for class " + context.getRequiredTestClass().getName());

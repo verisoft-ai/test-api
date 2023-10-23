@@ -28,6 +28,7 @@ import co.verisoft.fw.store.StoreManager;
 import co.verisoft.fw.store.StoreType;
 import co.verisoft.fw.xray.XrayIdentifier;
 import com.aventstack.extentreports.Status;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.plexus.util.ExceptionUtils;
@@ -69,7 +70,7 @@ public class ExtentReportExtension implements BeforeAllCallback,
         ExtensionContext.Store.CloseableResource {
 
     private static boolean didRun = false;
-
+    private static final Object lock = new Object();
     /**
      * This method will be invoked <b>only once before all test executions</b>.
      * It does the following tasks:<br>
@@ -78,10 +79,9 @@ public class ExtentReportExtension implements BeforeAllCallback,
      * (from property file into system property), additional test information if supplied etc..
      */
     @Override
-    public synchronized void beforeAll(ExtensionContext context) {
-
-        if (!didRun) {
-            // The following line registers a callback hook when the root test context is shut down
+    public void beforeAll(ExtensionContext context) {
+        synchronized (lock) {
+            if (!didRun) {
             context.getRoot().getStore(GLOBAL).put("Extent Report Callback", this);
 
             // Sets additional data if available
@@ -96,10 +96,10 @@ public class ExtentReportExtension implements BeforeAllCallback,
                         System.getProperty("test.included.groups"));
 
             // Register a report observer
-            @SuppressWarnings("unused")
             ExtentReportReportObserver extentReportReportObserver = new ExtentReportReportObserver(ReportLevel.INFO);
 
             didRun = true;
+            }
         }
     }
 
