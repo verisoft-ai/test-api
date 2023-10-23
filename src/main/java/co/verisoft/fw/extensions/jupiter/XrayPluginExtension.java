@@ -70,6 +70,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
     private static boolean executed = false;
 
+    private static final Object lock = new Object();
     // Load xray properties from xray-plugin.properties file
     public static Properties appProps = getXrayPluginProperties();
 
@@ -82,19 +83,20 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      */
     @Override
     public void beforeAll(ExtensionContext extensionContext) {
+        synchronized (lock) {
+            if (!executed) {
 
-        if (!executed) {
+                // Set the callback for class method at the end of the session
+                extensionContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("XrayCallback", this);
 
-            // Set the callback for class method at the end of the session
-            extensionContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("XrayCallback", this);
+                Map<String, XrayJsonTestObject> xrayTestInstances = new HashMap<>();
+                StoreManager.getStore(StoreType.GLOBAL).putValueInStore("tests", xrayTestInstances);
 
-            Map<String, XrayJsonTestObject> xrayTestInstances = new HashMap<>();
-            StoreManager.getStore(StoreType.GLOBAL).putValueInStore("tests", xrayTestInstances);
+                executed = true;
+            }
 
-            executed = true;
+            log.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
         }
-
-        log.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
     }
 
 

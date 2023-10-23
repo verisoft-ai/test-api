@@ -40,15 +40,17 @@ import java.util.Properties;
 public class PropertyLoaderExtension implements BeforeAllCallback {
 
     private static boolean didRun = false;
-
+    private static final Object lock = new Object();
     @Override
     public void beforeAll(ExtensionContext extensionContext) {
-        if (!didRun) {
-            setXrayProperties();
-            didRun = true;
-        }
+        synchronized (lock) {
+            if (!didRun) {
+                setXrayProperties();
+                didRun = true;
+            }
 
-        log.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
+            log.debug("Registered " + this.getClass().getName() + " for class " + extensionContext.getRequiredTestClass().getName());
+        }
     }
 
 
