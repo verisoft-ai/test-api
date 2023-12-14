@@ -24,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +81,11 @@ public final class ReportManager {
                 directory.mkdir();
             }
 
-            reportName = (System.getProperty("user.dir") + "/target/" + directoryName + "/TestReport.html");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String currentDateAndTime = dateFormat.format(new Date());
+
+            // Append the formatted date and time to the report filename
+            reportName = (System.getProperty("user.dir") + "/target/" + directoryName + "/TestReport-" + currentDateAndTime + ".html");
 
             // Create new instance of the report manager
             instance = new ReportManager(reportName);
