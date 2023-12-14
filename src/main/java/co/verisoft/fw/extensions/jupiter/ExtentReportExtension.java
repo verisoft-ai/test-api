@@ -126,19 +126,27 @@ public class ExtentReportExtension implements BeforeAllCallback,
         Map<String, List<String>> screenShots = new HashMap<>();
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
 
+
+        String fullClassName = context.getRequiredTestClass().getName();
+
+        int lastDotIndex = fullClassName.lastIndexOf('.');
+
+        String className = (lastDotIndex != -1) ? fullClassName.substring(lastDotIndex + 1) : fullClassName;
+
         // Get test name
         String testName = context.getDisplayName();
+        String fullTestName= testName+"- "+className;
 
         // Create a new test
         //If we have description, we should create test with it,otherwise not
         if (context.getElement().isPresent() && context.getElement().get().isAnnotationPresent(Description.class))
         {
             String description=context.getElement().get().getAnnotation(Description.class).value();
-            ReportManager.getInstance().newTest(testName,description);
+            ReportManager.getInstance().newTest(fullTestName,description);
             Report.info(ReportSource.REPORT, "Test Description: " + description);
         }
         else {
-            ReportManager.getInstance().newTest(testName);
+            ReportManager.getInstance().newTest(fullTestName);
         }
         Report.debug(ReportSource.REPORT, "Test Start. Test name: " + testName);
         Report.info(ReportSource.REPORT, "Test Name: " + testName);
