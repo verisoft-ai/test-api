@@ -27,10 +27,8 @@ import lombok.val;
 import okhttp3.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +39,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Extension to create Xray report.
@@ -108,15 +108,19 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * @param extensionContext Junit 5 context
      */
     @Override
-    public void beforeEach(ExtensionContext extensionContext) {
+    public void beforeEach(ExtensionContext extensionContext) throws Exception {
 
         // Validation - If there is no annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
-                extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)))
+                ( extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)||
+                extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
             return;
-
-        String[] xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
-
+        String[] xrayValues;
+        if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
+            xrayValues =new String[]{getXrayValueFromDataDriven(extensionContext)};
+        } else {
+            xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+        }
         // Validation - must contain a value
         if (xrayValues.length == 0)
             return;
@@ -133,6 +137,61 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
     }
 
+    /**
+     * Checks if the given object is a valid Xray identifier.
+     *
+     * @param key The object to check for Xray identifier validity.
+     * @return {@code true} if the object is a valid Xray identifier, {@code false} otherwise.
+     */
+    public boolean isValidXrayID(Object key) {
+        if (key instanceof String) {
+            Pattern regex = Pattern.compile("^[A-Z]+-[0-9]+$");
+            Matcher matcher = regex.matcher((String) key);
+            return matcher.matches();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Retrieves the Xray value from data-driven tests in the provided ExtensionContext.
+     *
+     * @param extensionContext The ExtensionContext containing test method arguments.
+     * @return The Xray value as a String.
+     * @throws Exception If the 1st argument is not a valid Xray identifier.
+     */
+    public String getXrayValueFromDataDriven(ExtensionContext extensionContext) throws Exception {
+        Object[] arguments = ExtensionUtilities.getTestMethodArgumentsFromExtensionContext(extensionContext);
+
+        if (arguments!=null&&isValidXrayID(arguments)) {
+            return (String) arguments[0];
+        } else {
+            throw new Exception("The 1st argument is not a valid Xray identifier!");
+        }
+    }
+
+    /**
+     * Checks if the given array of objects contains a valid Xray identifier at the 1st position.
+     *
+     * @param arguments The array of objects to check.
+     * @return {@code true} if the 1st argument is a valid Xray identifier, {@code false} otherwise.
+     */
+    private boolean isValidXrayID(Object[] arguments) {
+        return arguments.length >= 1 && arguments[0] instanceof String && matchesXrayIDPattern((String) arguments[0]);
+    }
+
+    /**
+     * Checks if the provided string matches the pattern of a valid Xray identifier.
+     *
+     * @param key The string to check for Xray identifier pattern.
+     * @return {@code true} if the string matches the Xray identifier pattern, {@code false} otherwise.
+     */
+    private boolean matchesXrayIDPattern(String key) {
+        Pattern regex = Pattern.compile("^[A-Z]+-[0-9]+$");
+        Matcher matcher = regex.matcher(key);
+        return matcher.matches();
+    }
+
 
     /**
      * Updates test object, which was created at the beginning of the test. If XrayIdentifier does not exist,
@@ -143,15 +202,20 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * @param extensionContext Junit 5 extension
      */
     @Override
-    public void afterEach(ExtensionContext extensionContext) {
+    public void afterEach(ExtensionContext extensionContext) throws Exception {
 
         // Validation - If ther is no annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
-                extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)))
+                (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)||
+                extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
             return;
 
-        String[] xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
-
+        String[] xrayValues;
+        if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
+            xrayValues =new String[]{getXrayValueFromDataDriven(extensionContext)};
+        } else {
+            xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+        }
         // Validation - must contain a value
         if (xrayValues.length == 0)
             return;
@@ -170,6 +234,9 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             // Validation
             if (obj == null)
                 return;
+
+            if ((Objects.equals(obj.getStatus(), "FAIL")) && (status.equals("PASS")))
+                status = Status.FAIL;
 
             // Update test results
             obj = new XrayJsonTestObject.XrayJsonTestObjectBuilder(tests.get(xrayValues[0]))
@@ -416,14 +483,10 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         if (appProps.isEmpty()) {
             log.warn("The Xray result json file created but no values are present");
             return;
-        }
-
-        else if (Objects.isNull(appProps.getProperty("xray.enabled"))){
+        } else if (Objects.isNull(appProps.getProperty("xray.enabled"))) {
             log.warn("The Xray result json file created but the xray plugin is disabled");
             return;
-        }
-
-        else if(!appProps.getProperty("xray.enabled").equalsIgnoreCase("true")){
+        } else if (!appProps.getProperty("xray.enabled").equalsIgnoreCase("true")) {
             log.warn("The Xray result json file created but the xray plugin is disabled");
             return;
         }
@@ -438,4 +501,6 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             exportJsonResultToJiraCloud(localPath + "/XrayResult.json");
         }
     }
+
+
 }
