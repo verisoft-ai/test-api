@@ -112,14 +112,16 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
         // Validation - If there is no annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
-                ( extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)||
-                extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
+                (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class) ||
+                        extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
             return;
-        String[] xrayValues;
-        if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
-            xrayValues =new String[]{getXrayValueFromDataDriven(extensionContext)};
-        } else {
+        String[] xrayValues = new String[]{};
+        if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
             xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+        } else {
+            if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
+                xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
+            }
         }
         // Validation - must contain a value
         if (xrayValues.length == 0)
@@ -127,12 +129,15 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
         // Simple case - just one test id
         if (xrayValues.length == 1) {
-            XrayJsonTestObject obj = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
-                    .testKey(xrayValues[0])
-                    .start(ZonedDateTime.now())
-                    .build();
             Map<String, XrayJsonTestObject> tests = StoreManager.getStore(StoreType.GLOBAL).getValueFromStore("tests");
-            tests.put(xrayValues[0], obj);
+
+            if (!tests.containsKey(xrayValues[0])) {
+                XrayJsonTestObject obj = new XrayJsonTestObject.XrayJsonTestObjectBuilder()
+                        .testKey(xrayValues[0])
+                        .start(ZonedDateTime.now())
+                        .build();
+                tests.put(xrayValues[0], obj);
+            }
         }
 
     }
@@ -163,7 +168,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
     public String getXrayValueFromDataDriven(ExtensionContext extensionContext) throws Exception {
         Object[] arguments = ExtensionUtilities.getTestMethodArgumentsFromExtensionContext(extensionContext);
 
-        if (arguments!=null&&isValidXrayID(arguments)) {
+        if (arguments != null && isValidXrayID(arguments)) {
             return (String) arguments[0];
         } else {
             throw new Exception("The 1st argument is not a valid Xray identifier!");
@@ -206,15 +211,17 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
         // Validation - If ther is no annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
-                (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)||
-                extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
+                (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class) ||
+                        extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
             return;
 
-        String[] xrayValues;
-        if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
-            xrayValues =new String[]{getXrayValueFromDataDriven(extensionContext)};
-        } else {
+        String[] xrayValues = new String[]{};
+        if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
             xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+        } else {
+            if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
+                xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
+            }
         }
         // Validation - must contain a value
         if (xrayValues.length == 0)
@@ -222,7 +229,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
         // Set the test status based on xray.type property value in Jira server/DC - set the status to PASS/FAIL, in cloud set the status to PASSED/FAILED
         // When xray.type is null - set the status as cloud: PASSED/FAILED
-        Status status = appProps.getProperty("xray.type") != null ? extensionContext.getExecutionException().isPresent() ? appProps.getProperty("xray.type").equals("server") ? Status.FAIL : Status.FAILED : appProps.getProperty("xray.type").equals("server") ? Status.PASS : Status.PASSED : extensionContext.getExecutionException().isPresent()? Status.FAILED:Status.PASSED;
+        Status status = appProps.getProperty("xray.type") != null ? extensionContext.getExecutionException().isPresent() ? appProps.getProperty("xray.type").equals("server") ? Status.FAIL : Status.FAILED : appProps.getProperty("xray.type").equals("server") ? Status.PASS : Status.PASSED : extensionContext.getExecutionException().isPresent() ? Status.FAILED : Status.PASSED;
         // If xray type did not initial in the properties file - set default xray type as cloud.
 
         // Simple case - just one test id
@@ -235,9 +242,12 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             if (obj == null)
                 return;
 
-            if ((Objects.equals(obj.getStatus(), "FAIL")) && (status.equals("PASS")))
-                status = Status.FAIL;
-
+            synchronized (lock) {
+                if ((Objects.equals(obj.getStatus(), Status.FAIL)) && ((Objects.equals(status, Status.PASS))))
+                    status = Status.FAIL;
+                if ((Objects.equals(obj.getStatus(), Status.FAILED)) && ((Objects.equals(status, Status.PASSED))))
+                    status = Status.FAILED;
+            }
             // Update test results
             obj = new XrayJsonTestObject.XrayJsonTestObjectBuilder(tests.get(xrayValues[0]))
                     .finish(ZonedDateTime.now())
