@@ -118,13 +118,6 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
             return;
         String[] xrayValues = getXrayValues(extensionContext);
 
-//        if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
-//            xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
-//        } else {
-//            if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
-//                xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
-//            }
-//        }
         // Validation - must contain a value
         if (xrayValues.length == 0)
             return;
@@ -143,7 +136,22 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
         }
 
     }
-
+    /**
+     * Retrieves Xray values associated with a test method from the provided ExtensionContext.
+     *
+     * <p>The method checks if the test method is annotated with {@code @ParameterizedTest}. If it is,
+     * it attempts to obtain an Xray value from the data-driven test using {@code getXrayValueFromDataDriven}.
+     * If the obtained Xray value is null, it checks if the test method is annotated with {@code @XrayIdentifier}.
+     * If present, it retrieves the Xray values from the annotation; otherwise, a warning is logged.
+     * </p>
+     *
+     * <p>If the test method is not annotated with {@code @ParameterizedTest}, it checks if it is annotated with
+     * {@code @XrayIdentifier}. If present, it retrieves the Xray values from the annotation.
+     * </p>
+     *
+     * @param extensionContext The ExtensionContext containing information about the test method.
+     * @return An array of Xray values associated with the test method.
+     */
     public String[] getXrayValues(ExtensionContext extensionContext) {
         String[] xrayValues = new String[]{};
 
