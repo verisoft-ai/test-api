@@ -30,6 +30,7 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -108,21 +109,22 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      * @param extensionContext Junit 5 context
      */
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(ExtensionContext extensionContext) {
 
         // Validation - If there is no annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
                 (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class) ||
                         extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
             return;
-        String[] xrayValues = new String[]{};
-        if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
-            xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
-        } else {
-            if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
-                xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
-            }
-        }
+        String[] xrayValues = getXrayValues(extensionContext);
+
+//        if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
+//            xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+//        } else {
+//            if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
+//                xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
+//            }
+//        }
         // Validation - must contain a value
         if (xrayValues.length == 0)
             return;
@@ -142,20 +144,24 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
 
     }
 
-    /**
-     * Checks if the given object is a valid Xray identifier.
-     *
-     * @param key The object to check for Xray identifier validity.
-     * @return {@code true} if the object is a valid Xray identifier, {@code false} otherwise.
-     */
-    public boolean isValidXrayID(Object key) {
-        if (key instanceof String) {
-            Pattern regex = Pattern.compile("^[A-Z]+-[0-9]+$");
-            Matcher matcher = regex.matcher((String) key);
-            return matcher.matches();
+    public String[] getXrayValues(ExtensionContext extensionContext) {
+        String[] xrayValues = new String[]{};
+
+        if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
+            xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
+            if (xrayValues[0]== null) {
+                if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
+                    xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+                } else {
+                    log.warn("There is no xray identifier in data driven/XrayIdentifier annotation! ");
+                }
+            }
         } else {
-            return false;
+            if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
+                xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
+            }
         }
+        return xrayValues;
     }
 
     /**
@@ -163,17 +169,18 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
      *
      * @param extensionContext The ExtensionContext containing test method arguments.
      * @return The Xray value as a String.
-     * @throws Exception If the 1st argument is not a valid Xray identifier.
      */
-    public String getXrayValueFromDataDriven(ExtensionContext extensionContext) throws Exception {
+    public String getXrayValueFromDataDriven(ExtensionContext extensionContext) {
         Object[] arguments = ExtensionUtilities.getTestMethodArgumentsFromExtensionContext(extensionContext);
 
         if (arguments != null && isValidXrayID(arguments)) {
             return (String) arguments[0];
         } else {
-            throw new Exception("The 1st argument is not a valid Xray identifier!");
+            log.warn("The 1st argument is not a valid Xray identifier!");
+            return null;
         }
     }
+
 
     /**
      * Checks if the given array of objects contains a valid Xray identifier at the 1st position.
@@ -209,20 +216,14 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
     @Override
     public void afterEach(ExtensionContext extensionContext) throws Exception {
 
-        // Validation - If ther is no annotation, test should not be reported to jira - no need to continue
+        // Validation - If there is no annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
                 (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class) ||
                         extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
             return;
 
-        String[] xrayValues = new String[]{};
-        if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
-            xrayValues = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
-        } else {
-            if (extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class)) {
-                xrayValues = new String[]{getXrayValueFromDataDriven(extensionContext)};
-            }
-        }
+        String[] xrayValues = getXrayValues(extensionContext);
+
         // Validation - must contain a value
         if (xrayValues.length == 0)
             return;
