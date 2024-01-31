@@ -15,6 +15,7 @@ final public class ExtensionUtilities {
      * @param extensionContext The ExtensionContext containing information about the test method.
      * @return An array of objects representing the test method arguments, or {@code null} if the arguments cannot be retrieved.
      * @throws NullPointerException If the provided extensionContext is {@code null}.
+     * @since 1.24
      */
     @Synchronized
     public static Object[] getTestMethodArgumentsFromExtensionContext(ExtensionContext extensionContext) {
