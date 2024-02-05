@@ -7,7 +7,7 @@
     <groupId>co.verisoft</groupId>
     <artifactId>test-api</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-RC3</version>
+    <version>1.0.0-RC4-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>VeriSoft framework for testing web and mobile applications. junit 5 Module</description>
     <url>https://bitbucket.org/nir_gallner/test.api</url>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.7</version>
+            <version>1.4.14</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
