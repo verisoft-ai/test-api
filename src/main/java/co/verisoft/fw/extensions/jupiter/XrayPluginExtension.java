@@ -111,7 +111,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
 
-        // Validation - If there is no annotation, test should not be reported to jira - no need to continue
+        // Validation - If there is no xray annotation and no parameterized annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
                 (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class) ||
                         extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))
@@ -172,13 +172,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
     public String[] getXrayValueFromAnnotation(ExtensionContext extensionContext) {
         String[] values = new String[]{};
         if (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class)) {
-            values = extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
-            if (isValidXrayID(values)) {
-                return values;
-            } else {
-                log.warn("The value from annotation is not a valid Xray identifier ");
-                return values;
-            }
+            return extensionContext.getElement().get().getAnnotation(XrayIdentifier.class).value();
         }
         return values;
     }
@@ -235,7 +229,7 @@ public class XrayPluginExtension implements AfterEachCallback, BeforeEachCallbac
     @Override
     public void afterEach(ExtensionContext extensionContext) throws Exception {
 
-        // Validation - If there is no annotation, test should not be reported to jira - no need to continue
+        // Validation - If there is no xray annotation and no parameterized annotation, test should not be reported to jira - no need to continue
         if (!(extensionContext.getElement().isPresent() &&
                 (extensionContext.getElement().get().isAnnotationPresent(XrayIdentifier.class) ||
                         extensionContext.getElement().get().isAnnotationPresent(ParameterizedTest.class))))

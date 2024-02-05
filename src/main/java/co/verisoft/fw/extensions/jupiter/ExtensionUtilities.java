@@ -1,12 +1,13 @@
 package co.verisoft.fw.extensions.jupiter;
 
 import lombok.Synchronized;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
 import org.junit.platform.engine.TestDescriptor;
 
 import java.lang.reflect.Field;
-
+@Slf4j
 final public class ExtensionUtilities {
     /**
      * Retrieves the test method arguments from the given ExtensionContext using reflection.
@@ -33,7 +34,7 @@ final public class ExtensionUtilities {
             Object[] argumentsValue = (Object[]) arguments.get(invocationContextValue);
             return argumentsValue;
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            System.out.println("Test has no arguments");
+            log.warn("Test has no arguments, message: "+e.getMessage());
             return null;
         }
     }
