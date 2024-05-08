@@ -36,14 +36,14 @@
     <properties>
 
         <!-- Dependencies -->
-        <slf4j.version>2.0.9</slf4j.version>
-        <aspectj.version>1.9.7</aspectj.version>
+        <slf4j.version>2.0.13</slf4j.version>
+        <aspectj.version>1.9.22</aspectj.version>
         <maven.compiler.version>3.11.0</maven.compiler.version>
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.32</lombok.version>
         <json.simple.version>1.1.1</json.simple.version>
-        <xmlBeans.version>5.1.1</xmlBeans.version>
-        <jetbrains.annotations.version>24.0.0</jetbrains.annotations.version>
-        <com.aventstack.extentReport.version>5.0.9</com.aventstack.extentReport.version>
+        <xmlBeans.version>5.2.0</xmlBeans.version>
+        <jetbrains.annotations.version>24.1.0</jetbrains.annotations.version>
+        <com.aventstack.extentReport.version>5.1.1</com.aventstack.extentReport.version>
 
 
         <!-- Maven plugins versions-->
@@ -53,13 +53,13 @@
         <maven.javadoc.plugin.version>3.3.1</maven.javadoc.plugin.version>
         <jacoco.maven.plugin.version>0.8.8</jacoco.maven.plugin.version>
         <nexus.staging.maven.version>1.6.13</nexus.staging.maven.version>
-        <maven.gpg.plugin.version>3.0.1</maven.gpg.plugin.version>
+        <maven.gpg.plugin.version>3.1.0</maven.gpg.plugin.version>
         <maven.release.plugin.version>3.0.0</maven.release.plugin.version>
 
         <!-- Test dependencies -->
-        <junit.platform.version>1.10.0</junit.platform.version>
-        <junit.jupiter.version>5.10.0</junit.jupiter.version>
-        <assertJ.version>3.24.2</assertJ.version>
+        <junit.platform.version>1.10.2</junit.platform.version>
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
+        <assertJ.version>3.25.3</assertJ.version>
 
         <!-- Java -->
         <java.version>11</java.version>
