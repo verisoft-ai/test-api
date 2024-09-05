@@ -56,7 +56,8 @@ public class StoreImp implements Store {
         if (store.get(key) != null)
             store.remove(key);
         store.put(key, value);
-        log.debug("Insert into store KEY: " + key.toString() + "\tVALUE: " + value.toString());
+        String valueString = value!= null ? value.toString():"null";
+        log.debug("Insert into store KEY: " + key.toString() + "\tVALUE: " + valueString);
     }
 
 
