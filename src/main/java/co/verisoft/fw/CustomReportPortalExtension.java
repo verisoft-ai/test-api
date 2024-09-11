@@ -83,7 +83,7 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
 
         if (!Objects.isNull(images))
             for (String image : images) {
-                File file = new File("target/screenshots",image);
+                File file = new File(image);
                 ReportPortal.emitLog("Error Screenshot",LogLevel.INFO.name(),new Date(), file);
             }
         super.afterTestExecution(context);
