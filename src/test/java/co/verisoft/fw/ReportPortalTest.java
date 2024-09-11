@@ -61,8 +61,4 @@ public class ReportPortalTest {
         Report.debug(base64ScreenShot);
 
     }
-    @Test
-    public void ShouldBeSkipped() {
-        assumeTrue(false);
-    }
 }
