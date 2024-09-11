@@ -26,7 +26,10 @@ import com.aventstack.extentreports.model.Media;
 import lombok.Getter;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import java.io.File;
 import java.util.Objects;
 
 
@@ -42,6 +45,23 @@ public class ExtentReportReportObserver extends BaseObserver {
 
     public ExtentReportReportObserver(ReportLevel minReportLevel) {
         this.minReportLevel = minReportLevel;
+    }
+
+    /**
+     * Computes the relative path from a base path to a target path.
+     * This method converts both the base path and the target path to absolute paths,
+     * then calculates the relative path from the base path to the target path. The result
+     * is returned as a string representation of the relative path.
+     *
+     * @param targetPath The path to which the relative path is computed.
+     * @param basePath   The base path from which the relative path is calculated.
+     * @return A string representing the relative path from the base path to the target path.
+     */
+    public static String RelativePath(String targetPath, String basePath) {
+        Path base = Paths.get(basePath).toAbsolutePath();
+        Path target = Paths.get(targetPath).toAbsolutePath();
+        Path relativePath = base.relativize(target);
+        return relativePath.toString();
     }
 
     @Override
@@ -79,7 +99,7 @@ public class ExtentReportReportObserver extends BaseObserver {
             ExtentReportData extentReportData = (ExtentReportData) reportEntry.getAdditionalObject();
             if (extentReportData.getType() == ExtentReportData.Type.SCREENSHOT){
                 Media media = MediaEntityBuilder
-                        .createScreenCaptureFromPath((String)((ExtentReportData) reportEntry.getAdditionalObject()).getData()).build();
+                        .createScreenCaptureFromPath(RelativePath((String)((ExtentReportData) reportEntry.getAdditionalObject()).getData(),"target/Extent-Report/")).build();
                 Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg, media);
             }
             else if (extentReportData.getType() == ExtentReportData.Type.THROWABLE){
@@ -87,6 +107,12 @@ public class ExtentReportReportObserver extends BaseObserver {
                 Objects.requireNonNull(ReportManager.getInstance().getCurrentTest())
                         .log(status, reportMsg + " Exception Message: " + throwable.getLocalizedMessage());
             }
+        }
+        if(reportEntry.getAdditionalObject() instanceof File)
+        {
+            Media media = MediaEntityBuilder
+                    .createScreenCaptureFromPath(RelativePath((((File) reportEntry.getAdditionalObject()).getPath()),"target/Extent-Report/")).build();
+            Objects.requireNonNull(ReportManager.getInstance().getCurrentTest()).log(status, reportMsg, media);
         }
     }
 }
