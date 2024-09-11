@@ -236,11 +236,5 @@ public class ExtentReportExtension implements BeforeAllCallback,
     @Override
     public void close() throws IOException {
         ReportManager.getInstance().flush();
-
-        File file = new File("target/Extent-Report");
-        File src = new File("target/screenshots");
-        if (file.exists() && src.exists()) {
-            FileUtils.copyDirectory(src, file);
-        }
     }
 }
