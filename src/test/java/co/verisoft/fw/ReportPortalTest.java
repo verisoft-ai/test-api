@@ -21,7 +21,6 @@ import co.verisoft.fw.extentreport.ExtentReport;
 import co.verisoft.fw.report.observer.Report;
 import com.epam.reportportal.listeners.LogLevel;
 import com.epam.reportportal.service.ReportPortal;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -34,8 +33,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
-
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtentReport
 @Disabled
@@ -51,7 +48,6 @@ public class ReportPortalTest {
     @EnumSource (TestParams.class)
     public void testParameters(TestParams param) throws AWTException, IOException {
         Report.info("Test: " + param.name());
-
         Robot robot = new Robot();
         BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         ByteArrayOutputStream out = new ByteArrayOutputStream(8192);
@@ -59,6 +55,5 @@ public class ReportPortalTest {
         String base64ScreenShot =  Base64.getEncoder().encodeToString(out.toByteArray());
         ReportPortal.emitLog("This is my log", LogLevel.INFO.name(), new Date());
         Report.debug(base64ScreenShot);
-
     }
 }
