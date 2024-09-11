@@ -20,7 +20,6 @@ package co.verisoft.fw.softAsserts;
 import co.verisoft.fw.asserts.SoftAssertionError;
 import co.verisoft.fw.extentreport.ExtentReport;
 import co.verisoft.fw.asserts.SoftAsserts;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

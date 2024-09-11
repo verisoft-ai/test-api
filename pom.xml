@@ -7,7 +7,7 @@
     <groupId>co.verisoft</groupId>
     <artifactId>test-api</artifactId>
     <packaging>jar</packaging>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>VeriSoft framework for testing web and mobile applications. junit 5 Module</description>
     <url>https://bitbucket.org/nir_gallner/test.api</url>
@@ -44,7 +44,7 @@
         <xmlBeans.version>5.2.0</xmlBeans.version>
         <jetbrains.annotations.version>24.1.0</jetbrains.annotations.version>
         <com.aventstack.extentReport.version>5.1.1</com.aventstack.extentReport.version>
-
+        <com.fasterxml.jackson.core.version>2.12.7</com.fasterxml.jackson.core.version>
 
         <!-- Maven plugins versions-->
         <maven.javadoc.version>3.4.1</maven.javadoc.version>
@@ -74,6 +74,23 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${com.fasterxml.jackson.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${com.fasterxml.jackson.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${com.fasterxml.jackson.core.version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>

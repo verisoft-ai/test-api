@@ -48,7 +48,6 @@ public class ReportPortalTest {
     @EnumSource (TestParams.class)
     public void testParameters(TestParams param) throws AWTException, IOException {
         Report.info("Test: " + param.name());
-
         Robot robot = new Robot();
         BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         ByteArrayOutputStream out = new ByteArrayOutputStream(8192);
@@ -56,6 +55,5 @@ public class ReportPortalTest {
         String base64ScreenShot =  Base64.getEncoder().encodeToString(out.toByteArray());
         ReportPortal.emitLog("This is my log", LogLevel.INFO.name(), new Date());
         Report.debug(base64ScreenShot);
-
     }
 }
