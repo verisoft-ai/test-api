@@ -38,13 +38,13 @@
         <!-- Dependencies -->
         <slf4j.version>2.0.13</slf4j.version>
         <aspectj.version>1.9.22</aspectj.version>
-        <maven.compiler.version>3.11.0</maven.compiler.version>
+        <maven.compiler.version>3.13.0</maven.compiler.version>
         <lombok.version>1.18.32</lombok.version>
         <json.simple.version>1.1.1</json.simple.version>
         <xmlBeans.version>5.2.0</xmlBeans.version>
         <jetbrains.annotations.version>24.1.0</jetbrains.annotations.version>
         <com.aventstack.extentReport.version>5.1.1</com.aventstack.extentReport.version>
-        <com.fasterxml.jackson.core.version>2.12.7</com.fasterxml.jackson.core.version>
+        <com.fasterxml.jackson.core.version>2.17.2</com.fasterxml.jackson.core.version>
 
         <!-- Maven plugins versions-->
         <maven.javadoc.version>3.4.1</maven.javadoc.version>
@@ -228,6 +228,18 @@
             <groupId>com.epam.reportportal</groupId>
             <artifactId>agent-java-junit5</artifactId>
             <version>5.1.10</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.3.0-android</version>
         </dependency>
 
 
