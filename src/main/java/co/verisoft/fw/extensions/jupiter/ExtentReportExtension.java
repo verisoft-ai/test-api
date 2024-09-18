@@ -122,10 +122,6 @@ public class ExtentReportExtension implements BeforeAllCallback,
         // Create a UUID for test
         UUID uuid = UUID.randomUUID();
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("testId", uuid);
-        // Create an object to hold screenshots
-        Map<String, List<String>> screenShots = new HashMap<>();
-        StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("screenshots", screenShots);
-
 
         String fullClassName = context.getRequiredTestClass().getName();
 
