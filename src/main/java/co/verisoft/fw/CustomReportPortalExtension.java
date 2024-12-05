@@ -28,25 +28,27 @@ import com.epam.reportportal.service.ReportPortal;
 import com.epam.ta.reportportal.ws.model.FinishTestItemRQ;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.junit.AssumptionViolatedException;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.opentest4j.TestAbortedException;
 
 import java.io.File;
 import java.util.*;
+import java.util.List;
 
 public class CustomReportPortalExtension extends ReportPortalExtension implements BeforeAllCallback, AfterEachCallback, BeforeTestExecutionCallback {
     private static boolean didRun = false;
     private static final Object lock = new Object();
 
-    public CustomReportPortalExtension() {
-    }
-
+    @Override
     public void beforeAll(ExtensionContext context) {
         synchronized (lock) {
             if (!didRun) {
-                new ReportPortalObserver(ReportLevel.INFO);
+                @SuppressWarnings("unused")
+                ReportPortalObserver reportPortalObserver = new ReportPortalObserver(ReportLevel.INFO);
                 didRun = true;
             }
             super.beforeAll(context);
@@ -54,51 +56,64 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
     }
 
     public void beforeTestExecution(ExtensionContext extensionContext) {
-        this.startTestItem(extensionContext, (List) null, ItemType.STEP, this.createStepDescription(extensionContext), Calendar.getInstance().getTime());
+        this.startTestItem(extensionContext, (List) null, ItemType.STEP,
+                this.createStepDescription(extensionContext), Calendar.getInstance().getTime());
     }
 
-    protected @NotNull FinishTestItemRQ buildFinishTestItemRq(@NotNull ExtensionContext context, @Nullable ItemStatus status) {
+
+    @NotNull
+    @Override
+    protected FinishTestItemRQ buildFinishTestItemRq(@NotNull ExtensionContext context, @Nullable ItemStatus status) {
         FinishTestItemRQ finishTestItemRQ = super.buildFinishTestItemRq(context, status);
-        ReportPortal.emitLog("Error ", "Error", new Date());
         if (context.getExecutionException().isPresent()) {
-            String var10001 = finishTestItemRQ.getDescription() == null ? " " : finishTestItemRQ.getDescription();
-            finishTestItemRQ.setDescription(var10001 + "<br>" + ((Throwable) context.getExecutionException().get()).getMessage());
+            finishTestItemRQ.setDescription((finishTestItemRQ.getDescription() == null ? " " : finishTestItemRQ.getDescription()) + "<br>" + context.getExecutionException().get().getMessage());
         }
         return finishTestItemRQ;
     }
 
     @Override
-    public void afterEach(ExtensionContext extensionContext) {
-        Map<String, List<String>> screenShots = (Map) StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("screenshots");
-        List<String> images = Objects.isNull(screenShots) ? null : (List) screenShots.get(extensionContext.getDisplayName());
-        if (!Objects.isNull(images)) {
-            Iterator var4 = images.iterator();
-            while (var4.hasNext()) {
-                String image = (String) var4.next();
+    public void afterEach(ExtensionContext context) {
+        if (context.getExecutionException().isPresent() &&
+                (context.getExecutionException().get() instanceof TestAbortedException ||
+                        context.getExecutionException().get() instanceof AssumptionViolatedException)) {
+            handleTestAbortedException(context, context.getExecutionException().get());
+        }
+
+        // Find out if there are screenshots collected during the test
+        Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
+                .getValueFromStore("screenshots");
+
+        List<String> images = Objects.isNull(screenShots) ? null : screenShots.get(context.getDisplayName());
+
+        if (!Objects.isNull(images))
+            for (String image : images) {
                 File file = new File(image);
                 ReportPortal.emitLog("Error Screenshot", LogLevel.INFO.name(), new Date(), file);
             }
-        }
-        ReportPortal.emitLog("Error without Screenshot", LogLevel.INFO.name(), new Date());
-        super.afterTestExecution(extensionContext);
+        super.afterTestExecution(context);
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("ReportPortalExtension.afterTestExecution", true);
     }
 
     protected void handleTestAbortedException(ExtensionContext context, Throwable throwable) {
+
         Date startTime = Calendar.getInstance().getTime();
+
         Date skipStartTime = Calendar.getInstance().getTime();
         if (skipStartTime.after(startTime)) {
             skipStartTime = new Date(skipStartTime.getTime() - 1L);
         }
-        Boolean after = (Boolean) StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("ReportPortalExtension.afterTestExecution");
-        if (after != null && after) {
-            StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("ReportPortalExtension.afterTestExecution", (Object) null);
-        } else {
-            this.startTestItem(context, (List) null, ItemType.STEP, this.createStepDescription(context), skipStartTime);
+
+        Boolean after = StoreManager.getStore(StoreType.LOCAL_THREAD).getValueFromStore("ReportPortalExtension.afterTestExecution");
+        if (after == null || after == false) {
+            this.startTestItem(context, null, ItemType.STEP, this.createStepDescription(context), skipStartTime);
             this.createSkippedSteps(context, throwable);
-            this.getExecutionStatus(context);
+            getExecutionStatus(context);
             FinishTestItemRQ finishRq = this.buildFinishTestItemRq(context, ItemStatus.SKIPPED);
             this.finishTestItem(context, finishRq);
+        } else {
+            StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("ReportPortalExtension.afterTestExecution", null);
         }
+
     }
+
 }
