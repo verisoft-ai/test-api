@@ -54,7 +54,7 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
             super.beforeAll(context);
         }
     }
-
+    @Override
     public void beforeTestExecution(ExtensionContext extensionContext) {
         this.startTestItem(extensionContext, (List) null, ItemType.STEP, this.createStepDescription(extensionContext), Calendar.getInstance().getTime());
     }
