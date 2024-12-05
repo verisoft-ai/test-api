@@ -29,6 +29,7 @@ import com.epam.ta.reportportal.ws.model.FinishTestItemRQ;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.AssumptionViolatedException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
@@ -39,12 +40,11 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class CustomReportPortalExtension extends ReportPortalExtension implements BeforeAllCallback, AfterEachCallback, BeforeTestExecutionCallback {
+public class CustomReportPortalExtension extends ReportPortalExtension implements BeforeAllCallback,AfterEachCallback, BeforeTestExecutionCallback {
     private static boolean didRun = false;
     private static final Object lock = new Object();
-
     @Override
-    public void beforeAll(ExtensionContext context) {
+    public void beforeAll(ExtensionContext context)  {
         synchronized (lock) {
             if (!didRun) {
                 @SuppressWarnings("unused")
@@ -56,29 +56,30 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
     }
 
     public void beforeTestExecution(ExtensionContext extensionContext) {
-        this.startTestItem(extensionContext, (List) null, ItemType.STEP,
-                this.createStepDescription(extensionContext), Calendar.getInstance().getTime());
+        this.startTestItem(extensionContext, (List) null, ItemType.STEP, this.createStepDescription(extensionContext), Calendar.getInstance().getTime());
     }
-
 
     @NotNull
     @Override
     protected FinishTestItemRQ buildFinishTestItemRq(@NotNull ExtensionContext context, @Nullable ItemStatus status) {
         FinishTestItemRQ finishTestItemRQ = super.buildFinishTestItemRq(context, status);
-        if (context.getExecutionException().isPresent()) {
-            finishTestItemRQ.setDescription((finishTestItemRQ.getDescription() == null ? " " : finishTestItemRQ.getDescription()) + "<br>" + context.getExecutionException().get().getMessage());
+        if(context.getExecutionException().isPresent()){
+            finishTestItemRQ.setDescription((finishTestItemRQ.getDescription() == null ? " " : finishTestItemRQ.getDescription()) + "<br>"+ context.getExecutionException().get().getMessage());
         }
         return finishTestItemRQ;
     }
 
     @Override
-    public void afterEach(ExtensionContext context) {
+    public void afterEach(ExtensionContext context)  {
         if (context.getExecutionException().isPresent() &&
                 (context.getExecutionException().get() instanceof TestAbortedException ||
-                        context.getExecutionException().get() instanceof AssumptionViolatedException)) {
+                        context.getExecutionException().get() instanceof AssumptionViolatedException)){
             handleTestAbortedException(context, context.getExecutionException().get());
         }
+    }
 
+    @Override
+    public void afterTestExecution(ExtensionContext context) {
         // Find out if there are screenshots collected during the test
         Map<String, List<String>> screenShots = StoreManager.getStore(StoreType.LOCAL_THREAD)
                 .getValueFromStore("screenshots");
@@ -88,7 +89,7 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
         if (!Objects.isNull(images))
             for (String image : images) {
                 File file = new File(image);
-                ReportPortal.emitLog("Error Screenshot", LogLevel.INFO.name(), new Date(), file);
+                ReportPortal.emitLog("Error Screenshot",LogLevel.INFO.name(),new Date(), file);
             }
         super.afterTestExecution(context);
         StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("ReportPortalExtension.afterTestExecution", true);
@@ -110,7 +111,8 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
             getExecutionStatus(context);
             FinishTestItemRQ finishRq = this.buildFinishTestItemRq(context, ItemStatus.SKIPPED);
             this.finishTestItem(context, finishRq);
-        } else {
+        }
+        else {
             StoreManager.getStore(StoreType.LOCAL_THREAD).putValueInStore("ReportPortalExtension.afterTestExecution", null);
         }
 
