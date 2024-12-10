@@ -32,6 +32,7 @@ import org.junit.AssumptionViolatedException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.opentest4j.TestAbortedException;
 
@@ -39,7 +40,7 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class CustomReportPortalExtension extends ReportPortalExtension implements BeforeAllCallback,AfterEachCallback {
+public class CustomReportPortalExtension extends ReportPortalExtension implements BeforeAllCallback,AfterEachCallback, BeforeTestExecutionCallback {
     private static boolean didRun = false;
     private static final Object lock = new Object();
     @Override
@@ -52,6 +53,10 @@ public class CustomReportPortalExtension extends ReportPortalExtension implement
             }
             super.beforeAll(context);
         }
+    }
+    @Override
+    public void beforeTestExecution(ExtensionContext extensionContext) {
+        this.startTestItem(extensionContext, (List) null, ItemType.STEP, this.createStepDescription(extensionContext), Calendar.getInstance().getTime());
     }
 
     @NotNull
